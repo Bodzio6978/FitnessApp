@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#00b25a</color>
+    <color name="error">#cf6679</color>
+
+    <color name="editText">@color/grey1</color>
+
+    <color name="notification">@color/white</color>
+
+
+</resources>

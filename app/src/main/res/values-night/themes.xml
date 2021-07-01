@@ -1,16 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.FitnessApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+    <style name="Theme.FitnessApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="background">@color/darkGrey</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSurface">@color/darkGrey</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnError">@color/black</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:statusBarColor">@color/darkGrey</item>
     </style>
+
+    <style name="notification" parent="Paragraph_Secondary_Caption">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:layout_marginBottom">-100dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/notification</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
 </resources>

@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
-        <activity android:name="com.gmail.bodziowaty6978.MainActivity">
+        <activity android:name=".authActivities.UsernameActivity"></activity>
+        <activity android:name=".authActivities.ForgotActivity" />
+        <activity android:name=".authActivities.RegisterActivity" />
+        <activity android:name=".authActivities.LoginActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

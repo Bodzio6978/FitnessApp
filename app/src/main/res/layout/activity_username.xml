@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".authActivities.UsernameActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        style="@style/PageTitle"
+        android:text="@string/please_enter_your_username"
+        android:layout_above="@+id/username_title"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/username_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="20dp"
+        style="@style/Paragraph_Secondary_Caption"
+        android:text="@string/it_will_be_displayed_to_all_users"
+        android:layout_above="@+id/username"
+        android:layout_centerHorizontal="true"/>
+
+
+    <EditText
+        android:id="@+id/username"
+        style="@style/InputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="username"
+        android:layout_centerVertical="true"
+        android:drawableStart="@drawable/ic_baseline_account_circle_24"
+        android:drawablePadding="10dp"
+        android:elevation="6dp"
+        android:hint="@string/your_username"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/username_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:textAllCaps="false"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/set_username"/>
+
+    <TextView
+        android:id="@+id/username_notification"
+        style="@style/notification"/>
+
+</RelativeLayout>

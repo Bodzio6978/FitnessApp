@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Fitness App</string>
+
+    <string name="this_will_be_implemented_in_the_future">This Will Be Implemented In The Future.</string>
+
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="help">Help</string>
+    <string name="register">Register</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="confirm_your_password">Confirm Your Password</string>
+    <string name="i_don_t_have_an_account_register">I Don\'t Have An Account! Register</string>
+    <string name="please_make_sure_all_fields_are_filled_in_correctly">Please Make Sure All Fields Are Filled In Correctly.</string>
+    <string name="please_make_sure_both_passwords_are_the_same">Please Make Sure Both Passwords Are The Same.</string>
+    <string name="i_have_an_account_login">I Have An Account! Login</string>
+    <string name="please_enter_your_email_in_order_to_reset_your_password">Please Enter Your Email In Order To Reset Your Password.</string>
+    <string name="reset_my_password">Reset My Password</string>
+
+    <string name="please_enter_your_username">Please Enter Your Username.</string>
+    <string name="it_will_be_displayed_to_all_users">It Will Be Displayed To All Users.</string>
+    <string name="set_username">Set Username</string>
+    <string name="your_username">Your Username</string>
+    <string name="username_length_notification">Please Make Sure Your Username Is At Least 6 Characters Long And No Longer Than 24 Characters</string>
+    <string name="username_exists_notification">There Is Already User With This Username</string>
+
 </resources>
