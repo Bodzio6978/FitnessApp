@@ -6,6 +6,10 @@
     <color name="editText">@color/grey1</color>
 
     <color name="notification">@color/white</color>
+    <color name="bottomNavigation">@color/grey1</color>
+    <color name="bottomTextSelected">@color/white</color>
+    <color name="bottomText">@color/grey4</color>
+    <color name="card_word">@color/grey1</color>
 
 
 </resources>

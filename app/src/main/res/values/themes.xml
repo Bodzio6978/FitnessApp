@@ -18,21 +18,21 @@
     <!--    Text size preset for every app element-->
 
     <style name="PageTitle" parent="Theme.FitnessApp">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
     <style name="Paragraph_Secondary_Caption" parent="Theme.FitnessApp">>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
     <style name="ListTitle" parent="Theme.FitnessApp">>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="fontWeight">550</item>
     </style>
     <style name="Button_Tab" parent="Theme.FitnessApp">>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="fontWeight">600</item>
     </style>
     <style name="TextInput_ListItemTitles_ImportantText_Snippet" parent="Theme.FitnessApp">>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 
@@ -58,8 +58,19 @@
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:layout_alignParentBottom">true</item>
     </style>
+    
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
 
+    <style name="mealTitle" parent="Theme.FitnessApp">
+        <item name="android:textSize">18sp</item>
+    </style>
 
-
+    <style name="secondaryMealInformation" parent="Paragraph_Secondary_Caption">
+        <item name="android:textColor">@color/bottomText</item>
+    </style>
 
 </resources>

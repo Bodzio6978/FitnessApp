@@ -12,9 +12,13 @@
     <color name="grey1">#1E1E1E</color>
     <color name="grey2">#262626</color>
     <color name="grey3">#4d4d4d</color>
-    <color name="lightGrey">#8c8c8c</color>
+    <color name="grey4">#8c8c8c</color>
 
     <color name="editText">@color/white</color>
+    <color name="bottomNavigation">@color/white</color>
     <color name="notification">@color/primary</color>
+    <color name="bottomText">#808080</color>
+    <color name="bottomTextSelected">@color/black</color>
+    <color name="card_word">@color/white</color>
 
 </resources>

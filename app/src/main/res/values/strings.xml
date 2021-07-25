@@ -25,5 +25,19 @@
     <string name="your_username">Your Username</string>
     <string name="username_length_notification">Please Make Sure Your Username Is At Least 6 Characters Long And No Longer Than 24 Characters</string>
     <string name="username_exists_notification">There Is Already User With This Username</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="calories">Calories</string>
+    <string name="training">Training</string>
+    <string name="recipes">Recipes</string>
+    <string name="shopping">Shopping</string>
+    <string name="settings">Settings</string>
+    <string name="breakfast">Breakfast</string>
+
+    <string name="kcal"> Kcal</string>
+    <string name="carb"> Carb</string>
+    <string name="prot"> Prot</string>
+    <string name="fat"> Fat</string>
+    <string name="delete">delete</string>
 
 </resources>
