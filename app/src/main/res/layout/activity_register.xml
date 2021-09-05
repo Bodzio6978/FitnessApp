@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".authActivities.RegisterActivity">
+    tools:context=".view.RegisterActivity">
 
     <TextView
+        style="@style/PageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/register_email"
-        android:text="@string/sign_up"
-        style="@style/PageTitle"
-        android:layout_marginBottom="40dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:text="@string/sign_up" />
 
     <EditText
         android:id="@+id/register_email"
@@ -20,27 +20,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/register_password"
-        android:autofillHints="email"
         android:layout_marginBottom="20dp"
+        android:autofillHints="email"
         android:drawableStart="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
         android:elevation="6dp"
         android:hint="@string/email_address"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/register_password"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_above="@id/register_confirm"
+        android:layout_marginBottom="20dp"
         android:autofillHints="password"
         android:drawableStart="@drawable/ic_baseline_lock_24"
         android:drawablePadding="10dp"
         android:elevation="6dp"
         android:hint="@string/password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
+
     <EditText
         android:id="@+id/register_confirm"
         style="@style/InputEditText"
@@ -52,47 +53,47 @@
         android:drawablePadding="10dp"
         android:elevation="6dp"
         android:hint="@string/confirm_your_password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/register_button"
         style="@style/Button_Tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
         android:layout_below="@+id/register_confirm"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:padding="10dp"
-        android:textAllCaps="false"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:padding="10dp"
+        android:text="@string/sign_up"
+        android:textAllCaps="false" />
 
 
     <TextView
         android:id="@+id/register_help"
-        android:layout_centerHorizontal="true"
+        style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/register_button"
-        android:text="@string/help"
-        android:layout_marginEnd="20dp"
-        style="@style/Paragraph_Secondary_Caption"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginEnd="20dp"
+        android:text="@string/help" />
 
     <TextView
         android:id="@+id/register_login"
+        style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/i_have_an_account_login"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
-        style="@style/Paragraph_Secondary_Caption"/>
+        android:text="@string/i_have_an_account_login" />
 
     <TextView
         android:id="@+id/register_notification"
-        style="@style/notification"/>
+        style="@style/notification" />
 
 </RelativeLayout>

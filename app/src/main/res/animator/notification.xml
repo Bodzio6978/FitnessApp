@@ -3,6 +3,6 @@
     android:duration="250"
     android:repeatCount="1"
     android:repeatMode="reverse">
-    <propertyValuesHolder android:propertyName="translationY" android:valueTo="-100dp"/>
+    <propertyValuesHolder android:propertyName="translationY" android:valueTo="-105dp"/>
 
 </objectAnimator>

@@ -3,33 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".authActivities.LoginActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.LoginActivity">
 
     <TextView
+        style="@style/PageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/etEmail"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/login_email"
-        android:text="@string/login"
-        style="@style/PageTitle"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:text="@string/login" />
 
     <EditText
-        android:id="@+id/login_email"
+        android:id="@+id/etEmail"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/login_password"
-        android:autofillHints="email"
+        android:layout_above="@+id/etPassword"
         android:layout_marginBottom="20dp"
+        android:autofillHints="email"
         android:drawableStart="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
         android:elevation="6dp"
         android:hint="@string/email_address"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/login_password"
+        android:id="@+id/etPassword"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,60 +40,57 @@
         android:drawablePadding="10dp"
         android:elevation="6dp"
         android:hint="@string/password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/btnSignIn"
         style="@style/Button_Tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sign_in"
-        android:layout_below="@+id/login_password"
+        android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:padding="10dp"
-        android:textAllCaps="false"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
-
-    <TextView
-        android:id="@+id/login_forgot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_button"
-        android:text="@string/forgot_password"
-        style="@style/Paragraph_Secondary_Caption"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"/>
-
-    <TextView
-        android:id="@+id/login_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_button"
-        android:text="@string/help"
-        android:layout_alignParentEnd="true"
         android:layout_marginEnd="20dp"
-        style="@style/Paragraph_Secondary_Caption"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"/>
+        android:padding="10dp"
+        android:text="@string/sign_in"
+        android:textAllCaps="false" />
 
     <TextView
-        android:id="@+id/login_register"
+        android:id="@+id/tvForgot"
+        style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/i_don_t_have_an_account_register"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        style="@style/Paragraph_Secondary_Caption"/>
+        android:layout_below="@+id/btnSignIn"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/forgot_password" />
 
     <TextView
-        android:id="@+id/login_notification"
+        android:id="@+id/tvHelp"
+        style="@style/Paragraph_Secondary_Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSignIn"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/help" />
+
+    <TextView
+        android:id="@+id/tvRegister"
+        style="@style/Paragraph_Secondary_Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="@string/i_don_t_have_an_account_register" />
+
+    <com.gmail.bodziowaty6978.customviews.NotificationView
+        android:id="@+id/nfv_notification"
         style="@style/notification"/>
-
-
-
 
 
 </RelativeLayout>

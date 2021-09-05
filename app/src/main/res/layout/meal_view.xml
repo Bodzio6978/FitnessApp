@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/meal_view_main_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/meal_view_name"
+            style="@style/mealTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:text="Breakfast" />
+
+        <TextView
+            android:id="@+id/meal_view_calories_value"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/meal_view_name"
+            android:layout_alignStart="@+id/meal_view_name"
+            android:text="215" />
+
+        <TextView
+            android:id="@+id/meal_view_kcal"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@+id/meal_view_calories_value"
+            android:text="@string/kcal" />
+
+        <TextView
+            android:id="@+id/meal_view_carbohydrates_value"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@+id/meal_view_kcal"
+            android:text="12" />
+
+        <TextView
+            android:id="@+id/meal_view_carb"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/meal_view_carbohydrates_value"
+            android:text="@string/carb" />
+
+        <TextView
+            android:id="@+id/meal_view_protein_value"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@+id/meal_view_carb"
+            android:text="12" />
+
+        <TextView
+            android:id="@+id/meal_view_prot"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/meal_view_protein_value"
+            android:text="@string/prot" />
+
+        <TextView
+            android:id="@+id/meal_view_fat_value"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="18dp"
+            android:layout_toEndOf="@+id/meal_view_prot"
+            android:text="12" />
+
+        <TextView
+            android:id="@+id/meal_view_fat"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/meal_view_fat_value"
+            android:text="@string/fat" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/meal_view_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:fabSize="mini" />
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/meal_view_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/meal_view_main_container"
+        android:elevation="6dp"
+        tools:itemCount="2"
+        tools:listitem="@layout/meal_layout" />
+
+</RelativeLayout>

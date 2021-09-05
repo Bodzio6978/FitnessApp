@@ -1,14 +1,12 @@
-package com.gmail.bodziowaty6978.authActivities
+package com.gmail.bodziowaty6978.view
 
 import android.animation.Animator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.gmail.bodziowaty6978.AnimationHolder
-import com.gmail.bodziowaty6978.MainActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.gmail.bodziowaty6978.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -36,9 +34,6 @@ class UsernameActivity : AppCompatActivity() {
 
         notification = findViewById(R.id.username_notification)
 
-        AnimationHolder.setUpAnimation()
-        AnimationHolder.setAnimationContext(this)
-        AnimationHolder.set.setTarget(notification)
 
         database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
         instance = FirebaseAuth.getInstance()
@@ -60,10 +55,9 @@ class UsernameActivity : AppCompatActivity() {
         val username = username.text.toString().trim()
         if(username.isNullOrEmpty()){
             notification.text = getString(R.string.please_enter_your_username)
-            AnimationHolder.set.start()
+
         }else if(username.length<6||username.length>24){
             notification.text = getString(R.string.username_length_notification)
-            AnimationHolder.set.start()
         }else{
             checkIfUserExists()
         }

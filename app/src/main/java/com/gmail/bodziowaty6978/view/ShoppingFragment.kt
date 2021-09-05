@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.mainFragments
+package com.gmail.bodziowaty6978.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

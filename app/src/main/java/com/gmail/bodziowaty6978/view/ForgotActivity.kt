@@ -1,7 +1,7 @@
-package com.gmail.bodziowaty6978.authActivities
+package com.gmail.bodziowaty6978.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.gmail.bodziowaty6978.R
 
 class ForgotActivity : AppCompatActivity() {

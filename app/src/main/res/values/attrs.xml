@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MealView">
+        <attr name="mealName" format="string"/>
+        <attr name="kcalValue" format="integer"/>
+        <attr name="carbValue" format="integer"/>
+        <attr name="protValue" format="integer"/>
+        <attr name="fatValue" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="NotificationView">
+        <attr name="text" format="string"/>
+    </declare-styleable>
+
+</resources>
