@@ -2,36 +2,30 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.google.firebase.auth.FirebaseAuth
 
 
 class LoginViewModel : ViewModel() {
 
     private val instance = FirebaseAuth.getInstance()
-    private val mAction: MutableLiveData<Action> = MutableLiveData()
-    private val notificationText:MutableLiveData<String> = MutableLiveData()
-
-
+    private val isUserLoggedIn : MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun loginUser(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
-            notificationText.value = "please"
+            NotificationText.text.value = "fields"
         }else{
-            notificationText.value = "Successful"
+            instance.signInWithEmailAndPassword(email,password).addOnFailureListener {
+                NotificationText.text.value = it.message.toString()
+            }.addOnSuccessListener {
+                isUserLoggedIn.value = true
+            }
         }
     }
 
-    fun getAction():MutableLiveData<Action> = mAction
-    fun getNotificationText():MutableLiveData<String> = notificationText
+    fun getState():MutableLiveData<Boolean> = isUserLoggedIn
 }
 
-class Action(val value: Int) {
-
-    companion object {
-        const val SHOW_ = 0
-        const val SHOW_INVALID_PASSWARD_OR_LOGIN = 1
-    }
-}
 
 
 

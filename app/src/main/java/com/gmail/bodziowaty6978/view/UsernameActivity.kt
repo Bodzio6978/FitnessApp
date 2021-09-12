@@ -1,95 +1,77 @@
 package com.gmail.bodziowaty6978.view
 
-import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.gmail.bodziowaty6978.databinding.ActivityUsernameBinding
+import com.gmail.bodziowaty6978.singleton.NetworkCallState
+import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.viewmodel.UsernameViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 
-class UsernameActivity : AppCompatActivity() {
+@DelicateCoroutinesApi
+class UsernameActivity : AppCompatActivity(), LifecycleOwner {
 
-    lateinit var database : FirebaseDatabase
-    lateinit var instance : FirebaseAuth
-    lateinit var userId : String
-
-    lateinit var username : EditText
-    lateinit var setUsername : Button
-
-    lateinit var notification : TextView
-    lateinit var set : Animator
+    private lateinit var binding: ActivityUsernameBinding
+    private lateinit var viewModel: UsernameViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_username)
 
-        notification = findViewById(R.id.username_notification)
+        binding = ActivityUsernameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-
-        database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
-        instance = FirebaseAuth.getInstance()
-
-        userId=instance.currentUser?.uid.toString()
-
-        username = findViewById(R.id.username)
-        setUsername = findViewById(R.id.username_button)
-
-
-
-
-        setUsername.setOnClickListener {
-            addUsername()
-        }
-    }
-
-    private fun addUsername(){
-        val username = username.text.toString().trim()
-        if(username.isNullOrEmpty()){
-            notification.text = getString(R.string.please_enter_your_username)
-
-        }else if(username.length<6||username.length>24){
-            notification.text = getString(R.string.username_length_notification)
-        }else{
-            checkIfUserExists()
-        }
-    }
-
-    private fun checkIfUserExists(){
-        val username = username.text.toString().trim()
-        val refUsers = database.reference.child("users")
-
-        refUsers.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var doesExist = false
-                for (data in snapshot.children) {
-                    if (data.child("username").value.toString() == username) {
-                        doesExist = true
-                    }
-                }
-                if(doesExist){
-                    notification.text = getString(R.string.username_exists_notification)
-                    set.start()
-                }else{
-                    database.reference.child("users").child(userId).child("username").setValue(username)
-                    val intent : Intent = Intent(this@UsernameActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+        viewModel = ViewModelProvider(this).get(UsernameViewModel::class.java)
+        viewModel.getState().observe(this, {
+            if (it){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         })
 
+        NotificationText.text.observe(this, {
+            changeNotificationText(it)
+        })
+
+        NetworkCallState.status.observe(this, {
+            if(it == 1){
+                val intent = Intent(this, ErrorActivity::class.java)
+                startActivity(intent)
+            }
+        })
+
+        binding.btUsername.setOnClickListener {
+            viewModel.addUsername(binding.etUsername.text.toString())
+        }
     }
+
+
+
+    private fun changeNotificationText(text:String){
+        when (text) {
+            "username" -> binding.nfvUsername.apply {
+                setText(getString(R.string.please_enter_your_username))
+                startAnimation()
+            }
+            "length" -> binding.nfvUsername.apply {
+                setText(getString(R.string.username_length_notification))
+                startAnimation()
+            }
+            "exists" -> binding.nfvUsername.apply {
+                setText(getString(R.string.username_exists_notification))
+                startAnimation()
+            }
+            else -> binding.nfvUsername.apply {
+                setText(text)
+                startAnimation()
+            }
+        }
+    }
+
+
 }

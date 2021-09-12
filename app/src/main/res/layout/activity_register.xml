@@ -9,17 +9,17 @@
         style="@style/PageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/register_email"
+        android:layout_above="@+id/etEmailRegister"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:text="@string/sign_up" />
 
     <EditText
-        android:id="@+id/register_email"
+        android:id="@+id/etEmailRegister"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/register_password"
+        android:layout_above="@+id/etPasswordRegister"
         android:layout_marginBottom="20dp"
         android:autofillHints="email"
         android:drawableStart="@drawable/ic_baseline_email_24"
@@ -29,11 +29,11 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/register_password"
+        android:id="@+id/etPasswordRegister"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/register_confirm"
+        android:layout_above="@id/etConfirmRegister"
         android:layout_marginBottom="20dp"
         android:autofillHints="password"
         android:drawableStart="@drawable/ic_baseline_lock_24"
@@ -43,7 +43,7 @@
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/register_confirm"
+        android:id="@+id/etConfirmRegister"
         style="@style/InputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,11 +56,11 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/register_button"
+        android:id="@+id/btRegister"
         style="@style/Button_Tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/register_confirm"
+        android:layout_below="@+id/etConfirmRegister"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
@@ -71,11 +71,11 @@
 
 
     <TextView
-        android:id="@+id/register_help"
+        android:id="@+id/tvHelpRegister"
         style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/register_button"
+        android:layout_below="@+id/btRegister"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
@@ -83,7 +83,7 @@
         android:text="@string/help" />
 
     <TextView
-        android:id="@+id/register_login"
+        android:id="@+id/tvLoginRegister"
         style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,8 +92,8 @@
         android:layout_marginBottom="15dp"
         android:text="@string/i_have_an_account_login" />
 
-    <TextView
-        android:id="@+id/register_notification"
+    <com.gmail.bodziowaty6978.customviews.NotificationView
+        android:id="@+id/nfvRegister"
         style="@style/notification" />
 
 </RelativeLayout>
