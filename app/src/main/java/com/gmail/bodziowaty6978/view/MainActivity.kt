@@ -3,8 +3,10 @@ package com.gmail.bodziowaty6978.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
+import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
@@ -12,18 +14,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-
-//    lateinit var database: FirebaseDatabase
-//    lateinit var instance: FirebaseAuth
-//    lateinit var userId: String
-//
-//    lateinit var bottomNav: BottomNavigationView
-//    lateinit var calories: CaloriesFragment
-//    lateinit var training: TrainingFragment
-//    lateinit var recipes: RecipesFragment
-//    lateinit var shopping: ShoppingFragment
-//    lateinit var settings: SettingFragment
-
+    lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,38 +23,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        calories = CaloriesFragment()
-//        training = TrainingFragment()
-//        recipes = RecipesFragment()
-//        shopping = ShoppingFragment()
-//        settings = SettingFragment()
-//
-//        setFragment(calories)
-//
-//        bottomNav = findViewById(R.id.main_bottom_nav)
-//
-//        bottomNav.setOnItemSelectedListener {
-//            when (it.itemId) {
-//                R.id.menu_calories -> {
-//
-//                    setFragment(calories)
-//                }
-//                R.id.menu_training -> {
-//                    setFragment(training)
-//                }
-//                R.id.menu_recipes -> {
-//                    setFragment(recipes)
-//                }
-//                R.id.menu_shopping -> {
-//                    setFragment(shopping)
-//
-//                }
-//                R.id.menu_settings -> {
-//                    setFragment(settings)
-//                }
-//            }
-//            true
-//        }
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.getFragment().observe(this,{
+            setFragment(it)
+        })
+
+        binding.bnvMain.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_calories -> {
+                    viewModel.setFragment(viewModel.getCalories())
+                }
+                R.id.menu_training -> {
+                    viewModel.setFragment(viewModel.getTraining())
+                }
+                R.id.menu_recipes -> {
+                    viewModel.setFragment(viewModel.getRecipes())
+                }
+                R.id.menu_shopping -> {
+                    viewModel.setFragment(viewModel.getShopping())
+
+                }
+                R.id.menu_settings -> {
+                    viewModel.setFragment(viewModel.getSettings())
+                }
+            }
+            true
+        }
 
     }
 
