@@ -2,6 +2,7 @@
     <string name="app_name">Fitness App</string>
 
     <string name="this_will_be_implemented_in_the_future">This Will Be Implemented In The Future.</string>
+    <string name="wait">Wait…</string>
 
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>

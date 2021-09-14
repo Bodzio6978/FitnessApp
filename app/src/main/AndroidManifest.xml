@@ -9,15 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
-        <activity android:name=".view.AddActivity"></activity>
+        <activity android:name=".view.MainActivity"></activity>
+        <activity android:name=".view.AddActivity" />
         <activity android:name=".view.UsernameActivity" />
         <activity android:name=".view.ForgotActivity" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.ErrorActivity" />
-        <activity android:name=".view.MainActivity"  android:windowSoftInputMode="stateVisible|adjustResize" >
-
-
+        <activity
+            android:name=".view.SplashActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
