@@ -12,7 +12,7 @@
         android:layout_marginBottom="5dp">
 
         <TextView
-            android:id="@+id/meal_view_name"
+            android:id="@+id/tvNameMeal"
             style="@style/mealTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,86 +21,86 @@
             android:text="Breakfast" />
 
         <TextView
-            android:id="@+id/meal_view_calories_value"
+            android:id="@+id/tvKcalValueMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/meal_view_name"
-            android:layout_alignStart="@+id/meal_view_name"
+            android:layout_below="@+id/tvNameMeal"
+            android:layout_alignStart="@+id/tvNameMeal"
             android:text="215" />
 
         <TextView
-            android:id="@+id/meal_view_kcal"
+            android:id="@+id/tvKcalMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="2dp"
-            android:layout_toEndOf="@+id/meal_view_calories_value"
+            android:layout_toEndOf="@+id/tvKcalValueMeal"
             android:text="@string/kcal" />
 
         <TextView
-            android:id="@+id/meal_view_carbohydrates_value"
+            android:id="@+id/tvCarbsValueMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="18dp"
-            android:layout_toEndOf="@+id/meal_view_kcal"
+            android:layout_toEndOf="@+id/tvKcalMeal"
             android:text="12" />
 
         <TextView
-            android:id="@+id/meal_view_carb"
+            android:id="@+id/tvCarbsMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="2dp"
-            android:layout_toEndOf="@id/meal_view_carbohydrates_value"
+            android:layout_toEndOf="@id/tvCarbsValueMeal"
             android:text="@string/carb" />
 
         <TextView
-            android:id="@+id/meal_view_protein_value"
+            android:id="@+id/tvProteinValueMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="18dp"
-            android:layout_toEndOf="@+id/meal_view_carb"
+            android:layout_toEndOf="@+id/tvCarbsMeal"
             android:text="12" />
 
         <TextView
-            android:id="@+id/meal_view_prot"
+            android:id="@+id/tvProteinMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="2dp"
-            android:layout_toEndOf="@id/meal_view_protein_value"
+            android:layout_toEndOf="@id/tvProteinValueMeal"
             android:text="@string/prot" />
 
         <TextView
-            android:id="@+id/meal_view_fat_value"
+            android:id="@+id/tvFatValueMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="18dp"
-            android:layout_toEndOf="@+id/meal_view_prot"
+            android:layout_toEndOf="@+id/tvProteinMeal"
             android:text="12" />
 
         <TextView
-            android:id="@+id/meal_view_fat"
+            android:id="@+id/tvFatMeal"
             style="@style/secondaryMealInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meal_view_calories_value"
+            android:layout_alignBottom="@+id/tvKcalValueMeal"
             android:layout_marginStart="2dp"
-            android:layout_toEndOf="@id/meal_view_fat_value"
+            android:layout_toEndOf="@id/tvFatValueMeal"
             android:text="@string/fat" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/meal_view_button"
+            android:id="@+id/fabMeal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -113,7 +113,7 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/meal_view_recycler"
+        android:id="@+id/rvMeal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/meal_view_main_container"

@@ -24,27 +24,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getFragment().observe(this,{
-            setFragment(it)
-        })
+
+        setFragment(viewModel.getCalories())
 
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_calories -> {
-                    viewModel.setFragment(viewModel.getCalories())
+                    setFragment(viewModel.getCalories())
                 }
                 R.id.menu_training -> {
-                    viewModel.setFragment(viewModel.getTraining())
+                    setFragment(viewModel.getTraining())
                 }
                 R.id.menu_recipes -> {
-                    viewModel.setFragment(viewModel.getRecipes())
+                    setFragment(viewModel.getRecipes())
                 }
                 R.id.menu_shopping -> {
-                    viewModel.setFragment(viewModel.getShopping())
+                    setFragment(viewModel.getShopping())
 
                 }
                 R.id.menu_settings -> {
-                    viewModel.setFragment(viewModel.getSettings())
+                    setFragment(viewModel.getSettings())
                 }
             }
             true

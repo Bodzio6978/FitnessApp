@@ -8,153 +8,146 @@
 
 
 
-    <!--    <RelativeLayout-->
-    <!--        android:id="@+id/calories_calendar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_alignParentTop="true">-->
+        <RelativeLayout
+            android:id="@+id/rlCalendarCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
 
-    <!--        <ImageButton-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="20dp"-->
-    <!--            android:layout_marginTop="10dp"-->
-    <!--            android:background="@android:color/transparent"-->
-    <!--            android:padding="10dp"-->
-    <!--            android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />-->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />
 
-    <!--        <TextView-->
-    <!--            android:id="@+id/calories_today"-->
-    <!--            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_centerInParent="true"-->
-    <!--            android:text="Today" />-->
-
-
-    <!--        <ImageButton-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_alignParentEnd="true"-->
-    <!--            android:layout_marginTop="10dp"-->
-    <!--            android:layout_marginEnd="20dp"-->
-    <!--            android:background="@android:color/transparent"-->
-    <!--            android:padding="10dp"-->
-    <!--            android:src="@drawable/ic_baseline_arrow_forward_ios_24" />-->
-
-    <!--    </RelativeLayout>-->
-
-    <!--    <View-->
-    <!--        style="@style/divider"-->
-    <!--        android:layout_alignBottom="@id/calories_calendar" />-->
-
-    <!--    <ScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_below="@+id/calories_calendar">-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content">-->
-
-    <!--        <com.gmail.bodziowaty6978.customviews.MealView-->
-    <!--            android:id="@+id/calories_breakfast"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            app:mealName="@string/breakfast" />-->
-
-    <!--        <com.gmail.bodziowaty6978.customviews.MealView-->
-    <!--            android:id="@+id/calories_lunch"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_below="@+id/calories_breakfast"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            app:mealName="@string/lunch" />-->
-
-    <!--        <com.gmail.bodziowaty6978.customviews.MealView-->
-    <!--            android:id="@+id/calories_dinner"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_below="@+id/calories_lunch"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            app:mealName="@string/dinner" />-->
-
-    <!--        <com.gmail.bodziowaty6978.customviews.MealView-->
-    <!--            android:id="@+id/calories_supper"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_below="@+id/calories_dinner"-->
-    <!--            android:layout_marginTop="15dp"-->
-    <!--            app:mealName="@string/supper" />-->
-
-    <!--        </RelativeLayout>-->
-
-    <!--    </ScrollView>-->
+            <TextView
+                android:id="@+id/tvTodayCalories"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Today" />
 
 
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="56dp"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:background="@color/bottomNavigation">-->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@android:color/transparent"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
-    <!--        <RelativeLayout-->
-    <!--            android:layout_width="75dp"-->
-    <!--            android:layout_height="match_parent">-->
+        </RelativeLayout>
 
-    <!--        <TextView-->
-    <!--            android:id="@+id/calories_calories"-->
-    <!--            android:layout_centerHorizontal="true"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_above="@+id/calories_progress"-->
-    <!--            style="@style/Paragraph_Secondary_Caption"-->
-    <!--            android:text="Calories:"/>-->
+        <View
+            style="@style/divider"
+            android:layout_alignBottom="@id/rlCalendarCalories" />
 
-    <!--        <ProgressBar-->
-    <!--            android:id="@+id/calories_progress"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            style="?android:progressBarStyleHorizontal"-->
-    <!--            android:progress="72"-->
-    <!--            android:layout_centerHorizontal="true"-->
-    <!--            android:layout_centerVertical="true"/>-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rlCalendarCalories">
 
-    <!--        <TextView-->
-    <!--            android:layout_below="@+id/calories_progress"-->
-    <!--            android:id="@+id/calories_current"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_toStartOf="@+id/calories_divider"-->
-    <!--            android:text="1524"/>-->
-    <!--        <TextView-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <!--            android:layout_alignBottom="@+id/calories_current"-->
-    <!--            android:id="@+id/calories_divider"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_centerHorizontal="true"-->
-    <!--            android:text="/"-->
-    <!--            />-->
+            <com.gmail.bodziowaty6978.customviews.MealView
+                android:id="@+id/calories_breakfast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:mealName="@string/breakfast" />
 
-    <!--        <TextView-->
-    <!--            android:layout_alignBottom="@+id/calories_current"-->
-    <!--            android:id="@+id/calories_total"-->
-    <!--            android:layout_toEndOf="@id/calories_divider"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="2100"/>-->
+            <com.gmail.bodziowaty6978.customviews.MealView
+                android:id="@+id/calories_lunch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calories_breakfast"
+                android:layout_marginTop="15dp"
+                app:mealName="@string/lunch" />
 
-    <!--        </RelativeLayout>-->
+            <com.gmail.bodziowaty6978.customviews.MealView
+                android:id="@+id/calories_dinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calories_lunch"
+                android:layout_marginTop="15dp"
+                app:mealName="@string/dinner" />
 
+            <com.gmail.bodziowaty6978.customviews.MealView
+                android:id="@+id/calories_supper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calories_dinner"
+                android:layout_marginTop="15dp"
+                app:mealName="@string/supper" />
 
-    <!--    </RelativeLayout>-->
+            </RelativeLayout>
+
+        </ScrollView>
 
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/calories_notification"-->
-    <!--        style="@style/notification" />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/bottomNavigation">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content">
+
+            <com.gmail.bodziowaty6978.customviews.NutritionView
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:id="@+id/nvCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:name="Calories"/>
+
+            <com.gmail.bodziowaty6978.customviews.NutritionView
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+
+                android:layout_toEndOf="@+id/nvCalories"
+                android:id="@+id/nvCarbohydrates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:name="Carbs"/>
+
+            <com.gmail.bodziowaty6978.customviews.NutritionView
+                android:layout_toEndOf="@+id/nvCarbohydrates"
+                android:id="@+id/nvProtein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:name="Protein"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <com.gmail.bodziowaty6978.customviews.NutritionView
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toEndOf="@+id/nvProtein"
+                android:id="@+id/nvFat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:name="Fat"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <com.gmail.bodziowaty6978.customviews.NotificationView
+            android:id="@+id/ntvCalories"
+            style="@style/notification" />
 
 </RelativeLayout>
 

@@ -13,4 +13,11 @@
         <attr name="text" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="NutritionView">
+        <attr name="name" format="string"/>
+        <attr name="currentValue" format="integer"/>
+        <attr name="wantedValue" format="integer"/>
+        <attr name="progressState" format="integer"/>
+    </declare-styleable>
+
 </resources>
