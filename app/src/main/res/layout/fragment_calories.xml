@@ -7,7 +7,6 @@
     tools:context=".view.CaloriesFragment">
 
 
-
         <RelativeLayout
             android:id="@+id/rlCalendarCalories"
             android:layout_width="match_parent"
@@ -88,19 +87,31 @@
                 android:layout_marginTop="15dp"
                 app:mealName="@string/supper" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/calories_supper"
+                    android:background="@android:color/transparent"
+                    android:layout_height="80dp"/>
+
             </RelativeLayout>
+
 
         </ScrollView>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/bottomNavigation">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true">
 
             <RelativeLayout
+                android:background="@drawable/bottom_nutrition_values"
                 android:layout_width="wrap_content"
+                android:elevation="6dp"
+                android:padding="5dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content">
 

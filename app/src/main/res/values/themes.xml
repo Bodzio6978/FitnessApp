@@ -68,5 +68,31 @@
     <style name="secondaryMealInformation" parent="Paragraph_Secondary_Caption">
         <item name="android:textColor">@color/bottomText</item>
     </style>
+    
+    <style name="newEditText" parent="Theme.FitnessApp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginStart">70dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:layout_marginTop">-5dp</item>
+        <item name="android:background">@drawable/edit_text</item>
+    </style>
+
+    <style name="newTextView" parent="TextInput_ListItemTitles_ImportantText_Snippet">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <style name="g" parent="TextInput_ListItemTitles_ImportantText_Snippet">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">g</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
 
 </resources>

@@ -14,13 +14,15 @@ import com.gmail.bodziowaty6978.view.AddActivity
 
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs){
 
-    lateinit var binding: MealViewBinding
+    var binding: MealViewBinding = MealViewBinding.inflate(LayoutInflater.from(context))
+    private var mealList: MutableList<Meal> = mutableListOf()
 
     init {
-        val binding = MealViewBinding.inflate(LayoutInflater.from(context))
         addView(binding.root)
 
+
         binding.rvMeal.layoutManager = LinearLayoutManager(context)
+        binding.rvMeal.adapter = CaloriesRecyclerAdapter(mealList)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
         binding.tvNameMeal.text = attributes.getString(R.styleable.MealView_mealName)
@@ -34,14 +36,15 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
 
         binding.fabMeal.setOnClickListener {
-            val intent = Intent(context, AddActivity::class.java)
+            val intent = Intent(context, AddActivity::class.java).putExtra("mealName",binding.tvNameMeal.text.toString())
             context.startActivity(intent)
 
         }
     }
 
-    fun setAdapter(list:MutableList<Meal>){
-        binding.rvMeal.adapter = CaloriesRecyclerAdapter(list)
+    fun addMeal(item:Meal){
+        mealList.add(item)
+        binding.rvMeal.adapter?.notifyDataSetChanged()
     }
 
 }

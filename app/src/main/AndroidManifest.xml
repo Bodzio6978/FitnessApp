@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
-        <activity android:name=".view.MainActivity"></activity>
+        <activity android:name=".view.MealActivity"></activity>
+        <activity
+            android:name=".view.NewActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".view.MainActivity" />
         <activity android:name=".view.AddActivity" />
         <activity android:name=".view.UsernameActivity" />
         <activity android:name=".view.ForgotActivity" />

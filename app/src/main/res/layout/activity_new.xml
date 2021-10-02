@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".view.NewActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/tvTitleNew"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            app:tint="@color/primary" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@color/primary"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvNameNew"
+        style="@style/newTextView"
+        android:layout_below="@+id/tvTitleNew"
+        android:layout_marginTop="20dp"
+        android:text="@string/name" />
+
+    <EditText
+        android:id="@+id/etNameNew"
+        style="@style/newEditText"
+        android:layout_alignTop="@+id/tvNameNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+
+    <TextView
+        android:id="@+id/tvBrandNew"
+        style="@style/newTextView"
+        android:layout_below="@+id/etNameNew"
+        android:text="@string/brand" />
+
+    <EditText
+        android:id="@+id/etBrandNew"
+        style="@style/newEditText"
+        android:layout_alignTop="@+id/tvBrandNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+    <TextView
+        android:layout_below="@+id/etBrandNew"
+        android:id="@+id/tvNutritionTitleNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Nutrition values in:"
+        style="@style/newTextView"
+        android:background="@color/toolbar"
+        android:padding="10dp"
+        android:textColor="@color/white"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNutritionTitleNew"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/white"
+        app:tabSelectedTextColor="@color/primary"
+        app:tabTextColor="@color/black">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In 100g" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In container" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In portion" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <TextView
+        android:id="@+id/tvCaloriesNew"
+        style="@style/newTextView"
+        android:layout_below="@+id/tlNew"
+        android:text="@string/caloriesStar"
+        android:layout_marginTop="30dp"/>
+
+
+    <EditText
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:id="@+id/etCaloriesNew"
+        android:layout_marginStart="150dp"
+        style="@style/newEditText"
+        android:layout_alignTop="@+id/tvCaloriesNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+    <TextView
+        style="@style/g"
+        android:layout_alignBottom="@+id/etCaloriesNew"/>
+
+
+    <TextView
+        android:id="@+id/tvCarbsNew"
+        style="@style/newTextView"
+        android:layout_below="@id/tvCaloriesNew"
+        android:text="@string/carbohydrates" />
+
+    <EditText
+        android:id="@+id/etCarbsNew"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        style="@style/newEditText"
+        android:layout_marginStart="150dp"
+        android:layout_alignTop="@+id/tvCarbsNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+    <TextView
+        style="@style/g"
+        android:layout_alignBottom="@+id/etCarbsNew"/>
+
+    <TextView
+        android:id="@+id/tvProteinNew"
+        style="@style/newTextView"
+        android:layout_below="@id/tvCarbsNew"
+        android:text="@string/protein" />
+
+    <EditText
+        android:id="@+id/etProteinNew"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        style="@style/newEditText"
+        android:layout_marginStart="150dp"
+        android:layout_alignTop="@+id/tvProteinNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+    <TextView
+        style="@style/g"
+        android:layout_alignBottom="@+id/etProteinNew"/>
+
+    <TextView
+        android:id="@+id/tvFatNew"
+        android:layout_below="@id/tvProteinNew"
+        style="@style/newTextView"
+        android:text="@string/fatStar" />
+
+    <EditText
+        android:id="@+id/etFatNew"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        style="@style/newEditText"
+        android:layout_marginStart="150dp"
+        android:layout_alignTop="@+id/tvFatNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+    <TextView
+        style="@style/g"
+        android:layout_alignBottom="@+id/etFatNew"/>
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:id="@+id/tvCodeNew"
+        android:layout_below="@id/tvFatNew"
+        style="@style/newTextView"
+        android:text="Bar code"/>
+
+    <EditText
+        android:id="@+id/etBarCodeNew"
+        style="@style/newEditText"
+        android:layout_marginStart="150dp"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_alignTop="@+id/tvCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew" />
+
+
+    <ImageButton
+        android:id="@+id/ibBarCodeNew"
+        android:layout_width="wrap_content"
+        app:tint="@color/primary"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_bar_code"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/etBarCodeNew"/>
+
+
+
+
+
+
+</RelativeLayout>

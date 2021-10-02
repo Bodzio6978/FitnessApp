@@ -14,6 +14,7 @@
     <color name="grey3">#4d4d4d</color>
     <color name="grey4">#8c8c8c</color>
 
+    <color name="toolbar">@color/primary</color>
     <color name="editText">@color/white</color>
     <color name="bottomNavigation">@color/white</color>
     <color name="notification">@color/primary</color>

@@ -28,7 +28,7 @@ class SplashViewModel: ViewModel() {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     GlobalScope.launch(Dispatchers.Main) {
-                        delay(1000L)
+                        delay(1L)
                         if (snapshot.value == null) {
                             hasUsername.value = false
                         }else{

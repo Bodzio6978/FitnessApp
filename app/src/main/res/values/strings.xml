@@ -43,8 +43,16 @@
     <string name="carb"> Carb</string>
     <string name="prot"> Prot</string>
     <string name="fat"> Fat</string>
+    <string name="fatStar"> Fat*</string>
     <string name="delete">delete</string>
     <string name="meal_has_been_removed">Meal Has Been Removed</string>
+    <string name="name">Name*</string>
+    <string name="carbohydrates">Carbohydrates*</string>
+    <string name="protein">Protein*</string>
+    <string name="brand">Brand</string>
+    <string name="caloriesStar">Calories*</string>
+    <string name="product_name">Product name</string>
+    <string name="save">Save</string>
 
 
 </resources>

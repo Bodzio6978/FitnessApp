@@ -6,20 +6,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.bodziowaty6978.databinding.MealLayoutBinding
 import com.gmail.bodziowaty6978.model.Meal
 
-class CaloriesRecyclerAdapter(private var meals: MutableList<Meal>): RecyclerView.Adapter<CaloriesRecyclerAdapter.ViewHolder>() {
+class QueryMealRecyclerAdapter(private var meals: MutableList<Meal>): RecyclerView.Adapter<QueryMealRecyclerAdapter.ViewHolder>() {
+
+    fun updateMeals(newMeals:MutableList<Meal>){
+        meals.clear()
+        meals.addAll(newMeals)
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(private val binding: MealLayoutBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item:Meal){
+        fun bind(item: Meal){
             binding.item = item
             binding.executePendingBindings()
-        }
-
-        init{
-            binding.mealDelete.setOnClickListener {
-                meals.removeAt(adapterPosition)
-                notifyDataSetChanged()
-            }
         }
     }
 
@@ -32,15 +31,5 @@ class CaloriesRecyclerAdapter(private var meals: MutableList<Meal>): RecyclerVie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(meals[position])
 
     override fun getItemCount(): Int = meals.size
-
-    fun updateMeals(newMeals:MutableList<Meal>){
-        meals.clear()
-        meals.addAll(newMeals)
-        notifyDataSetChanged()
-    }
-
-    fun addMeal(item:Meal){
-        meals.add(item)
-    }
 
 }

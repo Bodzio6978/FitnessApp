@@ -5,6 +5,8 @@
 
     <color name="editText">@color/grey1</color>
 
+    <color name="toolbar">@color/darkGrey</color>
+
     <color name="notification">@color/white</color>
     <color name="bottomNavigation">@color/grey1</color>
     <color name="bottomTextSelected">@color/white</color>

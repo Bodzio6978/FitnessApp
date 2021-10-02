@@ -23,9 +23,6 @@ class NutritionView(context: Context, attrs: AttributeSet) : LinearLayout(contex
         attributes.recycle()
     }
 
-    fun setAttributes(current:String,wanted:String){
-
-    }
     fun refreshProgress(){
 
     }

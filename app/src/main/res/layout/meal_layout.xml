@@ -35,6 +35,7 @@
                 android:layout_marginBottom="1dp" />
 
             <TextView
+                android:text="@{``+item.producer}"
                 android:id="@+id/meal_producer"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
@@ -43,6 +44,7 @@
                 android:layout_marginBottom="1dp" />
 
             <TextView
+                android:text="@{``+item.calories}"
                 android:id="@+id/meal_kcal_value"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
@@ -50,6 +52,7 @@
                 android:layout_below="@+id/meal_producer" />
 
             <TextView
+
                 android:id="@+id/meal_kcal"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
@@ -60,6 +63,7 @@
                 android:text="@string/kcal" />
 
             <TextView
+                android:text="@{``+item.carbs}"
                 android:id="@+id/meal_carb_value"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
@@ -79,6 +83,7 @@
                 android:text="@string/carb" />
 
             <TextView
+                android:text="@{``+item.protein}"
                 android:id="@+id/meal_prot_value"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
@@ -98,6 +103,7 @@
                 android:text="@string/prot" />
 
             <TextView
+                android:text="@{``+item.fat}"
                 android:id="@+id/meal_fat_value"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"
