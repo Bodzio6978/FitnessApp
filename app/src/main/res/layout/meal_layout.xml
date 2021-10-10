@@ -35,7 +35,7 @@
                 android:layout_marginBottom="1dp" />
 
             <TextView
-                android:text="@{``+item.producer}"
+                android:text="@{``+item.brand}"
                 android:id="@+id/meal_producer"
                 style="@style/secondaryMealInformation"
                 android:layout_width="wrap_content"

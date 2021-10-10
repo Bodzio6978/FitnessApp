@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <data>-->
-<!--        <variable-->
-<!--            name="item"-->
-<!--            type="com.gmail.bodziowaty6978.model.Meal" />-->
-<!--    </data>-->
-<!--    -->
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
+    <data>
 
-</RelativeLayout>
+        <variable
+            name="item"
+            type="com.gmail.bodziowaty6978.model.Meal" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:elevation="7dp"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/card_word">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvNameQuery"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Szynka zawędzana" />
+
+            <TextView
+                android:id="@+id/tvBrandQuery"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvNameQuery"
+                android:layout_marginStart="10dp"
+                android:text="Biedronka,"
+                android:textColor="@color/bottomText"/>
+
+
+            <TextView
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvNameQuery"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@+id/tvBrandQuery"
+                android:text="100 g"
+                android:textColor="@color/bottomText" />
+
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

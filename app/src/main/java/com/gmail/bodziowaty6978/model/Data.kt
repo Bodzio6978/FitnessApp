@@ -1,3 +1,3 @@
 package com.gmail.bodziowaty6978.model
 
-data class Meal(val name:String, val producer:String, val calories:Int, val carbs:Int, val protein:Int, val fat:Int)
+data class Meal(val author:String,val name:String, val brand:String,val weight:String,val isPortionWeight:Boolean, val calories:String, val carbs:String, val protein:String, val fat:String, val barCode:String)

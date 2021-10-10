@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
-import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -22,8 +21,6 @@ class CaloriesFragment() : Fragment() {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(requireActivity()).get(CaloriesViewModel::class.java)
-
-        binding.caloriesBreakfast.addMeal(Meal("Boczek wędzony","Piątnica",150,12,15,21))
 
         return binding.root
     }

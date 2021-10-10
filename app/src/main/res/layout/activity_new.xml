@@ -8,27 +8,30 @@
     tools:context=".view.NewActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/tvTitleNew"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
             app:tint="@color/primary" />
 
 
         <Button
+            android:id="@+id/btSaveNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:textColor="@color/primary"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textColor="@color/primary" />
 
     </RelativeLayout>
 
@@ -59,17 +62,17 @@
         android:layout_toEndOf="@+id/tvNameNew" />
 
     <TextView
-        android:layout_below="@+id/etBrandNew"
         android:id="@+id/tvNutritionTitleNew"
+        style="@style/newTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etBrandNew"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Nutrition values in:"
-        style="@style/newTextView"
         android:background="@color/toolbar"
         android:padding="10dp"
-        android:textColor="@color/white"/>
+        android:text="Nutrition values in:"
+        android:textColor="@color/white" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tlNew"
@@ -99,26 +102,47 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <TextView
+        android:id="@+id/tvWeightNew"
+        style="@style/newTextView"
+        android:layout_below="@+id/tlNew"
+        android:layout_marginTop="30dp"
+        android:text="@string/container_weight" />
+
+    <EditText
+        android:id="@+id/etWeightNew"
+        style="@style/newEditText"
+        android:layout_alignTop="@+id/tvWeightNew"
+        android:layout_marginStart="150dp"
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:inputType="numberDecimal" />
+
+    <TextView
+       style="@style/g"
+        android:layout_alignBottom="@+id/etWeightNew"/>
+
 
     <TextView
         android:id="@+id/tvCaloriesNew"
         style="@style/newTextView"
-        android:layout_below="@+id/tlNew"
-        android:text="@string/caloriesStar"
-        android:layout_marginTop="30dp"/>
+        android:layout_below="@+id/tvWeightNew"
+        android:layout_marginTop="25dp"
+        android:text="@string/caloriesStar" />
 
 
     <EditText
-        android:layout_toStartOf="@+id/ibBarCodeNew"
         android:id="@+id/etCaloriesNew"
-        android:layout_marginStart="150dp"
         style="@style/newEditText"
         android:layout_alignTop="@+id/tvCaloriesNew"
-        android:layout_toEndOf="@+id/tvNameNew" />
+        android:layout_marginStart="150dp"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:inputType="numberDecimal"  />
 
     <TextView
         style="@style/g"
-        android:layout_alignBottom="@+id/etCaloriesNew"/>
+        android:layout_alignBottom="@+id/etCaloriesNew" />
 
 
     <TextView
@@ -129,15 +153,16 @@
 
     <EditText
         android:id="@+id/etCarbsNew"
-        android:layout_toStartOf="@+id/ibBarCodeNew"
         style="@style/newEditText"
-        android:layout_marginStart="150dp"
         android:layout_alignTop="@+id/tvCarbsNew"
-        android:layout_toEndOf="@+id/tvNameNew" />
+        android:layout_marginStart="150dp"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:inputType="numberDecimal"  />
 
     <TextView
         style="@style/g"
-        android:layout_alignBottom="@+id/etCarbsNew"/>
+        android:layout_alignBottom="@+id/etCarbsNew" />
 
     <TextView
         android:id="@+id/tvProteinNew"
@@ -147,64 +172,67 @@
 
     <EditText
         android:id="@+id/etProteinNew"
-        android:layout_toStartOf="@+id/ibBarCodeNew"
         style="@style/newEditText"
-        android:layout_marginStart="150dp"
         android:layout_alignTop="@+id/tvProteinNew"
-        android:layout_toEndOf="@+id/tvNameNew" />
+        android:layout_marginStart="150dp"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:inputType="number" />
 
     <TextView
         style="@style/g"
-        android:layout_alignBottom="@+id/etProteinNew"/>
+        android:layout_alignBottom="@+id/etProteinNew" />
 
     <TextView
         android:id="@+id/tvFatNew"
-        android:layout_below="@id/tvProteinNew"
         style="@style/newTextView"
+        android:layout_below="@id/tvProteinNew"
         android:text="@string/fatStar" />
 
     <EditText
         android:id="@+id/etFatNew"
-        android:layout_toStartOf="@+id/ibBarCodeNew"
         style="@style/newEditText"
-        android:layout_marginStart="150dp"
         android:layout_alignTop="@+id/tvFatNew"
-        android:layout_toEndOf="@+id/tvNameNew" />
+        android:layout_marginStart="150dp"
+        android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:inputType="number" />
 
     <TextView
         style="@style/g"
-        android:layout_alignBottom="@+id/etFatNew"/>
+        android:layout_alignBottom="@+id/etFatNew" />
 
     <TextView
-        android:layout_marginTop="25dp"
         android:id="@+id/tvCodeNew"
-        android:layout_below="@id/tvFatNew"
         style="@style/newTextView"
-        android:text="Bar code"/>
+        android:layout_below="@id/tvFatNew"
+        android:layout_marginTop="25dp"
+        android:text="Bar code" />
 
     <EditText
         android:id="@+id/etBarCodeNew"
         style="@style/newEditText"
+        android:layout_alignTop="@+id/tvCodeNew"
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
-        android:layout_alignTop="@+id/tvCodeNew"
-        android:layout_toEndOf="@+id/tvNameNew" />
+        android:layout_toEndOf="@+id/tvNameNew"
+        android:inputType="number" />
 
 
     <ImageButton
         android:id="@+id/ibBarCodeNew"
         android:layout_width="wrap_content"
-        app:tint="@color/primary"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_bar_code"
+        android:layout_alignBottom="@id/etBarCodeNew"
+        android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/etBarCodeNew"/>
+        android:src="@drawable/ic_bar_code"
+        app:tint="@color/primary" />
 
-
-
-
+    <com.gmail.bodziowaty6978.customviews.NotificationView
+        style="@style/notification"
+        android:id="@+id/nfvNew"/>
 
 
 </RelativeLayout>
