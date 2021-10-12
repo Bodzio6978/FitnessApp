@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityRegisterBinding
-import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.gmail.bodziowaty6978.viewmodel.RegisterViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -32,11 +31,6 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
                 finish()
             }
         })
-
-        NotificationText.text.observe(this, { text ->
-            changeNotificationText(text)
-        })
-
         binding.btRegister.setOnClickListener {
             viewModel.registerUser(binding.etEmailRegister.text.toString(), binding.etPasswordRegister.text.toString(), binding.etConfirmRegister.text.toString())
         }
@@ -44,23 +38,6 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
         binding.tvLoginRegister.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-        }
-    }
-
-    private fun changeNotificationText(text: String) {
-        when (text) {
-            "fields" -> binding.nfvRegister.apply {
-                setText(getString(R.string.please_make_sure_all_fields_are_filled_in_correctly))
-                startAnimation()
-            }
-            "match" -> binding.nfvRegister.apply {
-                setText(getString(R.string.please_make_sure_both_passwords_are_the_same))
-                startAnimation()
-            }
-            else -> binding.nfvRegister.apply {
-                setText(text)
-                startAnimation()
-            }
         }
     }
 }

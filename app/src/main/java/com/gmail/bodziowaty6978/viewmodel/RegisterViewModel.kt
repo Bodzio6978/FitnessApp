@@ -12,11 +12,14 @@ class RegisterViewModel: ViewModel() {
     fun registerUser(email:String, password:String, confirm:String){
         if (email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
             NotificationText.text.value = "fields"
+            NotificationText.state.value = true
         }else if(password != confirm){
             NotificationText.text.value = "confirm"
+            NotificationText.state.value = true
         }else{
             instance.createUserWithEmailAndPassword(email,password).addOnFailureListener {
                 NotificationText.text.value = it.message.toString()
+                NotificationText.state.value = true
             }.addOnSuccessListener {
                 isUserRegistered.value = true
             }

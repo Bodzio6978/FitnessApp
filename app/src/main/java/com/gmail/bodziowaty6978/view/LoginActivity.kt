@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityLoginBinding
-import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.gmail.bodziowaty6978.viewmodel.LoginViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -33,10 +32,6 @@ class LoginActivity : AppCompatActivity(), LifecycleOwner {
             }
         })
 
-        NotificationText.text.observe(this, { text ->
-            changeNotificationText(text)
-        })
-
         binding.tvForgotLogin.setOnClickListener {
             val intent = Intent(this, ForgotActivity::class.java)
             startActivity(intent)
@@ -57,20 +52,4 @@ class LoginActivity : AppCompatActivity(), LifecycleOwner {
             startActivity(intent)
         }
     }
-
-    private fun changeNotificationText(text:String){
-        if (text == "fields"){
-            binding.nfvLogin.apply {
-                setText(getString(R.string.please_make_sure_all_fields_are_filled_in_correctly))
-                startAnimation()
-            }
-        }else{
-            binding.nfvLogin.apply {
-                setText(text)
-                startAnimation()
-            }
-
-        }
-    }
-
 }

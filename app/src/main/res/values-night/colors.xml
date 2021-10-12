@@ -7,6 +7,9 @@
 
     <color name="toolbar">@color/darkGrey</color>
 
+    <color name="progressBar">@color/primary</color>
+
+
     <color name="notification">@color/white</color>
     <color name="bottomNavigation">@color/grey1</color>
     <color name="bottomTextSelected">@color/white</color>

@@ -14,9 +14,11 @@ class LoginViewModel : ViewModel() {
     fun loginUser(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             NotificationText.text.value = "fields"
+            NotificationText.state.value = true
         }else{
             instance.signInWithEmailAndPassword(email,password).addOnFailureListener {
                 NotificationText.text.value = it.message.toString()
+                NotificationText.state.value = true
             }.addOnSuccessListener {
                 isUserLoggedIn.value = true
             }

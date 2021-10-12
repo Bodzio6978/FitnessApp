@@ -2,7 +2,6 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gmail.bodziowaty6978.singleton.NetworkCallState
 import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,8 +19,10 @@ class UsernameViewModel : ViewModel() {
     fun addUsername(username: String) {
         if (username.isEmpty()) {
             NotificationText.text.value = "username"
+            NotificationText.state.value = true
         } else if (username.length < 6 || username.length > 24) {
             NotificationText.text.value = "length"
+            NotificationText.state.value = true
         } else{
             checkIfUserExists(username)
         }
@@ -51,7 +52,8 @@ class UsernameViewModel : ViewModel() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                NetworkCallState.status.value = NetworkCallState.NETWORK_ERROR
+                NotificationText.text.value = "Something wrong happened"
+                NotificationText.state.value = true
             }
         })
 

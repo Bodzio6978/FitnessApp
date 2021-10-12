@@ -28,12 +28,18 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(NewViewModel::class.java)
 
-        NotificationText.text.observe(this,{
-            changeNotificationText(it)
+        viewModel.getAction().observe(this,{
+
         })
+
+
 
         binding.btSaveNew.setOnClickListener {
             addNewMeal()
+        }
+
+        binding.ibBackNew.setOnClickListener {
+            super.onBackPressed()
         }
 
         binding.tlNew.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
@@ -53,24 +59,18 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
         })
     }
 
-    private fun changeNotificationText(text:String){
-        binding.nfvNew.apply {
-            setText(text)
-            startAnimation()
-        }
-    }
-
     private fun addNewMeal() {
-        viewModel.addNewProduct(
-                name = binding.etNameNew.text.toString().trim(),
-                brand = binding.etBrandNew.text.toString().trim(),
-                weight = binding.etWeightNew.text.toString().trim(),
-                position = binding.tlNew.selectedTabPosition,
-                calories = binding.etCaloriesNew.text.toString().trim(),
-                carbs = binding.etCarbsNew.text.toString().trim(),
-                protein = binding.etProteinNew.text.toString().trim(),
-                fat = binding.etFatNew.text.toString().trim(),
-                barCode = binding.etBarCodeNew.text.toString().trim()
-        )
+        NotificationText.text.value = "huj"
+//        viewModel.addNewProduct(
+//                name = binding.etNameNew.text.toString().trim(),
+//                brand = binding.etBrandNew.text.toString().trim(),
+//                weight = binding.etWeightNew.text.toString().trim(),
+//                position = binding.tlNew.selectedTabPosition,
+//                calories = binding.etCaloriesNew.text.toString().trim(),
+//                carbs = binding.etCarbsNew.text.toString().trim(),
+//                protein = binding.etProteinNew.text.toString().trim(),
+//                fat = binding.etFatNew.text.toString().trim(),
+//                barCode = binding.etBarCodeNew.text.toString().trim()
+//        )
     }
 }

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageButton
+            android:id="@+id/ibBackNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -114,13 +115,13 @@
         style="@style/newEditText"
         android:layout_alignTop="@+id/tvWeightNew"
         android:layout_marginStart="150dp"
-        android:layout_toEndOf="@+id/tvNameNew"
         android:layout_toStartOf="@+id/ibBarCodeNew"
+        android:layout_toEndOf="@+id/tvNameNew"
         android:inputType="numberDecimal" />
 
     <TextView
-       style="@style/g"
-        android:layout_alignBottom="@+id/etWeightNew"/>
+        style="@style/g"
+        android:layout_alignBottom="@+id/etWeightNew" />
 
 
     <TextView
@@ -138,7 +139,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal"  />
+        android:inputType="numberDecimal" />
 
     <TextView
         style="@style/g"
@@ -158,7 +159,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal"  />
+        android:inputType="numberDecimal" />
 
     <TextView
         style="@style/g"
@@ -231,8 +232,8 @@
         app:tint="@color/primary" />
 
     <com.gmail.bodziowaty6978.customviews.NotificationView
-        style="@style/notification"
-        android:id="@+id/nfvNew"/>
+        android:id="@+id/nfvNew"
+        style="@style/notification" />
 
 
 </RelativeLayout>
