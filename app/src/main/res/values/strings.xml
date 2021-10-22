@@ -57,6 +57,7 @@
     <string name="container_weight">Container weight</string>
     <string name="portion_weight_star">Portion weight*</string>
     <string name="container_weight_star">Container weight*</string>
+    <string name="add">Add</string>
 
 
 </resources>

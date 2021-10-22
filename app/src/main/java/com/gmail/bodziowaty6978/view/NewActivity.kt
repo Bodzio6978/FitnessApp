@@ -50,6 +50,9 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
                     NotificationText.setText("Meal has been added")
                     startMealActivity()
                 }
+                Action.ERROR_ADDING_MEAL -> {
+                    NotificationText.setText("An error has occurred during adding your product")
+                }
             }
             NotificationText.startAnimation()
         })

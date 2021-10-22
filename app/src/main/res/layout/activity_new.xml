@@ -9,7 +9,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/tvTitleNew"
+        android:id="@+id/rlTitleNew"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,7 +40,7 @@
     <TextView
         android:id="@+id/tvNameNew"
         style="@style/newTextView"
-        android:layout_below="@+id/tvTitleNew"
+        android:layout_below="@+id/rlTitleNew"
         android:layout_marginTop="20dp"
         android:text="@string/name" />
 

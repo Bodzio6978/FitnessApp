@@ -22,6 +22,5 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(MealViewModel::class.java)
 
-        binding.tvKey.text = intent.getStringExtra("key")
     }
 }
