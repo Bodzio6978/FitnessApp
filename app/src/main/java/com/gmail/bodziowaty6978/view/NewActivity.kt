@@ -1,50 +1,90 @@
 package com.gmail.bodziowaty6978.view
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.budiyev.android.codescanner.*
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityNewBinding
 import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.viewmodel.Action
 import com.gmail.bodziowaty6978.viewmodel.NewViewModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
+
+private const val CAMERA_REQUEST_CODE = 101
+
+@DelicateCoroutinesApi
 class NewActivity : AppCompatActivity(), LifecycleOwner {
 
-    lateinit var viewModel: NewViewModel
+    private lateinit var viewModel: NewViewModel
     lateinit var binding: ActivityNewBinding
-
-    private var items = arrayOf<String>("g","kg")
+    private lateinit var codeScanner: CodeScanner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new)
+
+        setupPermissions()
 
         binding = ActivityNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(NewViewModel::class.java)
 
-        viewModel.getAction().observe(this,{
-
+        viewModel.getAction().observe(this, {
+            when (it.value) {
+                Action.ADDING_MEAL -> {
+                    NotificationText.setText("Adding new meal")
+                }
+                Action.MEAL_ADDED -> {
+                    NotificationText.setText("Meal has been added")
+                    startMealActivity()
+                }
+            }
+            NotificationText.startAnimation()
         })
 
+        codeScanner = CodeScanner(this, binding.csvNew)
 
+        codeScanner.apply {
+            camera = CodeScanner.CAMERA_BACK
+            formats = CodeScanner.ALL_FORMATS
 
-        binding.btSaveNew.setOnClickListener {
-            addNewMeal()
+            autoFocusMode = AutoFocusMode.SAFE
+            scanMode = ScanMode.CONTINUOUS
+            isAutoFocusEnabled = true
+            isFlashEnabled = false
+
+            decodeCallback = DecodeCallback {
+                runOnUiThread{
+                    binding.etBarCodeNew.setText(it.text)
+                    changeScannerVisibility()
+                }
+            }
+            errorCallback = ErrorCallback {
+                runOnUiThread{
+                    Log.e("NewActivity",it.message.toString())
+                }
+            }
         }
 
-        binding.ibBackNew.setOnClickListener {
-            super.onBackPressed()
+        binding.csvNew.setOnClickListener {
+            codeScanner.startPreview()
         }
 
-        binding.tlNew.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
+        binding.tlNew.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position){
+                when (tab?.position) {
                     0 -> binding.tvWeightNew.text = getString(R.string.container_weight)
                     1 -> binding.tvWeightNew.text = getString(R.string.container_weight_star)
                     2 -> binding.tvWeightNew.text = getString(R.string.portion_weight_star)
@@ -57,20 +97,97 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
+
+        binding.ibBarCodeNew.setOnClickListener {
+            changeScannerVisibility()
+        }
+
+        binding.btSaveNew.setOnClickListener {
+            addNewMeal()
+        }
+
+        binding.ibBackNew.setOnClickListener {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        codeScanner.startPreview()
+    }
+
+    override fun onPause() {
+        codeScanner.releaseResources()
+        super.onPause()
+    }
+
+    override fun onBackPressed() {
+        if (binding.flLayoutNew.visibility == View.VISIBLE) {
+            binding.flLayoutNew.visibility = View.GONE
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun addNewMeal() {
-        NotificationText.text.value = "huj"
-//        viewModel.addNewProduct(
-//                name = binding.etNameNew.text.toString().trim(),
-//                brand = binding.etBrandNew.text.toString().trim(),
-//                weight = binding.etWeightNew.text.toString().trim(),
-//                position = binding.tlNew.selectedTabPosition,
-//                calories = binding.etCaloriesNew.text.toString().trim(),
-//                carbs = binding.etCarbsNew.text.toString().trim(),
-//                protein = binding.etProteinNew.text.toString().trim(),
-//                fat = binding.etFatNew.text.toString().trim(),
-//                barCode = binding.etBarCodeNew.text.toString().trim()
-//        )
+        viewModel.addNewProduct(
+            name = binding.etNameNew.text.toString().trim(),
+            brand = binding.etBrandNew.text.toString().trim(),
+            weight = binding.etWeightNew.text.toString().trim(),
+            position = binding.tlNew.selectedTabPosition,
+            calories = binding.etCaloriesNew.text.toString().trim(),
+            carbs = binding.etCarbsNew.text.toString().trim(),
+            protein = binding.etProteinNew.text.toString().trim(),
+            fat = binding.etFatNew.text.toString().trim(),
+            barCode = binding.etBarCodeNew.text.toString().trim()
+        )
+    }
+
+    private fun startMealActivity() {
+        val key = viewModel.getKey()
+        val intent = Intent(this, MealActivity::class.java).putExtra("key", key)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun changeScannerVisibility() {
+        if (binding.flLayoutNew.visibility == View.VISIBLE) {
+            binding.flLayoutNew.visibility = View.GONE
+        } else {
+            binding.flLayoutNew.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupPermissions(){
+        val permission = ContextCompat.checkSelfPermission(this,
+        android.Manifest.permission.CAMERA)
+
+        if(permission != PackageManager.PERMISSION_GRANTED){
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest(){
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),
+            CAMERA_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when(requestCode){
+            CAMERA_REQUEST_CODE -> {
+                if(grantResults.isEmpty()|| grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+                    NotificationText.setText("You need the camera permission in order to scan the barcode")
+                    NotificationText.startAnimation()
+                }else{
+                    //successful request
+                    Log.e("NewActivity","Successful request")
+                }
+            }
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 }

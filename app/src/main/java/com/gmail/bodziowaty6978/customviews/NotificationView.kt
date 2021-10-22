@@ -19,7 +19,8 @@ import kotlinx.coroutines.*
 @DelicateCoroutinesApi
 class NotificationView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs), LifecycleOwner {
 
-    private val lifecycleRegistry = LifecycleRegistry(this);
+    private val lifecycleRegistry = LifecycleRegistry(this)
+    private var isRunning = false
 
     var binding: NotificationViewBinding = NotificationViewBinding.inflate(LayoutInflater.from(context))
     var set : Animator
@@ -32,10 +33,13 @@ class NotificationView(context: Context, attrs: AttributeSet) : LinearLayout(con
                 addListener(onRepeat = {
                     it.pause()
                     GlobalScope.launch(Dispatchers.Main) {
-                        delay(2000)
+                        delay(3400)
                         it.resume()
                     }
 
+                })
+                addListener(onEnd = {
+                    this@NotificationView.isRunning = false
                 })
             }
 
@@ -60,9 +64,14 @@ class NotificationView(context: Context, attrs: AttributeSet) : LinearLayout(con
         })
 
         NotificationText.state.observe(this,{
-            if(it){
+            if(it&&!isRunning){
+                isRunning=true
                 startAnimation()
-                NotificationText.state.value = false
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(1)
+                    NotificationText.state.value = false
+
+                }
             }
         })
     }

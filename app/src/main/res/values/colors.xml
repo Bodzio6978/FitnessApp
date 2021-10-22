@@ -15,6 +15,7 @@
     <color name="grey4">#8c8c8c</color>
 
     <color name="progressBar">@color/white</color>
+    <color name="tabLayout">@color/white</color>
 
     <color name="toolbar">@color/primary</color>
     <color name="editText">@color/white</color>

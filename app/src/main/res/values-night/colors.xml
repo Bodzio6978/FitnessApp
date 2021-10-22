@@ -8,6 +8,7 @@
     <color name="toolbar">@color/darkGrey</color>
 
     <color name="progressBar">@color/primary</color>
+    <color name="tabLayout">@color/grey1</color>
 
 
     <color name="notification">@color/white</color>
