@@ -58,6 +58,11 @@
     <string name="portion_weight_star">Portion weight*</string>
     <string name="container_weight_star">Container weight*</string>
     <string name="add">Add</string>
+    <string name="add_button">Add button</string>
+
+    <string name="carbohydrates_g">Carbohydrates(g)</string>
+    <string name="protein_g">Protein(g)</string>
+    <string name="fat_g">Fat(g)</string>
 
 
 </resources>

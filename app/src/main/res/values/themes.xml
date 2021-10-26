@@ -95,4 +95,15 @@
         <item name="android:layout_marginEnd">20dp</item>
     </style>
 
+    <style name="tvNutritionName" parent="Paragraph_Secondary_Caption">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="tvNutritionValue" parent="tvNutritionName">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
 </resources>

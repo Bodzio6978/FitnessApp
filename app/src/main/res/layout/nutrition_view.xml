@@ -8,8 +8,7 @@
         style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Calories" />
+        android:layout_centerHorizontal="true"/>
 
     <ProgressBar
         android:id="@+id/pbProgressNutrition"
@@ -18,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNameNutrition"
         android:layout_centerHorizontal="true"
-        android:progress="64" />
+        android:progress="1"/>
 
     <LinearLayout
         android:layout_centerHorizontal="true"
@@ -30,8 +29,7 @@
             android:id="@+id/tvCurrentValueNutrition"
             style="@style/Paragraph_Secondary_Caption"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2025" />
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tvSlashNutrition"
@@ -44,8 +42,7 @@
             android:id="@+id/tvWantedValueNutrition"
             style="@style/Paragraph_Secondary_Caption"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2400" />
+            android:layout_height="wrap_content"/>
 
 
     </LinearLayout>

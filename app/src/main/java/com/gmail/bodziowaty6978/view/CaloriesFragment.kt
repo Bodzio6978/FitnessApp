@@ -23,9 +23,27 @@ class CaloriesFragment() : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(CaloriesViewModel::class.java)
 
-        binding.caloriesBreakfast.addMeal(Meal("delord","cwelord","delord","215","100g","215","25","21","22",""))
+        binding.caloriesBreakfast.getValues().observe(viewLifecycleOwner,{
+            updateValues(it)
+        })
+
+        binding.nvCalories.setWanted(2500)
+        binding.nvCarbohydrates.setWanted(220)
+        binding.nvProtein.setWanted(180)
+        binding.nvFat.setWanted(100)
+
+        binding.caloriesBreakfast.addMeal(Meal("huj","Szynka zawedzana","Biedronka","115",2,"192","1","20","12"))
+        binding.caloriesBreakfast.addMeal(Meal("huj","Nutella","Biedronka","115",2,"546","57","6","30"))
+
 
         return binding.root
+    }
+
+    private fun updateValues(list:ArrayList<Int>){
+        binding.nvCalories.updateValue(list[0])
+        binding.nvCarbohydrates.updateValue(list[1])
+        binding.nvProtein.updateValue(list[2])
+        binding.nvFat.updateValue(list[3])
     }
 
     override fun onDestroyView() {

@@ -22,6 +22,24 @@
             android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
             app:tint="@color/primary" />
 
+        <TextView
+            android:id="@+id/tvMealNameMeal"
+            style="@style/PageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="Breakfast" />
+
+        <TextView
+            android:id="@+id/tvDateMeal"
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvMealNameMeal"
+            android:layout_centerHorizontal="true"
+            android:text="Today" />
+
 
         <Button
             android:id="@+id/btSaveNew"
@@ -35,10 +53,103 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tvProductNameMeal"
+        style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlTitleMeal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:text="Szynka zawędzana" />
+
+    <TextView
+        android:id="@+id/tvBrandMeal"
+        style="@style/secondaryMealInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvProductNameMeal"
+        android:layout_marginStart="20dp"
+        android:text="Biedronka" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBrandMeal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/tvNutritionTextMeal"
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nutrition Values:" />
+
+        <TextView
+            android:id="@+id/tvIn100gMeal"
+            style="@style/secondaryMealInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNutritionTextMeal"
+            android:text="In 100 g" />
+
+        <TextView
+            android:id="@+id/tvCaloriesMeal"
+            style="@style/tvNutritionName"
+            android:layout_below="@+id/tvIn100gMeal"
+            android:layout_marginTop="20dp"
+            android:text="@string/calories" />
+
+        <TextView
+            android:id="@+id/tvCaloriesValueMeal"
+            style="@style/tvNutritionValue"
+            android:layout_alignBottom="@+id/tvCaloriesMeal"
+            android:text="192"/>
+
+        <TextView
+            android:id="@+id/tvCarbsMeal"
+            style="@style/tvNutritionName"
+            android:layout_below="@+id/tvCaloriesMeal"
+            android:text="@string/carbohydrates_g" />
+
+        <TextView
+            android:id="@+id/tvCarbsValueMeal"
+            style="@style/tvNutritionValue"
+            android:layout_alignBottom="@+id/tvCarbsMeal"
+            android:text="1"/>
+
+        <TextView
+            android:id="@+id/tvProteinMeal"
+            style="@style/tvNutritionName"
+            android:layout_below="@+id/tvCarbsMeal"
+            android:text="@string/protein_g" />
+
+        <TextView
+            android:id="@+id/tvProteinValueMeal"
+            style="@style/tvNutritionValue"
+            android:layout_alignBottom="@+id/tvProteinMeal"
+            android:text="20"/>
+
+        <TextView
+            android:id="@+id/tvFatMeal"
+            style="@style/tvNutritionName"
+            android:layout_below="@+id/tvProteinMeal"
+            android:text="@string/fat_g" />
+
+        <TextView
+            android:id="@+id/tvFatValueMeal"
+            style="@style/tvNutritionValue"
+            android:layout_alignBottom="@+id/tvFatMeal"
+            android:text="12"/>
+
+
+    </RelativeLayout>
+
     <com.gmail.bodziowaty6978.customviews.NotificationView
         android:id="@+id/nfvMeal"
         style="@style/notification" />
-
 
 
 </RelativeLayout>

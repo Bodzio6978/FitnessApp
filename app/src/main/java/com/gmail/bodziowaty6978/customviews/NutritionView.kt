@@ -23,7 +23,19 @@ class NutritionView(context: Context, attrs: AttributeSet) : LinearLayout(contex
         attributes.recycle()
     }
 
-    fun refreshProgress(){
+    fun setWanted(value:Int){
+        binding.tvWantedValueNutrition.text = value.toString()
+    }
 
+    fun updateValue(value:Int){
+        binding.tvCurrentValueNutrition.text = value.toString()
+        updateProgress()
+    }
+
+    private fun updateProgress(){
+        val current = binding.tvCurrentValueNutrition.text.toString().toDouble()
+        val wanted = binding.tvWantedValueNutrition.text.toString().toDouble()
+
+        binding.pbProgressNutrition.progress = (current/wanted*100).toInt()
     }
 }

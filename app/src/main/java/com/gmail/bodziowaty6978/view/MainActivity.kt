@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+//        val intent = Intent(this,MealActivity::class.java)
+//        startActivity(intent)
 
         setFragment(viewModel.getCalories())
 

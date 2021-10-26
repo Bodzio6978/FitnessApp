@@ -22,5 +22,9 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(MealViewModel::class.java)
 
+        binding.ibBackMeal.setOnClickListener {
+            super.onBackPressed()
+        }
+
     }
 }
