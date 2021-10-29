@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.SettingFragment">
 
-    <Button android:id="@+id/btLogOut"
-        android:text="Log Out"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <com.gmail.bodziowaty6978.customviews.SettingsView
+        android:layout_marginTop="20dp"
+        android:id="@+id/svBodySettings"
+        style="@style/SettingsView"
+        app:image="@drawable/ic_baseline_balance_24"
+        app:settingText="Body measurements" />
+
+    <com.gmail.bodziowaty6978.customviews.SettingsView
+        android:id="@+id/svGoalsSettings"
+        android:layout_below="@+id/svBodySettings"
+        style="@style/SettingsView"
+        app:image="@drawable/ic_baseline_adjust_24"
+        app:settingText="Adjust goals"/>
+
+    <com.gmail.bodziowaty6978.customviews.SettingsView
+        android:id="@+id/svLogoutSettings"
+        android:layout_below="@+id/svGoalsSettings"
+        style="@style/SettingsView"
+        app:image="@drawable/ic_baseline_logout_24"
+        app:settingText="Log out"/>
+
 
 </RelativeLayout>

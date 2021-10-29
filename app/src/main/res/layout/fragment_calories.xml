@@ -100,12 +100,12 @@
 
 
         <RelativeLayout
+            android:background="@drawable/bottom_nutrition_values"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
 
             <RelativeLayout
-                android:background="@drawable/bottom_nutrition_values"
                 android:layout_width="wrap_content"
                 android:elevation="7dp"
                 android:padding="5dp"

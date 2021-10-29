@@ -25,7 +25,7 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater,container,false)
         instance = FirebaseAuth.getInstance()
 
-        binding.btLogOut.setOnClickListener {
+        binding.svLogoutSettings.setOnClickListener {
             instance.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)

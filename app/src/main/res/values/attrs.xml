@@ -13,6 +13,11 @@
         <attr name="text" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="SettingsView">
+        <attr name="settingText" format="string"/>
+        <attr name="image" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="NutritionView">
         <attr name="name" format="string"/>
         <attr name="currentValue" format="integer"/>
