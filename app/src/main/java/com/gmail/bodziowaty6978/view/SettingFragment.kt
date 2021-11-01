@@ -32,6 +32,11 @@ class SettingFragment : Fragment() {
             activity?.finish()
         }
 
+        binding.svGoalsSettings.setOnClickListener {
+            val intent = Intent(activity, GoalActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 

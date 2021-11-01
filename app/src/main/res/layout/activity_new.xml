@@ -8,39 +8,26 @@
     tools:context=".view.NewActivity">
 
 
-    <RelativeLayout
-        android:id="@+id/rlTitleNew"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/ibBackNew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-            app:tint="@color/primary" />
+    <ImageButton
+        android:id="@+id/ibBackNew"
+        style="@style/backArrow" />
 
 
-        <Button
-            android:id="@+id/btSaveNew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-            android:text="@string/save"
-            android:textAllCaps="true"
-            android:textColor="@color/primary" />
+    <Button
+        android:id="@+id/btSaveNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:text="@string/save"
+        android:textAllCaps="true"
+        android:textColor="@color/primary" />
 
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvNameNew"
         style="@style/newTextView"
-        android:layout_below="@+id/rlTitleNew"
+        android:layout_below="@+id/btSaveNew"
         android:layout_marginTop="20dp"
         android:text="@string/name" />
 
@@ -239,27 +226,27 @@
     <FrameLayout
         android:id="@+id/flLayoutNew"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:layout_height="match_parent"
         android:elevation="8dp"
-        android:layout_height="match_parent">
+        android:visibility="gone">
 
         <com.budiyev.android.codescanner.CodeScannerView
-            android:elevation="8dp"
             android:id="@+id/csvNew"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="8dp"
             app:autoFocusButtonColor="@android:color/white"
             app:autoFocusButtonVisible="true"
             app:flashButtonColor="@android:color/white"
             app:flashButtonVisible="true"
-            app:frameColor="@android:color/white"
-            app:frameCornersSize="10dp"
-            app:frameCornersRadius="0dp"
-            app:frameAspectRatioWidth="1"
             app:frameAspectRatioHeight="0.2"
+            app:frameAspectRatioWidth="1"
+            app:frameColor="@android:color/white"
+            app:frameCornersRadius="0dp"
+            app:frameCornersSize="10dp"
             app:frameSize="0.75"
             app:frameThickness="2dp"
-            app:maskColor="#77000000"/>
+            app:maskColor="#77000000" />
 
     </FrameLayout>
 

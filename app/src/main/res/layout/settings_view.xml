@@ -16,6 +16,7 @@
         style="@style/Paragraph_Secondary_Caption"
         android:id="@+id/tvTextSettingsView"
         android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/ivImageSettingsView"/>
