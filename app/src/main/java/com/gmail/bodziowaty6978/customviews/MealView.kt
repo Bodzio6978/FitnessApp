@@ -32,9 +32,9 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
         binding.tvNameMealView.text = attributes.getString(R.styleable.MealView_mealName)
         binding.tvKcalValueMeal.text = attributes.getInteger(R.styleable.MealView_kcalValue, 0).toString()
-        binding.tvCarbsValueMeal.text = attributes.getFloat(R.styleable.MealView_carbValue, 0F).toString()
-        binding.tvProteinValueMeal.text = attributes.getFloat(R.styleable.MealView_protValue, 0F).toString()
-        binding.tvFatValueMeal.text = attributes.getFloat(R.styleable.MealView_fatValue, 0F).toString()
+        binding.tvCarbsValueMeal.text = attributes.getInteger(R.styleable.MealView_carbValue, 0).toString()
+        binding.tvProteinValueMeal.text = attributes.getInteger(R.styleable.MealView_protValue, 0).toString()
+        binding.tvFatValueMeal.text = attributes.getInteger(R.styleable.MealView_fatValue, 0).toString()
 
         attributes.recycle()
 

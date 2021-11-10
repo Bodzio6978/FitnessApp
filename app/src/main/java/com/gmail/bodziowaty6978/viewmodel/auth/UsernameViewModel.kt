@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.viewmodel
+package com.gmail.bodziowaty6978.viewmodel.auth
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

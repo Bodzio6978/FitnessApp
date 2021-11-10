@@ -127,7 +127,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal" />
+        android:inputType="number" />
 
     <TextView
         style="@style/g"
@@ -138,7 +138,7 @@
         android:id="@+id/tvCarbsNew"
         style="@style/newTextView"
         android:layout_below="@id/tvCaloriesNew"
-        android:text="@string/carbohydrates" />
+        android:text="@string/carbohydratesStar" />
 
     <EditText
         android:id="@+id/etCarbsNew"
@@ -147,7 +147,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal" />
+        android:inputType="number" />
 
     <TextView
         style="@style/g"
@@ -157,7 +157,7 @@
         android:id="@+id/tvProteinNew"
         style="@style/newTextView"
         android:layout_below="@id/tvCarbsNew"
-        android:text="@string/protein" />
+        android:text="@string/proteinStar" />
 
     <EditText
         android:id="@+id/etProteinNew"
@@ -166,7 +166,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal" />
+        android:inputType="number" />
 
     <TextView
         style="@style/g"
@@ -176,7 +176,7 @@
         android:id="@+id/tvFatNew"
         style="@style/newTextView"
         android:layout_below="@id/tvProteinNew"
-        android:text="@string/fatStar" />
+        android:text="@string/fatStar"/>
 
     <EditText
         android:id="@+id/etFatNew"
@@ -185,7 +185,7 @@
         android:layout_marginStart="150dp"
         android:layout_toStartOf="@+id/ibBarCodeNew"
         android:layout_toEndOf="@+id/tvNameNew"
-        android:inputType="numberDecimal" />
+        android:inputType="number" />
 
     <TextView
         style="@style/g"

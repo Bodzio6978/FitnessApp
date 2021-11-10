@@ -53,9 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvKcalValueMeal"
-            android:layout_marginStart="2dp"
             android:layout_toEndOf="@id/tvCarbsValueMeal"
-            android:text="@string/carb" />
+            android:text="@string/g_carb" />
 
         <TextView
             android:id="@+id/tvProteinValueMeal"
@@ -72,9 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvKcalValueMeal"
-            android:layout_marginStart="2dp"
             android:layout_toEndOf="@id/tvProteinValueMeal"
-            android:text="@string/prot" />
+            android:text="@string/g_prot" />
 
         <TextView
             android:id="@+id/tvFatValueMeal"
@@ -91,9 +89,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvKcalValueMeal"
-            android:layout_marginStart="2dp"
             android:layout_toEndOf="@id/tvFatValueMeal"
-            android:text="@string/fat" />
+            android:text="@string/g_fat" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabMeal"

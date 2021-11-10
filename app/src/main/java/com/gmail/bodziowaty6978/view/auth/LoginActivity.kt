@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.view
+package com.gmail.bodziowaty6978.view.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,14 +7,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityLoginBinding
-import com.gmail.bodziowaty6978.viewmodel.LoginViewModel
+import com.gmail.bodziowaty6978.view.MainActivity
+import com.gmail.bodziowaty6978.viewmodel.auth.LoginViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
 class LoginActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel:LoginViewModel
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

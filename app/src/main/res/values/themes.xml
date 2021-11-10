@@ -74,22 +74,43 @@
         <item name="android:textColor">@color/bottomText</item>
     </style>
     
-    <style name="newEditText" parent="Theme.FitnessApp">
+    <style name="newEditText" parent="TextInput_ListItemTitles_ImportantText_Snippet">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation">6dp</item>
+        <item name="android:elevation">7dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_marginStart">70dp</item>
         <item name="android:layout_marginEnd">15dp</item>
-        <item name="android:layout_marginTop">-5dp</item>
+        <item name="android:layout_marginTop">-4dp</item>
         <item name="android:background">@drawable/edit_text</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="settingsEditText" parent="newEditText">
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:minWidth">70dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:padding">9dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="introductionEditText" parent="settingsEditText">
+        <item name="android:layout_centerVertical">false</item>
+        <item name="android:inputType">numberDecimal</item>
     </style>
 
     <style name="newTextView" parent="TextInput_ListItemTitles_ImportantText_Snippet">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="typeSettingsView" parent="g">
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <style name="g" parent="TextInput_ListItemTitles_ImportantText_Snippet">

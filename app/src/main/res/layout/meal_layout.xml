@@ -78,9 +78,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/meal_kcal_value"
-                android:layout_marginStart="3dp"
                 android:layout_toEndOf="@+id/meal_carb_value"
-                android:text="@string/carb" />
+                android:text="@string/g_carb" />
 
             <TextView
                 android:text="@{``+item.protein}"
@@ -98,9 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/meal_kcal_value"
-                android:layout_marginStart="3dp"
                 android:layout_toEndOf="@+id/meal_prot_value"
-                android:text="@string/prot" />
+                android:text="@string/g_prot" />
 
             <TextView
                 android:text="@{``+item.fat}"
@@ -118,9 +116,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/meal_kcal_value"
-                android:layout_marginStart="3dp"
                 android:layout_toEndOf="@+id/meal_fat_value"
-                android:text="@string/fat" />
+                android:text="@string/g_fat" />
 
             <ImageButton
                 android:id="@+id/meal_delete"

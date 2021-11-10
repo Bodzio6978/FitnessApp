@@ -1,4 +1,6 @@
 package com.gmail.bodziowaty6978.viewmodel
 
-class GoalViewModel {
+import androidx.lifecycle.ViewModel
+
+class GoalViewModel:ViewModel() {
 }

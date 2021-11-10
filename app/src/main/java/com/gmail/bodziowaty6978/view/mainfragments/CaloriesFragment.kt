@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.view
+package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

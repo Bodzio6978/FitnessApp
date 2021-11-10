@@ -10,6 +10,7 @@
         android:id="@+id/ibBackGoal"
         style="@style/backArrow" />
 
+
     <com.gmail.bodziowaty6978.customviews.SettingsView
         android:id="@+id/svWeightGoal"
         style="@style/SettingsView"

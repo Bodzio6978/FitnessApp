@@ -7,6 +7,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivitySplashBinding
+import com.gmail.bodziowaty6978.view.auth.LoginActivity
+import com.gmail.bodziowaty6978.view.auth.UsernameActivity
 import com.gmail.bodziowaty6978.viewmodel.SplashViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 

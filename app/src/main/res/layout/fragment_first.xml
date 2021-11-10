@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.introduction.FirstFragment">
+
+    <RelativeLayout
+        android:id="@+id/rlGenderIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tilGenderIntroduction"
+            android:labelFor="@+id/actvGenderIntroduction"
+            android:text="@string/gender" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilGenderIntroduction"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/darkGrey"
+            android:labelFor="@+id/tvGender"
+            android:minWidth="135dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/actvGenderIntroduction"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="none"
+                android:padding="10dp"
+                android:text="@string/female"
+                android:textSize="14sp" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlAgeIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlGenderIntroduction"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/etAgeIntroduction"
+            android:labelFor="@+id/etAgeIntroduction"
+            android:text="@string/age" />
+
+        <EditText
+            android:id="@+id/etAgeIntroduction"
+            style="@style/introductionEditText"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:autofillHints="@string/age" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlCurrentIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlAgeIntroduction"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/etCurrentIntroduction"
+            android:labelFor="@+id/etCurrentIntroduction"
+            android:text="@string/current_weight" />
+
+        <EditText
+            android:id="@+id/etCurrentIntroduction"
+            style="@style/introductionEditText"
+            android:layout_toStartOf="@+id/tvCurrentUnitIntroduction"
+            android:autofillHints="@string/current_weight" />
+
+        <TextView
+            android:id="@+id/tvCurrentUnitIntroduction"
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/kg" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlWantedIntroduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlCurrentIntroduction"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/etDesiredIntroduction"
+            android:labelFor="@+id/etDesiredIntroduction"
+            android:text="@string/desired_weight" />
+
+        <EditText
+            android:id="@+id/etDesiredIntroduction"
+            style="@style/introductionEditText"
+            android:layout_toStartOf="@+id/tvDesiredUnitIntroduction"
+            android:autofillHints="@string/desired_weight" />
+
+        <TextView
+            android:id="@+id/tvDesiredUnitIntroduction"
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/kg" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btNavigationNextIntroduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        android:text="@string/next"
+        android:textColor="@color/primary" />
+
+    <com.gmail.bodziowaty6978.customviews.NotificationView
+        android:id="@+id/ntvFirstIntroduction"
+        style="@style/notification" />
+
+
+</RelativeLayout>

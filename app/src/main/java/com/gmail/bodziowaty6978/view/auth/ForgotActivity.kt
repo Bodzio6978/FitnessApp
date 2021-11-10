@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.view
+package com.gmail.bodziowaty6978.view.auth
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

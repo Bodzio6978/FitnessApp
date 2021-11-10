@@ -2,7 +2,7 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import com.gmail.bodziowaty6978.view.*
+import com.gmail.bodziowaty6978.view.mainfragments.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi

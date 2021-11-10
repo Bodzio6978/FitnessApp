@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.view
+package com.gmail.bodziowaty6978.view.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityRegisterBinding
-import com.gmail.bodziowaty6978.viewmodel.RegisterViewModel
+import com.gmail.bodziowaty6978.viewmodel.auth.RegisterViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi

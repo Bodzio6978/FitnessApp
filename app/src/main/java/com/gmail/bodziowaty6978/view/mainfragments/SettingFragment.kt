@@ -1,4 +1,4 @@
-package com.gmail.bodziowaty6978.view
+package com.gmail.bodziowaty6978.view.mainfragments
 
 
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.databinding.FragmentSettingBinding
+import com.gmail.bodziowaty6978.view.GoalActivity
+import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.DelicateCoroutinesApi
 

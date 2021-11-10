@@ -1,11 +1,13 @@
 package com.gmail.bodziowaty6978.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
+import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -24,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-//        val intent = Intent(this,MealActivity::class.java)
-//        startActivity(intent)
+        val intent = Intent(this, IntroductionActivity::class.java)
+        startActivity(intent)
 
         setFragment(viewModel.getCalories())
 

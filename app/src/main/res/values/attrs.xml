@@ -24,5 +24,9 @@
         <attr name="wantedValue" format="integer"/>
         <attr name="progressState" format="integer"/>
     </declare-styleable>
+    
+    <declare-styleable name="NutritionSettingsView">
+        <attr name="nutritionName" format="string"/>
+    </declare-styleable>
 
 </resources>

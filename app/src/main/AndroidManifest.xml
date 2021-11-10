@@ -12,17 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
-        <activity android:name=".view.GoalActivity"></activity>
+        <activity android:name=".view.introduction.IntroductionActivity"></activity>
+        <activity android:name=".view.NutritionSettings" />
+        <activity android:name=".view.GoalActivity" />
         <activity android:name=".view.MealActivity" />
         <activity
             android:name=".view.NewActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.AddActivity" />
-        <activity android:name=".view.UsernameActivity" />
-        <activity android:name=".view.ForgotActivity" />
-        <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.auth.UsernameActivity" />
+        <activity android:name=".view.auth.ForgotActivity" />
+        <activity android:name=".view.auth.RegisterActivity" />
+        <activity android:name=".view.auth.LoginActivity" />
         <activity android:name=".view.ErrorActivity" />
         <activity
             android:name=".view.SplashActivity"
