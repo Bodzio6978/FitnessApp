@@ -165,6 +165,7 @@
 
     <com.gmail.bodziowaty6978.customviews.NotificationView
         android:id="@+id/ntvFirstIntroduction"
+        android:elevation="6dp"
         style="@style/notification" />
 
 

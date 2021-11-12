@@ -10,9 +10,10 @@ import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSecondBinding
+import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
 import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
 import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
-import com.gmail.bodziowaty6978.interfaces.onClearDataRequest
+import com.gmail.bodziowaty6978.singleton.NotificationText
 
 class SecondFragment : Fragment() {
 
@@ -21,28 +22,12 @@ class SecondFragment : Fragment() {
 
     private lateinit var dataPasser: OnDataPassIntroduction
     private lateinit var fragmentChanger: OnRequestFragmentChange
-    private lateinit var dataClear: onClearDataRequest
+    private lateinit var dataClear: OnClearDataRequest
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentSecondBinding.inflate(inflater,container,false)
-
-        val context = requireActivity().applicationContext
-
-        val typesOfWork = resources.getStringArray(R.array.works)
-        val trainingsPerWeek = resources.getStringArray(R.array.trainingsPerWeek)
-        val activity = resources.getStringArray(R.array.activity)
-
-
-        val workAdapter = ArrayAdapter(context,R.layout.dropdown_item,typesOfWork)
-        val trainingAdapter = ArrayAdapter(context,R.layout.dropdown_item,trainingsPerWeek)
-        val activityAdapter = ArrayAdapter(context,R.layout.dropdown_item,activity)
-
-
-        binding.actvWorkIntroduction.setAdapter(workAdapter)
-        binding.actvTrainingIntroduction.setAdapter((trainingAdapter))
-        binding.actvActivityIntroduction.setAdapter(activityAdapter)
 
         binding.btBacktIntroduction.setOnClickListener {
             fragmentChanger.onRequest(0)
@@ -52,7 +37,6 @@ class SecondFragment : Fragment() {
             dataPasser.onDataPass(getData(),true)
         }
 
-
         return binding.root
     }
 
@@ -61,21 +45,45 @@ class SecondFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        val typesOfWork = resources.getStringArray(R.array.works)
+        val trainingsPerWeek = resources.getStringArray(R.array.trainingsPerWeek)
+        val activity = resources.getStringArray(R.array.activity)
+
+        val workAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item,typesOfWork)
+        val trainingAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item,trainingsPerWeek)
+        val activityAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item,activity)
+
+        binding.actvWorkIntroduction.setAdapter(workAdapter)
+        binding.actvTrainingIntroduction.setAdapter((trainingAdapter))
+        binding.actvActivityIntroduction.setAdapter(activityAdapter)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         dataPasser = context as OnDataPassIntroduction
         fragmentChanger = context as OnRequestFragmentChange
-        dataClear = context as onClearDataRequest
+        dataClear = context as OnClearDataRequest
     }
 
     private fun getData(): ArrayMap<String, String> {
         val data = ArrayMap<String,String>()
 
-        data.putIfAbsent("type",binding.actvWorkIntroduction.text.toString())
-        data.putIfAbsent("workouts",binding.actvTrainingIntroduction.text.toString())
-        data.putIfAbsent("activity",binding.actvActivityIntroduction.text.toString())
-        data.putIfAbsent("height",binding.etHeightIntroduction.text.toString())
+        val type = binding.actvWorkIntroduction.text.toString()
+        val workouts = binding.actvTrainingIntroduction.text.toString()
+        val activity = binding.actvActivityIntroduction.text.toString()
+        val height = binding.etHeightIntroduction.text.toString().trim()
 
+        if(height.isEmpty()){
+            NotificationText.setText(getString(R.string.please_make_sure_you_have_entered_your_height))
+            NotificationText.startAnimation()
+        }else{
+            data.putIfAbsent("type",type)
+            data.putIfAbsent("workouts",workouts)
+            data.putIfAbsent("activity",activity)
+            data.putIfAbsent("height",height)
+        }
         return data
     }
 }

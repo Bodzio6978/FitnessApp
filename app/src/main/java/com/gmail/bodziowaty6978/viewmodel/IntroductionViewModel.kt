@@ -46,4 +46,5 @@ class IntroductionViewModel:ViewModel() {
             }
         }
     }
+    fun getAddingState():MutableLiveData<Boolean> = addingState
 }

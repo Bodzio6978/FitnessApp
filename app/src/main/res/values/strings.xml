@@ -81,6 +81,12 @@
     <string name="kg">kg</string>
     <string name="desired_weight">Desired Weight</string>
     <string name="let_us_know_something_about_you">Let Us Know Something About You!</string>
+    <string name="type_of_work">Type Of Work</string>
+    <string name="workouts_during_the_week">Workouts During The Week</string>
+    <string name="activity_during_a_day">Activity During A Day</string>
+    <string name="height">Height</string>
+    <string name="cm">cm</string>
+    <string name="please_make_sure_you_have_entered_your_height">Please Make Sure You Have Entered Your Height</string>
 
     <string-array name="works">
         <item>Sedentary</item>

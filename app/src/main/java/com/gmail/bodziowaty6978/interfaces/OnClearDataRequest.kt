@@ -1,5 +1,5 @@
 package com.gmail.bodziowaty6978.interfaces
 
-interface onClearDataRequest {
+interface OnClearDataRequest {
     fun onClearDataRequest()
 }
