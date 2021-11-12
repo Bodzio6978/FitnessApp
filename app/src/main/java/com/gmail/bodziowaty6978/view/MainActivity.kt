@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
+import com.gmail.bodziowaty6978.view.auth.LoginActivity
+import com.gmail.bodziowaty6978.view.auth.UsernameActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
+import com.gmail.bodziowaty6978.viewmodel.UserState
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
 @DelicateCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
@@ -26,8 +30,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val intent = Intent(this, IntroductionActivity::class.java)
-        startActivity(intent)
+
+        viewModel.checkInformation()
+
+        viewModel.getUserState().observe(this,{
+            when(it.value){
+                UserState.USER_NOT_LOGGED -> {
+                    val intent = Intent(this,LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                UserState.USER_NO_USERNAME -> {
+                    val intent = Intent(this,UsernameActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                UserState.USER_NO_INFORMATION -> {
+                    val intent = Intent(this,IntroductionActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        })
+//        val intent = Intent(this, IntroductionActivity::class.java)
+//        startActivity(intent)
 
         setFragment(viewModel.getCalories())
 

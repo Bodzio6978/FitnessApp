@@ -38,7 +38,7 @@ class FirstFragment : Fragment() {
 
         binding.btNavigationNextIntroduction.setOnClickListener {
             fragmentChanger.onRequest(1)
-            dataPasser.onDataPass(getData())
+            dataPasser.onDataPass(getData(),false)
         }
 
         return binding.root

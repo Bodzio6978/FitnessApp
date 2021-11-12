@@ -9,9 +9,10 @@ import com.gmail.bodziowaty6978.adapters.ViewPagerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityIntroductionBinding
 import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
 import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
+import com.gmail.bodziowaty6978.interfaces.onClearDataRequest
 import com.gmail.bodziowaty6978.viewmodel.IntroductionViewModel
 
-class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequestFragmentChange {
+class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequestFragmentChange, onClearDataRequest {
 
     lateinit var binding:ActivityIntroductionBinding
     lateinit var viewModel: IntroductionViewModel
@@ -29,11 +30,15 @@ class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequ
         binding.vp2Introduction.adapter = adapter
     }
 
-    override fun onDataPass(data: ArrayMap<String, String>) {
-        viewModel.addInformation(data)
+    override fun onDataPass(data: ArrayMap<String, String>,isFinished:Boolean) {
+        viewModel.addInformation(data,isFinished)
     }
 
     override fun onRequest(position: Int) {
         binding.vp2Introduction.currentItem = position
+    }
+
+    override fun onClearDataRequest() {
+        viewModel.clearData()
     }
 }

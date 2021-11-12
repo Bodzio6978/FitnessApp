@@ -12,6 +12,7 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSecondBinding
 import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
 import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
+import com.gmail.bodziowaty6978.interfaces.onClearDataRequest
 
 class SecondFragment : Fragment() {
 
@@ -20,6 +21,7 @@ class SecondFragment : Fragment() {
 
     private lateinit var dataPasser: OnDataPassIntroduction
     private lateinit var fragmentChanger: OnRequestFragmentChange
+    private lateinit var dataClear: onClearDataRequest
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -44,9 +46,10 @@ class SecondFragment : Fragment() {
 
         binding.btBacktIntroduction.setOnClickListener {
             fragmentChanger.onRequest(0)
+            dataClear.onClearDataRequest()
         }
         binding.btFinishIntroduction.setOnClickListener {
-            dataPasser.onDataPass(getData())
+            dataPasser.onDataPass(getData(),true)
         }
 
 
@@ -62,6 +65,7 @@ class SecondFragment : Fragment() {
         super.onAttach(context)
         dataPasser = context as OnDataPassIntroduction
         fragmentChanger = context as OnRequestFragmentChange
+        dataClear = context as onClearDataRequest
     }
 
     private fun getData(): ArrayMap<String, String> {
