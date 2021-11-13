@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.bodziowaty6978.databinding.MealLayoutBinding
+import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.Meal
 
 class CaloriesRecyclerAdapter(private var meals: MutableList<Meal>, private var adapterItemClickListener: OnAdapterItemClickListener): RecyclerView.Adapter<CaloriesRecyclerAdapter.ViewHolder>() {
@@ -38,6 +39,4 @@ class CaloriesRecyclerAdapter(private var meals: MutableList<Meal>, private var 
 
 }
 
-interface OnAdapterItemClickListener {
-    fun onAdapterItemClickListener(position: Int)
-}
+

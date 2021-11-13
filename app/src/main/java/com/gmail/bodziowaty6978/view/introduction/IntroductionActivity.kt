@@ -31,7 +31,7 @@ class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequ
 
         viewModel = ViewModelProvider(this).get(IntroductionViewModel::class.java)
 
-        viewModel.getAddingState().observe(this,{
+        viewModel.getInformationStatus().observe(this,{
             if (it){
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

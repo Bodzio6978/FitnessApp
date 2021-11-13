@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.singleton.NotificationText
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -14,13 +13,19 @@ import com.google.firebase.ktx.Firebase
 
 class AddViewModel:ViewModel() {
     private val database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     private val searchResult = MutableLiveData<ArrayList<Meal>>()
+    private val keysResult = MutableLiveData<ArrayList<String>>()
+
+    private val mealRef = database.reference.child("meals")
+
+    fun initializeHistory(){
+
+    }
 
 
     fun search(text: String){
-        val mealRef = database.reference.child("meals")
+
         val query = mealRef.orderByChild("name").startAt(text).endAt("$text\uf8ff").limitToFirst(20)
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -30,6 +35,7 @@ class AddViewModel:ViewModel() {
                     val keys = snapshotMap.keys
 
                     val mealList = ArrayList<Meal>()
+                    val keyList = ArrayList<String>()
 
                     for (key in keys) {
                         val mealMap = snapshotMap[key] as HashMap<*,*>
@@ -44,9 +50,10 @@ class AddViewModel:ViewModel() {
                                 mealMap["fat"] as String)
 
                         mealList.add(meal)
-
+                        keyList.add(key.toString())
                     }
                     searchResult.value = mealList
+                    keysResult.value = keyList
                 }else{
                     NotificationText.setText("There Are No Products With That Name")
                     NotificationText.startAnimation()
@@ -62,6 +69,7 @@ class AddViewModel:ViewModel() {
     }
 
     fun getSearchResult():MutableLiveData<ArrayList<Meal>> = searchResult
+    fun getKeys():MutableLiveData<ArrayList<String>> = keysResult
 
 
 }

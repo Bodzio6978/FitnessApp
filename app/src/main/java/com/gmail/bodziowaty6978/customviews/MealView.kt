@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
-import com.gmail.bodziowaty6978.adapters.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
+import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.view.AddActivity
 

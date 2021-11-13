@@ -9,17 +9,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.QueryMealRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityAddBinding
+import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class AddActivity : AppCompatActivity(),LifecycleOwner {
+class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListener {
 
     lateinit var binding:ActivityAddBinding
     lateinit var viewModel:AddViewModel
 
     private var mealList: MutableList<Meal> = mutableListOf()
+    private var keyList:MutableList<String> = mutableListOf()
+
+    private lateinit var mealName:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +35,23 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
         viewModel = ViewModelProvider(this).get(AddViewModel::class.java)
 
         binding.rvAdd.layoutManager = LinearLayoutManager(this)
-        binding.rvAdd.adapter = QueryMealRecyclerAdapter(mealList)
+        binding.rvAdd.adapter = QueryMealRecyclerAdapter(mealList,this)
+
+        viewModel.initializeHistory()
 
         viewModel.getSearchResult().observe(this, {
             mealList.clear()
             mealList.addAll(it)
             binding.rvAdd.adapter?.notifyDataSetChanged()
         })
-        val mealName = intent.getStringExtra("mealName")
+
+        viewModel.getKeys().observe(this,{
+            keyList.clear()
+            keyList.addAll(it)
+        })
+
+        mealName = intent.getStringExtra("mealName").toString()
+
         binding.tvMealNameAdd.text = mealName
 
         binding.ibAdd.setOnClickListener {
@@ -53,5 +66,11 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
             viewModel.search(binding.etSearchAdd.text.toString().trim())
         }
 
+    }
+
+    override fun onAdapterItemClickListener(position: Int) {
+        val key = keyList[position]
+        val intent = Intent(this, MealActivity::class.java).putExtra("mealId",key).putExtra("mealName",mealName)
+        startActivity(intent)
     }
 }
