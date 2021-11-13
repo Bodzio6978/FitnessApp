@@ -52,8 +52,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 }
             }
         })
-//        val intent = Intent(this, IntroductionActivity::class.java)
-//        startActivity(intent)
 
         setFragment(viewModel.getCalories())
 

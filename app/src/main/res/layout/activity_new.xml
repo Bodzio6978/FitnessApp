@@ -34,6 +34,7 @@
     <EditText
         android:id="@+id/etNameNew"
         style="@style/newEditText"
+        android:inputType="text"
         android:layout_alignTop="@+id/tvNameNew"
         android:layout_toEndOf="@+id/tvNameNew" />
 
@@ -47,6 +48,7 @@
     <EditText
         android:id="@+id/etBrandNew"
         style="@style/newEditText"
+        android:inputType="text"
         android:layout_alignTop="@+id/tvBrandNew"
         android:layout_toEndOf="@+id/tvNameNew" />
 

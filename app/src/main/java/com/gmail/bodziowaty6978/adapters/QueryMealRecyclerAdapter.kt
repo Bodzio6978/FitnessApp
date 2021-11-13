@@ -3,28 +3,22 @@ package com.gmail.bodziowaty6978.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.gmail.bodziowaty6978.databinding.MealLayoutBinding
+import com.gmail.bodziowaty6978.databinding.MealQueryLayoutBinding
 import com.gmail.bodziowaty6978.model.Meal
 
 class QueryMealRecyclerAdapter(private var meals: MutableList<Meal>): RecyclerView.Adapter<QueryMealRecyclerAdapter.ViewHolder>() {
 
-    fun updateMeals(newMeals:MutableList<Meal>){
-        meals.clear()
-        meals.addAll(newMeals)
-        notifyDataSetChanged()
-    }
-
-    inner class ViewHolder(private val binding: MealLayoutBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: MealQueryLayoutBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Meal){
-            binding.item = item
+            binding.meal = item
             binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = MealLayoutBinding.inflate(inflater)
+        val binding = MealQueryLayoutBinding.inflate(inflater)
         return ViewHolder(binding)
     }
 

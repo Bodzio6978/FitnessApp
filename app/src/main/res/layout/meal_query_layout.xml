@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="item"
+            name="meal"
             type="com.gmail.bodziowaty6978.model.Meal" />
+
     </data>
 
-    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:elevation="7dp"
@@ -18,6 +21,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_height="match_parent">
 
             <TextView
@@ -25,9 +32,7 @@
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Szynka zawędzana" />
+                android:text="@{meal.name}" />
 
             <TextView
                 android:id="@+id/tvBrandQuery"
@@ -35,9 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvNameQuery"
-                android:layout_marginStart="10dp"
-                android:text="Biedronka,"
-                android:textColor="@color/bottomText"/>
+                android:text="@{meal.brand}"
+                android:textColor="@color/bottomText" />
 
 
             <TextView
@@ -50,10 +54,19 @@
                 android:text="100 g"
                 android:textColor="@color/bottomText" />
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{meal.calories}"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 
+
     </androidx.cardview.widget.CardView>
+
+
+
 
 </layout>
