@@ -53,8 +53,21 @@ class MainViewModel: ViewModel() {
             }
         })
 
-        val informationRef = database.reference.child("users").child(userId).child("information").child("age")
+        val informationRef = database.reference.child("users").child(userId).child("information")
         informationRef.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.value == null){
+                    mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("MainViewModel",error.message)
+            }
+        })
+
+        val nutritionRef = database.reference.child("users").child(userId).child("nutritionValues")
+        nutritionRef.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.value == null){
                     mUserState.value = UserState(UserState.USER_NO_INFORMATION)

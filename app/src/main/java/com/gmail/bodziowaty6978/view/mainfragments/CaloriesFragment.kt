@@ -27,16 +27,30 @@ class CaloriesFragment() : Fragment() {
             updateValues(it)
         })
 
-        binding.nvCalories.setWanted(2500)
-        binding.nvCarbohydrates.setWanted(220)
-        binding.nvProtein.setWanted(180)
-        binding.nvFat.setWanted(100)
+        viewModel.setUpValues()
+
+        viewModel.getValues().observe(viewLifecycleOwner,{
+            setUpUI(it)
+        })
 
         binding.caloriesBreakfast.addMeal(Meal("huj","Szynka zawedzana","Biedronka","115",2,"192","1","20","12"))
         binding.caloriesBreakfast.addMeal(Meal("huj","Nutella","Biedronka","115",2,"546","57","6","30"))
 
 
         return binding.root
+    }
+
+    private fun setUpUI(map:HashMap<*,*>){
+        binding.nvCalories.setWanted((map["calories"] as String).toInt())
+        binding.nvCarbohydrates.setWanted((map["carbohydrates"] as String).toInt())
+        binding.nvProtein.setWanted((map["protein"] as String).toInt())
+        binding.nvFat.setWanted((map["fat"] as String).toInt())
+
+        binding.nvCalories.updateProgress()
+        binding.nvCarbohydrates.updateProgress()
+        binding.nvProtein.updateProgress()
+        binding.nvFat.updateProgress()
+
     }
 
     private fun updateValues(list:ArrayList<Int>){

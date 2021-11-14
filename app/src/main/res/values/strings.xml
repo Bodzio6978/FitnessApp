@@ -88,6 +88,7 @@
     <string name="cm">cm</string>
     <string name="please_make_sure_you_have_entered_your_height">Please Make Sure You Have Entered Your Height</string>
     <string name="search">Search</string>
+    <string name="today">Today</string>
 
     <string-array name="works">
         <item>Sedentary</item>

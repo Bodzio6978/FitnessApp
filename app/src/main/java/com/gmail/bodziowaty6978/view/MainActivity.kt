@@ -2,18 +2,23 @@ package com.gmail.bodziowaty6978.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
+import com.gmail.bodziowaty6978.functions.getCurrentDateTime
+import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.view.auth.UsernameActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.gmail.bodziowaty6978.viewmodel.UserState
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.util.*
 
 
 @DelicateCoroutinesApi
@@ -32,6 +37,21 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.checkInformation()
+
+        binding.ibNextCalendar.setOnClickListener {
+            CurrentDate.addDay()
+        }
+
+        binding.ibBackCalendar.setOnClickListener {
+            CurrentDate.deductDay()
+        }
+
+        CurrentDate.date.observe(this,{
+            setUpDate(it)
+            Log.e("huj", it.time.toString())
+        })
+
+        CurrentDate.date.value = getCurrentDateTime()
 
         viewModel.getUserState().observe(this,{
             when(it.value){
@@ -84,4 +104,14 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             beginTransaction().replace(R.id.main_fl, fragment).commit()
         }
     }
+
+    private fun setUpDate(date: Calendar){
+        if(date.time.toString("EEEE, dd-MM-yyyy")== getCurrentDateTime().time.toString("EEEE, dd-MM-yyyy")){
+            binding.tvDateCalendar.text = getString(R.string.today)
+        }else{
+            binding.tvDateCalendar.text = date.time.toString("EEEE, dd-MM-yyyy")
+        }
+    }
+
+
 }
