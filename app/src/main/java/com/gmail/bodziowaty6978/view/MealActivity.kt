@@ -6,7 +6,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMealBinding
+import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.MealViewModel
 
 class MealActivity : AppCompatActivity(), LifecycleOwner {
@@ -25,6 +27,10 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel.getCurrentMeal().observe(this,{
             initializeUi(it)
+        })
+
+        CurrentDate.date.observe(this,{
+            binding.tvDateMeal.text = getDateInAppFormat(it)
         })
 
         binding.tvMealNameMeal.text = intent.getStringExtra("mealName")

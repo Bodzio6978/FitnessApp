@@ -6,6 +6,8 @@ import java.util.*
 object CurrentDate {
     val date = MutableLiveData<Calendar>()
 
+    fun getDate(): Calendar? = date.value
+
     fun addDay(){
         val calendar: Calendar = date.value!!
         calendar.run {

@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.QueryMealRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityAddBinding
+import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -51,6 +53,10 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
         })
 
         mealName = intent.getStringExtra("mealName").toString()
+
+        CurrentDate.date.observe(this,{
+            binding.tvDayAdd.text = getDateInAppFormat(it)
+        })
 
         binding.tvMealNameAdd.text = mealName
 

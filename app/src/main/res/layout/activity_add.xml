@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvDayAdd"
-            android:text="Today"
             style="@style/secondaryMealInformation"
             android:layout_below="@+id/tvMealNameAdd"
             android:layout_centerHorizontal="true"/>
