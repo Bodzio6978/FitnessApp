@@ -44,6 +44,7 @@ class AddViewModel:ViewModel() {
                                 mealMap["brand"] as String,
                                 mealMap["weight"] as String,
                                 (mealMap["position"] as Long).toInt(),
+                                mealMap["unit"] as String,
                                 mealMap["calories"] as String,
                                 mealMap["carbs"] as String,
                                 mealMap["protein"] as String,

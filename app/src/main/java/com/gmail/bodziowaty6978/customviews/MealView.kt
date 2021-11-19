@@ -13,7 +13,9 @@ import com.gmail.bodziowaty6978.databinding.MealViewBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.view.AddActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@OptIn(DelicateCoroutinesApi::class)
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),OnAdapterItemClickListener{
 
     var binding: MealViewBinding = MealViewBinding.inflate(LayoutInflater.from(context))

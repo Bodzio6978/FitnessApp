@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,7 +26,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 private const val CAMERA_REQUEST_CODE = 101
 
 @DelicateCoroutinesApi
-class NewActivity : AppCompatActivity(), LifecycleOwner {
+class NewActivity : AppCompatActivity(), LifecycleOwner, AdapterView.OnItemClickListener {
 
     private lateinit var viewModel: NewViewModel
     lateinit var binding: ActivityNewBinding
@@ -69,17 +71,23 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
             isFlashEnabled = false
 
             decodeCallback = DecodeCallback {
-                runOnUiThread{
+                runOnUiThread {
                     binding.etBarCodeNew.setText(it.text)
                     changeScannerVisibility()
                 }
             }
             errorCallback = ErrorCallback {
-                runOnUiThread{
-                    Log.e("NewActivity",it.message.toString())
+                runOnUiThread {
+                    Log.e("NewActivity", it.message.toString())
                 }
             }
         }
+
+        val unit = resources.getStringArray(R.array.unit)
+        val unitAdapter = ArrayAdapter(this, R.layout.dropdown_item, unit)
+        binding.actvUnitIntroduction.setAdapter(unitAdapter)
+
+        binding.actvUnitIntroduction.onItemClickListener = this
 
         binding.csvNew.setOnClickListener {
             codeScanner.startPreview()
@@ -119,6 +127,15 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
         codeScanner.startPreview()
     }
 
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when(position){
+            0 -> binding.tlNew.getTabAt(0)?.text = getString(R.string.in_100g)
+            1 -> binding.tlNew.getTabAt(0)?.text = getString(R.string.in_100ml)
+        }
+    }
+
+
+
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
@@ -134,21 +151,22 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
 
     private fun addNewMeal() {
         viewModel.addNewProduct(
-            name = binding.etNameNew.text.toString().trim(),
-            brand = binding.etBrandNew.text.toString().trim(),
-            weight = binding.etWeightNew.text.toString().trim(),
-            position = binding.tlNew.selectedTabPosition,
-            calories = binding.etCaloriesNew.text.toString().trim(),
-            carbs = binding.etCarbsNew.text.toString().trim(),
-            protein = binding.etProteinNew.text.toString().trim(),
-            fat = binding.etFatNew.text.toString().trim(),
-            barCode = binding.etBarCodeNew.text.toString().trim()
+                name = binding.etNameNew.text.toString().trim(),
+                brand = binding.etBrandNew.text.toString().trim(),
+                weight = binding.etWeightNew.text.toString().trim(),
+                position = binding.tlNew.selectedTabPosition,
+                unit = binding.actvUnitIntroduction.text.toString(),
+                calories = binding.etCaloriesNew.text.toString().trim(),
+                carbs = binding.etCarbsNew.text.toString().trim(),
+                protein = binding.etProteinNew.text.toString().trim(),
+                fat = binding.etFatNew.text.toString().trim(),
+                barCode = binding.etBarCodeNew.text.toString().trim()
         )
     }
 
     private fun startMealActivity() {
         val key = viewModel.getKey()
-        val intent = Intent(this, MealActivity::class.java).putExtra("key", key)
+        val intent = Intent(this, MealActivity::class.java).putExtra("key", key).putExtra("mealName", intent.getStringExtra("mealName"))
         startActivity(intent)
         finish()
     }
@@ -161,33 +179,33 @@ class NewActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
-    private fun setupPermissions(){
+    private fun setupPermissions() {
         val permission = ContextCompat.checkSelfPermission(this,
-        android.Manifest.permission.CAMERA)
+                android.Manifest.permission.CAMERA)
 
-        if(permission != PackageManager.PERMISSION_GRANTED){
+        if (permission != PackageManager.PERMISSION_GRANTED) {
             makeRequest()
         }
     }
 
-    private fun makeRequest(){
+    private fun makeRequest() {
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),
-            CAMERA_REQUEST_CODE)
+                CAMERA_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
-        when(requestCode){
+        when (requestCode) {
             CAMERA_REQUEST_CODE -> {
-                if(grantResults.isEmpty()|| grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     NotificationText.setText("You need the camera permission in order to scan the barcode")
                     NotificationText.startAnimation()
-                }else{
+                } else {
                     //successful request
-                    Log.e("NewActivity","Successful request")
+                    Log.e("NewActivity", "Successful request")
                 }
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)

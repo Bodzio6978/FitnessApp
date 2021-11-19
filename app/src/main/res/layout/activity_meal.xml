@@ -40,7 +40,7 @@
 
 
         <Button
-            android:id="@+id/btSaveNew"
+            android:id="@+id/btAddNew"
             android:layout_width="wrap_content"
             android:textSize="16sp"
             android:layout_height="wrap_content"
@@ -70,18 +70,41 @@
         android:layout_marginStart="20dp"
         android:text="Biedronka" />
 
+
+
     <RelativeLayout
         android:id="@+id/rlWeightMeal"
-        android:layout_below="@+id/tvBrandMeal"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/newRelativeLayout"
+        android:layout_below="@+id/tvBrandMeal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""/>
+            android:text="Weight"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/etWeightMeal"
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+            android:layout_centerVertical="true"/>
 
+
+        <EditText
+            android:id="@+id/etWeightMeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:layout_toStartOf="@+id/tvUnitMeal"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/edit_text"
+            android:padding="8dp"/>
+
+        <TextView
+            android:layout_centerVertical="true"
+            style="@style/Paragraph_Secondary_Caption"
+            android:id="@+id/tvUnitMeal"
+            android:layout_alignParentEnd="true"
+            android:text="ml"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

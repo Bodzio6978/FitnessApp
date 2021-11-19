@@ -73,18 +73,6 @@
     <style name="secondaryMealInformation" parent="Paragraph_Secondary_Caption">
         <item name="android:textColor">@color/bottomText</item>
     </style>
-    
-    <style name="newEditText" parent="TextInput_ListItemTitles_ImportantText_Snippet">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:elevation">7dp</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:layout_marginStart">70dp</item>
-        <item name="android:layout_marginEnd">15dp</item>
-        <item name="android:layout_marginTop">-4dp</item>
-        <item name="android:background">@drawable/edit_text</item>
-        <item name="android:inputType">number</item>
-    </style>
 
     <style name="settingsEditText" parent="newEditText">
         <item name="android:textAlignment">textEnd</item>
@@ -105,20 +93,41 @@
     <style name="newTextView" parent="TextInput_ListItemTitles_ImportantText_Snippet">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <style name="newEditText" parent="TextInput_ListItemTitles_ImportantText_Snippet">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">7dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:minWidth">250dp</item>
+        <item name="android:background">@drawable/edit_text</item>
+        <item name="android:inputType">number</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
+    <style name="newRelativeLayout" parent="Theme.FitnessApp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginTop">15dp</item>
     </style>
 
     <style name="typeSettingsView" parent="g">
         <item name="android:layout_centerVertical">true</item>
+
     </style>
 
     <style name="g" parent="TextInput_ListItemTitles_ImportantText_Snippet">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">34dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">g</item>
         <item name="android:layout_alignParentEnd">true</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="tvNutritionName" parent="Paragraph_Secondary_Caption">

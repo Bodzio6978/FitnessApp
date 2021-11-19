@@ -76,7 +76,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
 
     override fun onAdapterItemClickListener(position: Int) {
         val key = keyList[position]
-        val intent = Intent(this, MealActivity::class.java).putExtra("mealId",key).putExtra("mealName",mealName)
+        val intent = Intent(this, MealActivity::class.java).putExtra("key",key).putExtra("mealName",mealName)
         startActivity(intent)
     }
 }

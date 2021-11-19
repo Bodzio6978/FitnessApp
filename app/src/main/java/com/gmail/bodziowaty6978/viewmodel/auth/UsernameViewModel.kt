@@ -1,8 +1,11 @@
 package com.gmail.bodziowaty6978.viewmodel.auth
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.singleton.Strings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,11 +21,11 @@ class UsernameViewModel : ViewModel() {
 
     fun addUsername(username: String) {
         if (username.isEmpty()) {
-            NotificationText.text.value = "username"
-            NotificationText.state.value = true
+            NotificationText.setText(Strings.get(R.string.please_enter_your_username))
+            NotificationText.startAnimation()
         } else if (username.length < 6 || username.length > 24) {
-            NotificationText.text.value = "length"
-            NotificationText.state.value = true
+            NotificationText.setText(Strings.get(R.string.username_length_notification))
+            NotificationText.startAnimation()
         } else{
             checkIfUserExists(username)
         }
@@ -30,18 +33,17 @@ class UsernameViewModel : ViewModel() {
     }
 
     private fun checkIfUserExists(username: String){
-        val refUsers = database.reference.child("users")
+        val refUsers = database.reference.child("users").orderByChild("username").equalTo(username)
 
         refUsers.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                var doesExist = false
-                for (data in snapshot.children) {
-                    if (data.child("username").value.toString() == username) {
-                        doesExist = true
-                    }
+                var doesExist = true
+                if(snapshot.value==null){
+                    doesExist=false
                 }
                 if (doesExist) {
-                    NotificationText.text.value = "exists"
+                    NotificationText.setText(Strings.get(R.string.username_exists_notification))
+                    NotificationText.startAnimation()
                 } else {
                     database.reference.child("users").child(userId).child("username").setValue(username).addOnSuccessListener {
                         isUsernameSet.value = true
@@ -52,8 +54,7 @@ class UsernameViewModel : ViewModel() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                NotificationText.text.value = "Something wrong happened"
-                NotificationText.state.value = true
+                Log.e("UsernameViewModel",error.message)
             }
         })
 

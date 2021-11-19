@@ -16,7 +16,7 @@ class NewViewModel : ViewModel() {
     private val mAction = MutableLiveData<Action>()
     private val currentKey = MutableLiveData<String>()
 
-    fun addNewProduct(name: String, brand: String, weight: String, position: Int, calories: String, carbs: String, protein: String, fat: String, barCode: String) {
+    fun addNewProduct(name: String, brand: String, weight: String, position: Int, unit: String, calories: String, carbs: String, protein: String, fat: String, barCode: String) {
 
         if ((name.isEmpty() || calories.isEmpty() || carbs.isEmpty() || protein.isEmpty() || fat.isEmpty())) {
             NotificationText.setText("fields")
@@ -30,10 +30,10 @@ class NewViewModel : ViewModel() {
             val key = mealRef.push().key
             val meal = when (position) {
                 0 -> {
-                    Meal(getUserId(), name, brand, weight, position, calories, carbs, protein, fat)
+                    Meal(getUserId(), name, brand, weight, position, unit, calories, carbs, protein, fat)
                 }
                 else -> {
-                    Meal(getUserId(), name, brand, weight, position,
+                    Meal(getUserId(), name, brand, weight, position, unit,
                             (calories.toInt() / weight.toInt() * 100).toString(),
                             (carbs.toDouble() / weight.toDouble() * 100).toString(),
                             (protein.toDouble() / weight.toDouble() * 100).toString(),

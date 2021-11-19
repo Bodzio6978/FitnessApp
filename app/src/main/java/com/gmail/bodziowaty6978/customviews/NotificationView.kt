@@ -53,9 +53,6 @@ class NotificationView(context: Context, attrs: AttributeSet) : LinearLayout(con
 
         NotificationText.text.observe(this, {
             when (it) {
-                "username" -> binding.tvNotificationView.text = Strings.get(R.string.please_enter_your_username)
-                "length" -> binding.tvNotificationView.text = Strings.get(R.string.username_length_notification)
-                "exists" -> binding.tvNotificationView.text = Strings.get(R.string.username_exists_notification)
                 "fields" -> binding.tvNotificationView.text = Strings.get(R.string.please_make_sure_all_fields_are_filled_in_correctly)
                 "match" -> binding.tvNotificationView.text = Strings.get(R.string.please_make_sure_both_passwords_are_the_same)
                 else -> binding.tvNotificationView.text = it
@@ -73,6 +70,10 @@ class NotificationView(context: Context, attrs: AttributeSet) : LinearLayout(con
 
                 }
             }
+            if(it&&!isRunning){
+                NotificationText.state.value = false
+            }
+
         })
     }
 

@@ -89,6 +89,16 @@
     <string name="please_make_sure_you_have_entered_your_height">Please Make Sure You Have Entered Your Height</string>
     <string name="search">Search</string>
     <string name="today">Today</string>
+    <string name="back_button">Back button</string>
+    <string name="in_container">In container</string>
+    <string name="in_portion">In portion</string>
+
+    <string name="in_100g">In 100 g</string>
+    <string name="in_100ml">In 100 ml</string>
+
+    <string name="nutrition_values_in">Nutrition values in:</string>
+    <string name="g">g</string>
+    <string name="bar_code">Bar code</string>
 
     <string-array name="works">
         <item>Sedentary</item>
@@ -116,10 +126,12 @@
         <item>Male</item>
     </string-array>
 
-    <string-array name="weightUnit">
-        <item>Kilograms</item>
-        <item>Pounds</item>
+    <string-array name="unit">
+        <item>g</item>
+        <item>ml</item>
     </string-array>
+
+
 
 
 </resources>

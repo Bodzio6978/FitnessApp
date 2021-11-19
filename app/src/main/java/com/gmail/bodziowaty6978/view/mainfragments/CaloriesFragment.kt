@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
-import com.gmail.bodziowaty6978.model.Meal
 import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -33,8 +32,7 @@ class CaloriesFragment() : Fragment() {
             setUpUI(it)
         })
 
-        binding.caloriesBreakfast.addMeal(Meal("huj","Szynka zawedzana","Biedronka","115",2,"192","1","20","12"))
-        binding.caloriesBreakfast.addMeal(Meal("huj","Nutella","Biedronka","115",2,"546","57","6","30"))
+        viewModel.getProductsIds()
 
 
         return binding.root
