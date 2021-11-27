@@ -3,8 +3,7 @@ package com.gmail.bodziowaty6978.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.toString
-import com.gmail.bodziowaty6978.model.JournalProduct
-import com.gmail.bodziowaty6978.model.Product
+import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -17,7 +16,11 @@ class CaloriesViewModel : ViewModel() {
 
     private val mValues = MutableLiveData<Map<*, *>>()
 
-    private val mProducts = MutableLiveData<MutableMap<JournalProduct,Product>>()
+    private val mBreakfastProducts = MutableLiveData<MutableList<JournalEntry>>()
+    private val mLunchProducts = MutableLiveData<MutableList<JournalEntry>>()
+    private val mDinnerProducts = MutableLiveData<MutableList<JournalEntry>>()
+    private val mSupperProducts = MutableLiveData<MutableList<JournalEntry>>()
+
     private val idList = ArrayList<String>()
 
     fun setUpValues() {
@@ -29,15 +32,15 @@ class CaloriesViewModel : ViewModel() {
     }
 
 
-    fun getJournalProducts() {
+    fun getJournalEntries() {
         db.collection("users").document(userId).collection("journal").whereEqualTo("date",CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"))
                 .get()
                 .addOnSuccessListener {
 
-                    val journalProductList = ArrayList<JournalProduct>()
+                    val journalProductList = ArrayList<JournalEntry>()
 
                     for (document in it.documents){
-                        journalProductList.add(document.toObject(JournalProduct::class.java)!!)
+                        journalProductList.add(document.toObject(JournalEntry::class.java)!!)
                         idList.add(document.id)
                     }
 
@@ -46,23 +49,35 @@ class CaloriesViewModel : ViewModel() {
 
     }
 
-    private fun getProducts(list:ArrayList<JournalProduct>){
-        val map = mutableMapOf<JournalProduct,Product>()
+    private fun getProducts(list:ArrayList<JournalEntry>){
 
-        val productRef = db.collection("products")
+        if (list.isNotEmpty()){
+            val breakfast = mutableListOf<JournalEntry>()
+            val lunch = mutableListOf<JournalEntry>()
+            val dinner = mutableListOf<JournalEntry>()
+            val supper = mutableListOf<JournalEntry>()
 
-        for (item in list){
-            productRef.document(item.id).get().addOnSuccessListener {
-                map[item] = it.toObject(Product::class.java) as Product
+            for (entry in list){
+                when(entry.mealName){
+                    "Breakfast" -> breakfast.add(entry)
+                    "Lunch" -> lunch.add(entry)
+                    "Dinner" -> dinner.add(entry)
+                    "Supper" -> supper.add(entry)
+                }
             }
+            mBreakfastProducts.value = breakfast
+            mLunchProducts.value = lunch
+            mDinnerProducts.value = dinner
+            mSupperProducts.value = supper
         }
 
-        mProducts.value = map
     }
 
     fun getValues(): MutableLiveData<Map<*, *>> = mValues
 
-    fun getMutableJournalProducts(): MutableLiveData<MutableMap<JournalProduct,Product>> = mProducts
-
+    fun getBreakfastProducts():MutableLiveData<MutableList<JournalEntry>> = mBreakfastProducts
+    fun getLunchProducts():MutableLiveData<MutableList<JournalEntry>> = mLunchProducts
+    fun getDinnerProducts():MutableLiveData<MutableList<JournalEntry>> = mDinnerProducts
+    fun getSupperProducts():MutableLiveData<MutableList<JournalEntry>> = mSupperProducts
 
 }

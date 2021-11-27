@@ -12,7 +12,6 @@ import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.view.AddActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -20,7 +19,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),OnAdapterItemClickListener{
 
     var binding: MealViewBinding = MealViewBinding.inflate(LayoutInflater.from(context))
-    private var mealList: MutableList<Product> = mutableListOf()
     private var entriesList:MutableList<JournalEntry> = mutableListOf()
 
     private val data = MutableLiveData<ArrayList<Int>>()
@@ -30,7 +28,7 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
 
         binding.rvMeal.layoutManager = LinearLayoutManager(context)
-        binding.rvMeal.adapter = CaloriesRecyclerAdapter(mealList,entriesList,this)
+        binding.rvMeal.adapter = CaloriesRecyclerAdapter(entriesList,this)
 
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
@@ -51,40 +49,40 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     }
 
-    fun addMeal(item:Product,entry:JournalEntry){
-        mealList.add(item)
-        entriesList.add(entry)
+    fun addProducts(list:MutableList<JournalEntry>){
+        entriesList.clear()
+        entriesList.addAll(list)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()
     }
 
     private fun calculateValues(){
         var calories = 0
-        var carbs = 0
-        var protein = 0
-        var fat = 0
-        for(meal in mealList){
+        var carbs = 0.0
+        var protein = 0.0
+        var fat = 0.0
+        for(meal in entriesList){
             calories += meal.calories.toInt()
-            carbs += meal.carbs.toInt()
-            protein += meal.protein.toInt()
-            fat += meal.fat.toInt()
+            carbs += meal.carbs.toDouble()
+            protein += meal.protein.toDouble()
+            fat += meal.fat.toDouble()
         }
         updateValues(calories,carbs ,protein,fat)
     }
 
-    private fun updateValues(calories:Int,carbs:Int,protein:Int,fat:Int){
+    private fun updateValues(calories:Int,carbs:Double,protein:Double,fat:Double){
         binding.tvKcalValueMeal.text = calories.toString()
-        binding.tvCarbsValueMeal.text = carbs.toString()
-        binding.tvProteinValueMeal.text = protein.toString()
-        binding.tvFatValueMeal.text = fat.toString()
+        binding.tvCarbsValueMeal.text = carbs.toInt().toString()
+        binding.tvProteinValueMeal.text = protein.toInt().toString()
+        binding.tvFatValueMeal.text = fat.toInt().toString()
 
-        data.value = arrayListOf(calories,carbs,protein,fat)
+        data.value = arrayListOf(calories,carbs.toInt(),protein.toInt(),fat.toInt())
     }
 
     fun getValues():MutableLiveData<ArrayList<Int>> = data
 
     override fun onAdapterItemClickListener(position: Int) {
-        mealList.removeAt(position)
+        entriesList.removeAt(position)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()
     }

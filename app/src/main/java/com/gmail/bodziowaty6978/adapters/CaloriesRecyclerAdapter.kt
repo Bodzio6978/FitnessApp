@@ -7,19 +7,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.bodziowaty6978.databinding.MealLayoutBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.model.Product
 
-class CaloriesRecyclerAdapter(private var products: MutableList<Product>,private var journalEntries:MutableList<JournalEntry>, private var adapterItemClickListener: OnAdapterItemClickListener): RecyclerView.Adapter<CaloriesRecyclerAdapter.ViewHolder>() {
+class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEntry>, private var adapterItemClickListener: OnAdapterItemClickListener): RecyclerView.Adapter<CaloriesRecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: MealLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener{
 
-        fun bind(item: Product){
+        fun bind(item: JournalEntry){
             binding.item = item
             binding.executePendingBindings()
         }
 
         init{
             binding.mealDelete.setOnClickListener(this)
+
+            if (binding.mealProducer.text.isNullOrEmpty()){
+                binding.mealProducer.visibility = View.GONE
+            }
+
         }
 
         override fun onClick(v: View?) {
@@ -33,9 +37,9 @@ class CaloriesRecyclerAdapter(private var products: MutableList<Product>,private
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(products[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(journalEntries[position])
 
-    override fun getItemCount(): Int = products.size
+    override fun getItemCount(): Int = journalEntries.size
 
 
 }

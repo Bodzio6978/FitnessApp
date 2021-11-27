@@ -3,6 +3,7 @@ package com.gmail.bodziowaty6978.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.google.firebase.auth.FirebaseAuth
@@ -30,16 +31,38 @@ class MealViewModel : ViewModel() {
 
     fun addMeal(id: String, weight: String, mealName: String) {
 
-        db.collection("users").document(userId).collection("journal")
-                .add(mapOf("id" to id,
-                "weight" to weight,
-                "mealName" to mealName,
-                "date" to CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy")))
-                .addOnSuccessListener {
+        if(currentMeal.value!=null){
 
-                    addingState.value = true
+            val currentMeal = currentMeal.value!!
 
-                }
+            val calories = (currentMeal.calories.toDouble()*weight.toDouble()/100.0).toInt()
+            val carbohydrates = currentMeal.carbs.toDouble()*weight.toDouble()/100.0
+            val protein = currentMeal.protein.toDouble()*weight.toDouble()/100.0
+            val fat = currentMeal.fat.toDouble()*weight.toDouble()/100.0
+
+            val journalEntry = JournalEntry(currentMeal.name,
+                    id,
+                    mealName,
+                    CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"),
+                    currentMeal.brand,
+                    weight,
+                    currentMeal.unit,
+                    calories.toString(),
+                    carbohydrates.toString(),
+                    protein.toString(),
+                    fat.toString()
+            )
+
+            db.collection("users").document(userId).collection("journal")
+                    .add(journalEntry)
+                    .addOnSuccessListener {
+
+                        addingState.value = true
+
+                    }
+        }
+
+
 
 
 

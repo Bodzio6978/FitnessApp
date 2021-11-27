@@ -22,7 +22,19 @@ class CaloriesFragment() : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(CaloriesViewModel::class.java)
 
-        binding.caloriesBreakfast.getValues().observe(viewLifecycleOwner,{
+        binding.mvBreakfastCalories.getValues().observe(viewLifecycleOwner,{
+            updateValues(it)
+        })
+
+        binding.mvLunchCalories.getValues().observe(viewLifecycleOwner,{
+            updateValues(it)
+        })
+
+        binding.mvDinnerCalories.getValues().observe(viewLifecycleOwner,{
+            updateValues(it)
+        })
+
+        binding.mvSupperCalories.getValues().observe(viewLifecycleOwner,{
             updateValues(it)
         })
 
@@ -32,7 +44,23 @@ class CaloriesFragment() : Fragment() {
             setUpUI(it)
         })
 
-        viewModel.getJournalProducts()
+        viewModel.getJournalEntries()
+
+        viewModel.getBreakfastProducts().observe(viewLifecycleOwner,{
+            binding.mvBreakfastCalories.addProducts(it)
+        })
+
+        viewModel.getLunchProducts().observe(viewLifecycleOwner,{
+            binding.mvLunchCalories.addProducts(it)
+        })
+
+        viewModel.getDinnerProducts().observe(viewLifecycleOwner,{
+            binding.mvDinnerCalories.addProducts(it)
+        })
+
+        viewModel.getSupperProducts().observe(viewLifecycleOwner,{
+            binding.mvSupperCalories.addProducts(it)
+        })
 
 
 

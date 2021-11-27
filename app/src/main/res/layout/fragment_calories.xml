@@ -15,39 +15,39 @@
                 android:layout_height="wrap_content">
 
             <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/calories_breakfast"
+                android:id="@+id/mvBreakfastCalories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 app:mealName="@string/breakfast" />
 
             <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/calories_lunch"
+                android:id="@+id/mvLunchCalories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/calories_breakfast"
+                android:layout_below="@+id/mvBreakfastCalories"
                 android:layout_marginTop="15dp"
                 app:mealName="@string/lunch" />
 
             <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/calories_dinner"
+                android:id="@+id/mvDinnerCalories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/calories_lunch"
+                android:layout_below="@+id/mvLunchCalories"
                 android:layout_marginTop="15dp"
                 app:mealName="@string/dinner" />
 
             <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/calories_supper"
+                android:id="@+id/mvSupperCalories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/calories_dinner"
+                android:layout_below="@+id/mvDinnerCalories"
                 android:layout_marginTop="15dp"
                 app:mealName="@string/supper" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_below="@+id/calories_supper"
+                    android:layout_below="@+id/mvSupperCalories"
                     android:background="@android:color/transparent"
                     android:layout_height="80dp"/>
 
