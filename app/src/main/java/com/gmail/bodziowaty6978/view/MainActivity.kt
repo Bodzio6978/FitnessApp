@@ -2,6 +2,7 @@ package com.gmail.bodziowaty6978.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -75,19 +76,24 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_calories -> {
+                    binding.rlCalendar.visibility = View.VISIBLE
                     setFragment(viewModel.getCalories())
                 }
                 R.id.menu_training -> {
+                    binding.rlCalendar.visibility = View.VISIBLE
                     setFragment(viewModel.getTraining())
                 }
                 R.id.menu_recipes -> {
+                    binding.rlCalendar.visibility = View.GONE
                     setFragment(viewModel.getRecipes())
                 }
                 R.id.menu_shopping -> {
+                    binding.rlCalendar.visibility = View.VISIBLE
                     setFragment(viewModel.getShopping())
 
                 }
                 R.id.menu_settings -> {
+                    binding.rlCalendar.visibility = View.GONE
                     setFragment(viewModel.getSettings())
                 }
             }

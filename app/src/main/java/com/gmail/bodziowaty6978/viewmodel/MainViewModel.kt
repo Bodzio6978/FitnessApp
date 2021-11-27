@@ -1,15 +1,11 @@
 package com.gmail.bodziowaty6978.viewmodel
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.view.mainfragments.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -22,7 +18,8 @@ class MainViewModel: ViewModel() {
     private val settings = SettingFragment()
 
     private val instance = FirebaseAuth.getInstance()
-    private val database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
+
+    private val db = Firebase.firestore
     private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     private val mUserState = MutableLiveData<UserState>()
@@ -36,48 +33,25 @@ class MainViewModel: ViewModel() {
     fun getUserState():MutableLiveData<UserState> = mUserState
 
     fun checkInformation() {
+
         if (instance.currentUser==null){
             mUserState.value = UserState(UserState.USER_NOT_LOGGED)
         }
 
-        val usernameRef = database.reference.child("users").child(userId).child("username")
-        usernameRef.addListenerForSingleValueEvent(object:ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value==null){
-                    mUserState.value = UserState(UserState.USER_NO_USERNAME)
-                }
-            }
+        val userCollectionRef = db.collection("users").document(userId)
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("MainViewModel",error.message)
+        userCollectionRef.get().addOnSuccessListener {
+            if (it.getString("username")==null){
+                mUserState.value = UserState(UserState.USER_NO_USERNAME)
             }
-        })
+            if(it.get("nutritionValues")==null){
+                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+            }
+            if(it.get("userInformation")==null){
+                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+            }
+        }
 
-        val informationRef = database.reference.child("users").child(userId).child("information")
-        informationRef.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.value == null){
-                    mUserState.value = UserState(UserState.USER_NO_INFORMATION)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("MainViewModel",error.message)
-            }
-        })
-
-        val nutritionRef = database.reference.child("users").child(userId).child("nutritionValues")
-        nutritionRef.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.value == null){
-                    mUserState.value = UserState(UserState.USER_NO_INFORMATION)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("MainViewModel",error.message)
-            }
-        })
     }
 }
 

@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.bodziowaty6978.databinding.MealQueryLayoutBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
-import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.model.Product
 
-class QueryMealRecyclerAdapter(private var meals: MutableList<Meal>,private val adapterItemClickListener:OnAdapterItemClickListener): RecyclerView.Adapter<QueryMealRecyclerAdapter.ViewHolder>() {
+class QueryMealRecyclerAdapter(private var meals: MutableList<Product>,private val adapterItemClickListener:OnAdapterItemClickListener): RecyclerView.Adapter<QueryMealRecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: MealQueryLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        fun bind(item: Meal){
+        fun bind(item: Product){
             binding.meal = item
             binding.executePendingBindings()
         }

@@ -86,8 +86,10 @@
     </style>
 
     <style name="introductionEditText" parent="settingsEditText">
+        <item name="android:layout_alignParentEnd">false</item>
         <item name="android:layout_centerVertical">false</item>
         <item name="android:inputType">numberDecimal</item>
+        <item name="android:layout_marginEnd">0dp</item>
     </style>
 
     <style name="newTextView" parent="TextInput_ListItemTitles_ImportantText_Snippet">
@@ -104,7 +106,7 @@
         <item name="android:padding">8dp</item>
         <item name="android:minWidth">250dp</item>
         <item name="android:background">@drawable/edit_text</item>
-        <item name="android:inputType">number</item>
+        <item name="android:inputType">numberDecimal</item>
         <item name="android:layout_alignParentEnd">true</item>
     </style>
 

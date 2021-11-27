@@ -32,17 +32,18 @@ class CaloriesFragment() : Fragment() {
             setUpUI(it)
         })
 
-        viewModel.getProductsIds()
+        viewModel.getJournalProducts()
+
 
 
         return binding.root
     }
 
-    private fun setUpUI(map:HashMap<*,*>){
-        binding.nvCalories.setWanted((map["calories"] as String).toInt())
-        binding.nvCarbohydrates.setWanted((map["carbohydrates"] as String).toInt())
-        binding.nvProtein.setWanted((map["protein"] as String).toInt())
-        binding.nvFat.setWanted((map["fat"] as String).toInt())
+    private fun setUpUI(map:Map<*,*>){
+        binding.nvCalories.setWanted((map["calories"]).toString().toInt())
+        binding.nvCarbohydrates.setWanted((map["carbohydrates"]).toString().toDouble().toInt())
+        binding.nvProtein.setWanted((map["protein"]).toString().toDouble().toInt())
+        binding.nvFat.setWanted((map["fat"]).toString().toDouble().toInt())
 
         binding.nvCalories.updateProgress()
         binding.nvCarbohydrates.updateProgress()

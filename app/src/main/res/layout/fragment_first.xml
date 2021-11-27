@@ -70,10 +70,10 @@
             android:text="@string/age" />
 
         <EditText
+            android:layout_marginEnd="34dp"
             android:id="@+id/etAgeIntroduction"
             style="@style/introductionEditText"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
             android:autofillHints="@string/age" />
 
     </RelativeLayout>
@@ -106,11 +106,7 @@
 
         <TextView
             android:id="@+id/tvCurrentUnitIntroduction"
-            style="@style/Paragraph_Secondary_Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            style="@style/g"
             android:text="@string/kg" />
 
     </RelativeLayout>
@@ -142,11 +138,7 @@
 
         <TextView
             android:id="@+id/tvDesiredUnitIntroduction"
-            style="@style/Paragraph_Secondary_Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            style="@style/g"
             android:text="@string/kg" />
 
     </RelativeLayout>

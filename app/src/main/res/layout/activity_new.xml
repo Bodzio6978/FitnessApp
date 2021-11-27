@@ -180,8 +180,7 @@
             android:autofillHints="@string/calories"
             android:minWidth="140dp"
             android:layout_toStartOf="@+id/gCalories"
-            android:layout_marginEnd="34dp"
-            android:inputType="number" />
+            android:layout_marginEnd="34dp"/>
 
         <TextView
             android:id="@+id/gCalories"
@@ -211,8 +210,7 @@
             android:autofillHints="@string/carbohydrates"
             android:minWidth="140dp"
             android:layout_toStartOf="@+id/gCarbs"
-            android:layout_marginEnd="34dp"
-            android:inputType="number" />
+            android:layout_marginEnd="34dp"/>
 
         <TextView
             android:id="@+id/gCarbs"
@@ -286,6 +284,7 @@
             style="@style/newEditText"
             android:layout_alignParentEnd="false"
             android:minWidth="140dp"
+            android:inputType="number"
             android:layout_toStartOf="@+id/ibBarCodeNew"/>
 
 

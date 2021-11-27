@@ -11,7 +11,7 @@ import com.gmail.bodziowaty6978.adapters.QueryMealRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityAddBinding
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
-import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -22,8 +22,8 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
     lateinit var binding:ActivityAddBinding
     lateinit var viewModel:AddViewModel
 
-    private var mealList: MutableList<Meal> = mutableListOf()
-    private var keyList:MutableList<String> = mutableListOf()
+    private var mealList: MutableList<Product> = mutableListOf()
+    private var idList:MutableList<String> = mutableListOf()
 
     private lateinit var mealName:String
 
@@ -47,9 +47,9 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
             binding.rvAdd.adapter?.notifyDataSetChanged()
         })
 
-        viewModel.getKeys().observe(this,{
-            keyList.clear()
-            keyList.addAll(it)
+        viewModel.getIds().observe(this,{
+            idList.clear()
+            idList.addAll(it)
         })
 
         mealName = intent.getStringExtra("mealName").toString()
@@ -75,7 +75,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
     }
 
     override fun onAdapterItemClickListener(position: Int) {
-        val key = keyList[position]
+        val key = idList[position]
         val intent = Intent(this, MealActivity::class.java).putExtra("key",key).putExtra("mealName",mealName)
         startActivity(intent)
     }

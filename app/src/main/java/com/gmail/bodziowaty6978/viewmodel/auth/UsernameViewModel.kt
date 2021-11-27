@@ -6,16 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.gmail.bodziowaty6978.singleton.Strings
+import com.gmail.bodziowaty6978.viewmodel.TAG
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class UsernameViewModel : ViewModel() {
-
-    private val database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val db = Firebase.firestore
     private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private val isUsernameSet: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -26,40 +24,33 @@ class UsernameViewModel : ViewModel() {
         } else if (username.length < 6 || username.length > 24) {
             NotificationText.setText(Strings.get(R.string.username_length_notification))
             NotificationText.startAnimation()
-        } else{
+        } else {
             checkIfUserExists(username)
         }
 
     }
 
-    private fun checkIfUserExists(username: String){
-        val refUsers = database.reference.child("users").orderByChild("username").equalTo(username)
+    private fun checkIfUserExists(username: String) {
 
-        refUsers.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var doesExist = true
-                if(snapshot.value==null){
-                    doesExist=false
-                }
-                if (doesExist) {
-                    NotificationText.setText(Strings.get(R.string.username_exists_notification))
-                    NotificationText.startAnimation()
-                } else {
-                    database.reference.child("users").child(userId).child("username").setValue(username).addOnSuccessListener {
-                        isUsernameSet.value = true
-                    }
+        db.collection("users").whereEqualTo("username", username).get().addOnSuccessListener {
+            if (it.isEmpty) {
 
+                db.collection("users").document(userId).set(mapOf("username" to username), SetOptions.merge()).addOnSuccessListener {
+                    isUsernameSet.value = true
                 }
 
-            }
+            } else {
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("UsernameViewModel",error.message)
+                NotificationText.setText(Strings.get(R.string.username_exists_notification))
+                NotificationText.startAnimation()
             }
-        })
+        }.addOnFailureListener {
+            Log.d(TAG, it.message.toString())
+        }
 
     }
-    fun getState():MutableLiveData<Boolean> = isUsernameSet
+
+    fun getState(): MutableLiveData<Boolean> = isUsernameSet
 
 
 }

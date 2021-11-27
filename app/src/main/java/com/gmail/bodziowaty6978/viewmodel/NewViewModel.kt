@@ -2,16 +2,17 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class NewViewModel : ViewModel() {
 
-    private val database = Firebase.database("https://fitness-app-fa608-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val instance = FirebaseAuth.getInstance()
+    private val db = Firebase.firestore
+    private val userId = FirebaseAuth.getInstance().uid.toString()
 
     private val mAction = MutableLiveData<Action>()
     private val currentKey = MutableLiveData<String>()
@@ -26,40 +27,33 @@ class NewViewModel : ViewModel() {
             NotificationText.startAnimation()
         } else {
             mAction.value = Action(Action.ADDING_MEAL)
-            val mealRef = database.reference.child("meals")
-            val key = mealRef.push().key
             val meal = when (position) {
                 0 -> {
-                    Meal(getUserId(), name, brand, weight, position, unit, calories, carbs, protein, fat)
+                    Product(userId, name, brand, weight, position, unit, calories, carbs, protein, fat)
                 }
                 else -> {
-                    Meal(getUserId(), name, brand, weight, position, unit,
-                            (calories.toInt() / weight.toInt() * 100).toString(),
-                            (carbs.toDouble() / weight.toDouble() * 100).toString(),
-                            (protein.toDouble() / weight.toDouble() * 100).toString(),
-                            (fat.toDouble() / weight.toDouble() * 100).toString())
+                    Product(userId, name, brand, weight, position, unit,
+                            (calories.toDouble() / weight.toDouble() * 100).toInt().toString(),
+                            (carbs.toDouble() / weight.toDouble() * 100).round(2).toString(),
+                            (protein.toDouble() / weight.toDouble() * 100).round(2).toString(),
+                            (fat.toDouble() / weight.toDouble() * 100).round(2).toString())
                 }
 
             }
 
-            if (barCode.isNotEmpty()) {
-                val barcodeRef = database.reference.child("barCodes")
-                barcodeRef.child(barCode).setValue(key.toString())
-            }
+            db.collection("products")
+                    .add(meal).addOnSuccessListener {
+                        currentKey.value = it.id
+                        if (barCode.isNotEmpty()) {
+                            db.collection("barcodes").add(
+                                    mapOf(barCode to it.id)
+                            )
+                        }
+                        mAction.value = Action(Action.MEAL_ADDED)
 
-            mealRef.child(key.toString()).setValue(meal).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    currentKey.value = key.toString()
-                    mAction.value = Action(Action.MEAL_ADDED)
-                } else {
-                    mAction.value = Action(Action.ERROR_ADDING_MEAL)
-
-                }
-            }
+                    }
         }
     }
-
-    private fun getUserId(): String = instance.uid.toString()
 
     fun getAction(): MutableLiveData<Action> = mAction
     fun getKey(): String = currentKey.value.toString()

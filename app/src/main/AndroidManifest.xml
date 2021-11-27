@@ -18,7 +18,7 @@
         <activity android:name=".view.MealActivity" />
         <activity
             android:name=".view.NewActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.AddActivity" />
         <activity android:name=".view.auth.UsernameActivity" />

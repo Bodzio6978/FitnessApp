@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMealBinding
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
-import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.MealViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -47,21 +47,21 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
         binding.tvMealNameMeal.text = mealName
 
-        val key = intent.getStringExtra("key")
+        val id = intent.getStringExtra("key")
 
-        viewModel.getMeal(key.toString())
+        viewModel.getMeal(id.toString())
 
         binding.ibBackMeal.setOnClickListener {
             super.onBackPressed()
         }
 
         binding.btAddNew.setOnClickListener{
-            viewModel.addMeal(key.toString(),binding.etWeightMeal.text.toString(),mealName.toString())
+            viewModel.addMeal(id.toString(),binding.etWeightMeal.text.toString(),mealName.toString())
         }
 
     }
 
-    private fun initializeUi(meal: Meal){
+    private fun initializeUi(meal: Product){
         binding.tvProductNameMeal.text = meal.name
         binding.tvFatValueMeal.text = meal.fat
         binding.tvCarbsValueMeal.text = meal.carbs

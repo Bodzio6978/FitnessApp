@@ -11,7 +11,8 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
-import com.gmail.bodziowaty6978.model.Meal
+import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.view.AddActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -19,7 +20,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),OnAdapterItemClickListener{
 
     var binding: MealViewBinding = MealViewBinding.inflate(LayoutInflater.from(context))
-    private var mealList: MutableList<Meal> = mutableListOf()
+    private var mealList: MutableList<Product> = mutableListOf()
+    private var entriesList:MutableList<JournalEntry> = mutableListOf()
 
     private val data = MutableLiveData<ArrayList<Int>>()
 
@@ -28,7 +30,7 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
 
         binding.rvMeal.layoutManager = LinearLayoutManager(context)
-        binding.rvMeal.adapter = CaloriesRecyclerAdapter(mealList,this)
+        binding.rvMeal.adapter = CaloriesRecyclerAdapter(mealList,entriesList,this)
 
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
@@ -49,8 +51,9 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     }
 
-    fun addMeal(item:Meal){
+    fun addMeal(item:Product,entry:JournalEntry){
         mealList.add(item)
+        entriesList.add(entry)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()
     }
