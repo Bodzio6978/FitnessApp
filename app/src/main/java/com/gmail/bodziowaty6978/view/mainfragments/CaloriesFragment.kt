@@ -62,6 +62,12 @@ class CaloriesFragment() : Fragment() {
             binding.mvSupperCalories.addProducts(it)
         })
 
+        observeMealViews()
+
+        viewModel.getDeleteProduct().observe(viewLifecycleOwner,{
+            deletedProduct(it)
+        })
+
 
 
         return binding.root
@@ -80,6 +86,30 @@ class CaloriesFragment() : Fragment() {
 
     }
 
+    private fun observeMealViews(){
+        binding.mvBreakfastCalories.getDeletedProduct().observe(viewLifecycleOwner,{
+            viewModel.removeItem(it.first,it.second)
+        })
+        binding.mvLunchCalories.getDeletedProduct().observe(viewLifecycleOwner,{
+            viewModel.removeItem(it.first,it.second)
+        })
+        binding.mvDinnerCalories.getDeletedProduct().observe(viewLifecycleOwner,{
+            viewModel.removeItem(it.first,it.second)
+        })
+        binding.mvSupperCalories.getDeletedProduct().observe(viewLifecycleOwner,{
+            viewModel.removeItem(it.first,it.second)
+        })
+    }
+
+    private fun deletedProduct(productInformation:ArrayList<String>){
+        when(productInformation[1]){
+            "Breakfast" -> binding.mvBreakfastCalories.removeProduct(productInformation[0].toInt())
+            "Lunch" -> binding.mvLunchCalories.removeProduct(productInformation[0].toInt())
+            "Dinner" -> binding.mvDinnerCalories.removeProduct(productInformation[0].toInt())
+            "Supper" -> binding.mvSupperCalories.removeProduct(productInformation[0].toInt())
+        }
+    }
+
     private fun updateValues(list:ArrayList<Int>){
         binding.nvCalories.updateValue(list[0])
         binding.nvCarbohydrates.updateValue(list[1])
@@ -91,4 +121,5 @@ class CaloriesFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

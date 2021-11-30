@@ -14,6 +14,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+
+                <View
+                    style="@style/secondaryMealInformation"
+                    android:layout_width="0dp"
+                    android:layout_weight=".25"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    style="@style/secondaryMealInformation"
+                    android:layout_width="0dp"
+                    android:layout_weight=".25"
+                    android:textAlignment="center"
+                    android:text="@string/carbs"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    style="@style/secondaryMealInformation"
+                    android:layout_width="0dp"
+                    android:textAlignment="center"
+                    android:text="@string/protein"
+                    android:layout_weight=".25"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    style="@style/secondaryMealInformation"
+                    android:layout_width="0dp"
+                    android:text="@string/fat"
+                    android:textAlignment="center"
+                    android:layout_weight=".25"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+
+            <RelativeLayout
+                android:id="@+id/rlMealViewsCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             <com.gmail.bodziowaty6978.customviews.MealView
                 android:id="@+id/mvBreakfastCalories"
                 android:layout_width="match_parent"
@@ -53,6 +98,8 @@
 
             </RelativeLayout>
 
+            </RelativeLayout>
+
 
         </ScrollView>
 
@@ -78,7 +125,7 @@
                 android:id="@+id/nvCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:name="Calories"/>
+                app:name="@string/calories"/>
 
             <com.gmail.bodziowaty6978.customviews.NutritionView
                 android:layout_marginStart="15dp"
@@ -87,14 +134,14 @@
                 android:id="@+id/nvCarbohydrates"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:name="Carbs"/>
+                app:name="@string/carbs"/>
 
             <com.gmail.bodziowaty6978.customviews.NutritionView
                 android:layout_toEndOf="@+id/nvCarbohydrates"
                 android:id="@+id/nvProtein"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:name="Protein"
+                app:name="@string/protein"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"/>
 
@@ -105,7 +152,7 @@
                 android:id="@+id/nvFat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:name="Fat"/>
+                app:name="@string/fat"/>
 
             </RelativeLayout>
 

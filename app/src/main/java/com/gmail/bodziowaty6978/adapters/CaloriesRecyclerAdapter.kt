@@ -18,7 +18,7 @@ class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEnt
         }
 
         init{
-            binding.mealDelete.setOnClickListener(this)
+            binding.rlMeal.setOnClickListener(this)
 
             if (binding.mealProducer.text.isNullOrEmpty()){
                 binding.mealProducer.visibility = View.GONE

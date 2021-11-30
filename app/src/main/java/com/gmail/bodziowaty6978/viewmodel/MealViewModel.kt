@@ -2,6 +2,7 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.Product
@@ -36,9 +37,9 @@ class MealViewModel : ViewModel() {
             val currentMeal = currentMeal.value!!
 
             val calories = (currentMeal.calories.toDouble()*weight.toDouble()/100.0).toInt()
-            val carbohydrates = currentMeal.carbs.toDouble()*weight.toDouble()/100.0
-            val protein = currentMeal.protein.toDouble()*weight.toDouble()/100.0
-            val fat = currentMeal.fat.toDouble()*weight.toDouble()/100.0
+            val carbohydrates = (currentMeal.carbs.toDouble()*weight.toDouble()/100.0).round(2)
+            val protein = (currentMeal.protein.toDouble()*weight.toDouble()/100.0).round(2)
+            val fat = (currentMeal.fat.toDouble()*weight.toDouble()/100.0).round(2)
 
             val journalEntry = JournalEntry(currentMeal.name,
                     id,

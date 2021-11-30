@@ -12,6 +12,7 @@ import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.singleton.Strings
 import com.gmail.bodziowaty6978.view.AddActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -19,13 +20,15 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),OnAdapterItemClickListener{
 
     var binding: MealViewBinding = MealViewBinding.inflate(LayoutInflater.from(context))
+
     private var entriesList:MutableList<JournalEntry> = mutableListOf()
 
     private val data = MutableLiveData<ArrayList<Int>>()
 
+    private var deletedProduct = MutableLiveData<Pair<Int,String>>()
+
     init {
         addView(binding.root)
-
 
         binding.rvMeal.layoutManager = LinearLayoutManager(context)
         binding.rvMeal.adapter = CaloriesRecyclerAdapter(entriesList,this)
@@ -33,14 +36,12 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
         binding.tvNameMealView.text = attributes.getString(R.styleable.MealView_mealName)
-        binding.tvKcalValueMeal.text = attributes.getInteger(R.styleable.MealView_kcalValue, 0).toString()
-        binding.tvCarbsValueMeal.text = attributes.getInteger(R.styleable.MealView_carbValue, 0).toString()
-        binding.tvProteinValueMeal.text = attributes.getInteger(R.styleable.MealView_protValue, 0).toString()
-        binding.tvFatValueMeal.text = attributes.getInteger(R.styleable.MealView_fatValue, 0).toString()
+        (attributes.getInteger(R.styleable.MealView_kcalValue, 0).toString()+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
+        (attributes.getInteger(R.styleable.MealView_carbValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
+        (attributes.getInteger(R.styleable.MealView_protValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
+        (attributes.getInteger(R.styleable.MealView_fatValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
 
         attributes.recycle()
-
-
 
         binding.fabMeal.setOnClickListener {
             val intent = Intent(context, AddActivity::class.java).putExtra("mealName",binding.tvNameMealView.text.toString())
@@ -49,9 +50,9 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     }
 
-    fun addProducts(list:MutableList<JournalEntry>){
+    fun addProducts(list:MutableMap<String,JournalEntry>){
         entriesList.clear()
-        entriesList.addAll(list)
+        entriesList.addAll(list.values)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()
     }
@@ -71,19 +72,25 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
     }
 
     private fun updateValues(calories:Int,carbs:Double,protein:Double,fat:Double){
-        binding.tvKcalValueMeal.text = calories.toString()
-        binding.tvCarbsValueMeal.text = carbs.toInt().toString()
-        binding.tvProteinValueMeal.text = protein.toInt().toString()
-        binding.tvFatValueMeal.text = fat.toInt().toString()
+        (calories.toString()+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
+        (carbs.toInt().toString()+Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
+        (protein.toInt().toString()+Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
+        (fat.toInt().toString()+Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
 
         data.value = arrayListOf(calories,carbs.toInt(),protein.toInt(),fat.toInt())
     }
 
-    fun getValues():MutableLiveData<ArrayList<Int>> = data
-
-    override fun onAdapterItemClickListener(position: Int) {
+    fun removeProduct(position: Int){
         entriesList.removeAt(position)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()
+    }
+
+    fun getValues():MutableLiveData<ArrayList<Int>> = data
+
+    fun getDeletedProduct():MutableLiveData<Pair<Int,String>> = deletedProduct
+
+    override fun onAdapterItemClickListener(position: Int) {
+        deletedProduct.value = Pair(position,binding.tvNameMealView.text.toString())
     }
 }
