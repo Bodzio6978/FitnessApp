@@ -74,10 +74,10 @@ class CaloriesFragment() : Fragment() {
     }
 
     private fun setUpUI(map:Map<*,*>){
-        binding.nvCalories.setWanted((map["calories"]).toString().toInt())
-        binding.nvCarbohydrates.setWanted((map["carbohydrates"]).toString().toDouble().toInt())
-        binding.nvProtein.setWanted((map["protein"]).toString().toDouble().toInt())
-        binding.nvFat.setWanted((map["fat"]).toString().toDouble().toInt())
+        binding.nvCalories.setWanted(((map["wantedCalories"]) as Double).toInt())
+        binding.nvCarbohydrates.setWanted(((map["wantedCarbohydrates"]) as Double).toInt())
+        binding.nvProtein.setWanted(((map["wantedProtein"]) as Double).toInt())
+        binding.nvFat.setWanted(((map["wantedFat"]) as Double).toInt())
 
         binding.nvCalories.updateProgress()
         binding.nvCarbohydrates.updateProgress()

@@ -11,7 +11,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
     private val calories = CaloriesFragment()
     private val training = TrainingFragment()
     private val recipes = RecipesFragment()
@@ -27,34 +27,36 @@ class MainViewModel: ViewModel() {
 
     private var errorMessage = ""
 
-    fun getCalories():Fragment = calories
-    fun getTraining():Fragment = training
-    fun getRecipes():Fragment = recipes
-    fun getShopping():Fragment = shopping
-    fun getSettings():Fragment = settings
+    fun getCalories(): Fragment = calories
+    fun getTraining(): Fragment = training
+    fun getRecipes(): Fragment = recipes
+    fun getShopping(): Fragment = shopping
+    fun getSettings(): Fragment = settings
 
-    fun getUserState():MutableLiveData<UserState> = mUserState
+    fun getUserState(): MutableLiveData<UserState> = mUserState
 
-    fun getErrorMessage():String = errorMessage
+    fun getErrorMessage(): String = errorMessage
 
     fun checkInformation() {
 
-        if (instance.currentUser==null){
+        if (instance.currentUser == null) {
             mUserState.value = UserState(UserState.USER_NOT_LOGGED)
-        }
+        } else {
 
-        val userCollectionRef = db.collection("users").document(userId)
+            val userCollectionRef = db.collection("users").document(userId)
 
-        userCollectionRef.get().addOnSuccessListener {
-            if (it.getString("username")==null){
-                mUserState.value = UserState(UserState.USER_NO_USERNAME)
-            }else if(it.get("nutritionValues")==null){
-                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
-            }else if(it.get("userInformation")==null){
-                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+            userCollectionRef.get().addOnSuccessListener {
+                if (it.getString("username") == null) {
+                    mUserState.value = UserState(UserState.USER_NO_USERNAME)
+                } else if (it.get("nutritionValues") == null) {
+                    mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+                } else if (it.get("userInformation") == null) {
+                    mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+                }
+            }.addOnFailureListener {
+                Log.e(TAG, it.message.toString())
             }
-        }.addOnFailureListener {
-            Log.e(TAG,it.message.toString())
+
         }
 
     }
