@@ -36,22 +36,24 @@ class MealViewModel : ViewModel() {
 
             val currentMeal = currentMeal.value!!
 
-            val calories = (currentMeal.calories.toDouble()*weight.toDouble()/100.0).toInt()
-            val carbohydrates = (currentMeal.carbs.toDouble()*weight.toDouble()/100.0).round(2)
-            val protein = (currentMeal.protein.toDouble()*weight.toDouble()/100.0).round(2)
-            val fat = (currentMeal.fat.toDouble()*weight.toDouble()/100.0).round(2)
+            val weightValue = weight.replace(",",".").toDouble()
+
+            val calories = (currentMeal.calories.toDouble()*weightValue/100.0).toInt()
+            val carbohydrates = (currentMeal.carbs*weightValue/100.0).round(2)
+            val protein = (currentMeal.protein*weightValue/100.0).round(2)
+            val fat = (currentMeal.fat*weightValue/100.0).round(2)
 
             val journalEntry = JournalEntry(currentMeal.name,
                     id,
                     mealName,
                     CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"),
                     currentMeal.brand,
-                    weight,
+                    weightValue,
                     currentMeal.unit,
-                    calories.toString(),
-                    carbohydrates.toString(),
-                    protein.toString(),
-                    fat.toString()
+                    calories,
+                    carbohydrates,
+                    protein,
+                    fat
             )
 
             db.collection("users").document(userId).collection("journal")

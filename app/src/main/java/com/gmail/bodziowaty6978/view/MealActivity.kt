@@ -63,10 +63,10 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
     private fun initializeUi(meal: Product){
         binding.tvProductNameMeal.text = meal.name
-        binding.tvFatValueMeal.text = meal.fat
-        binding.tvCarbsValueMeal.text = meal.carbs
-        binding.tvProteinValueMeal.text = meal.protein
-        binding.tvCaloriesValueMeal.text = meal.calories
+        binding.tvFatValueMeal.text = meal.fat.toString()
+        binding.tvCarbsValueMeal.text = meal.carbs.toString()
+        binding.tvProteinValueMeal.text = meal.protein.toString()
+        binding.tvCaloriesValueMeal.text = meal.calories.toString()
         binding.tvBrandMeal.text = meal.brand
     }
 }

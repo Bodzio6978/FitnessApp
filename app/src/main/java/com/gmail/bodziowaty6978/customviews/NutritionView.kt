@@ -28,7 +28,8 @@ class NutritionView(context: Context, attrs: AttributeSet) : LinearLayout(contex
     }
 
     fun updateValue(value:Int){
-        binding.tvCurrentValueNutrition.text = value.toString()
+//        Log.e(TAG,value.toString())
+        binding.tvCurrentValueNutrition.text = (binding.tvCurrentValueNutrition.text.toString().toInt()+value).toString()
         updateProgress()
     }
 

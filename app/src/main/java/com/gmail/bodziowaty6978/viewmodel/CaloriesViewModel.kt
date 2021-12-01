@@ -25,7 +25,7 @@ class CaloriesViewModel : ViewModel() {
 
     fun setUpValues() {
         db.collection("users").document(userId).get().addOnSuccessListener {
-            if (it.exists()) {
+            if (it.data?.get("nutritionValues")!=null) {
                 mValues.value = it.data?.get("nutritionValues") as Map<*, *>
             }
         }

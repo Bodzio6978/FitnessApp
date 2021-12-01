@@ -13,7 +13,6 @@
         style="@style/backArrow"
         android:contentDescription="@string/back_button" />
 
-
     <Button
         android:id="@+id/btSaveNew"
         android:layout_width="wrap_content"
@@ -132,6 +131,7 @@
             android:layout_marginEnd="10dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="false"
+            android:digits="0123456789,."
             android:autofillHints="@string/container_weight" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -179,6 +179,7 @@
             style="@style/newEditText"
             android:autofillHints="@string/calories"
             android:minWidth="140dp"
+            android:inputType="number"
             android:layout_toStartOf="@+id/gCalories"
             android:layout_marginEnd="34dp"/>
 
@@ -209,6 +210,7 @@
             style="@style/newEditText"
             android:autofillHints="@string/carbohydrates"
             android:minWidth="140dp"
+            android:digits="0123456789,."
             android:layout_toStartOf="@+id/gCarbs"
             android:layout_marginEnd="34dp"/>
 
@@ -233,6 +235,7 @@
         <EditText
             android:id="@+id/etProteinNew"
             style="@style/newEditText"
+            android:digits="0123456789,."
             android:layout_toStartOf="@+id/gProtein"
             android:layout_marginEnd="34dp"
             android:minWidth="140dp"/>
@@ -257,6 +260,7 @@
         <EditText
             android:id="@+id/etFatNew"
             style="@style/newEditText"
+            android:digits="0123456789,."
             android:layout_toStartOf="@+id/gFat"
             android:layout_marginEnd="34dp"
             android:minWidth="140dp"/>

@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="meal"
+            name="product"
             type="com.gmail.bodziowaty6978.model.Product" />
 
     </data>
@@ -33,7 +33,7 @@
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{meal.name}" />
+                android:text="@{product.name}" />
 
             <TextView
                 android:id="@+id/tvBrandQuery"
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvNameQuery"
-                android:text="@{meal.brand}"
+                android:text="@{product.brand}"
                 android:textColor="@color/bottomText" />
 
 
@@ -58,7 +58,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{meal.calories}"
+                android:text="@{Integer.toString(product.calories)}"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"/>
 

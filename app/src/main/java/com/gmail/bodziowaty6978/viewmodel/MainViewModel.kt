@@ -1,5 +1,6 @@
 package com.gmail.bodziowaty6978.viewmodel
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,8 @@ class MainViewModel: ViewModel() {
 
     private val mUserState = MutableLiveData<UserState>()
 
+    private var errorMessage = ""
+
     fun getCalories():Fragment = calories
     fun getTraining():Fragment = training
     fun getRecipes():Fragment = recipes
@@ -31,6 +34,8 @@ class MainViewModel: ViewModel() {
     fun getSettings():Fragment = settings
 
     fun getUserState():MutableLiveData<UserState> = mUserState
+
+    fun getErrorMessage():String = errorMessage
 
     fun checkInformation() {
 
@@ -43,13 +48,13 @@ class MainViewModel: ViewModel() {
         userCollectionRef.get().addOnSuccessListener {
             if (it.getString("username")==null){
                 mUserState.value = UserState(UserState.USER_NO_USERNAME)
-            }
-            if(it.get("nutritionValues")==null){
+            }else if(it.get("nutritionValues")==null){
+                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
+            }else if(it.get("userInformation")==null){
                 mUserState.value = UserState(UserState.USER_NO_INFORMATION)
             }
-            if(it.get("userInformation")==null){
-                mUserState.value = UserState(UserState.USER_NO_INFORMATION)
-            }
+        }.addOnFailureListener {
+            Log.e(TAG,it.message.toString())
         }
 
     }

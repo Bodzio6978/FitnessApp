@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/secondaryMealInformation"
+                style="@style/mealLayoutSecondary"
                 android:text="@{` (`+item.weight+item.unit+`)`}"
                 android:layout_toEndOf="@+id/meal_name"
                 android:layout_alignBottom="@+id/meal_name"/>
@@ -61,16 +61,16 @@
 
                 <TextView
                     android:id="@+id/meal_kcal_value"
-                    style="@style/secondaryMealInformation"
+                    style="@style/mealLayoutSecondary"
                     android:layout_width="0dp"
                     android:layout_weight=".25"
                     android:layout_height="wrap_content"
-                    android:text="@{``+item.calories+`kcal`}" />
+                    android:text="@{``+item.calories+` kcal`}" />
 
 
                 <TextView
                     android:id="@+id/meal_carb_value"
-                    style="@style/secondaryMealInformation"
+                    style="@style/mealLayoutSecondary"
                     android:layout_width="0dp"
                     android:textAlignment="center"
                     android:layout_weight=".25"
@@ -81,7 +81,7 @@
 
                 <TextView
                     android:id="@+id/meal_prot_value"
-                    style="@style/secondaryMealInformation"
+                    style="@style/mealLayoutSecondary"
                     android:layout_width="0dp"
                     android:layout_weight=".25"
                     android:textAlignment="center"
@@ -91,7 +91,7 @@
 
                 <TextView
                     android:id="@+id/meal_fat_value"
-                    style="@style/secondaryMealInformation"
+                    style="@style/mealLayoutSecondary"
                     android:layout_width="0dp"
                     android:textAlignment="center"
                     android:layout_weight=".25"

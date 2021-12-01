@@ -33,7 +33,7 @@ class IntroductionViewModel : ViewModel() {
 
     private val userInformation = ArrayMap<String, String>()
 
-    private val addingInformation = MutableLiveData<Boolean>(false)
+    private val addingInformation = MutableLiveData<InformationState>()
 
     private var isEverythingReady = false
 
@@ -53,18 +53,20 @@ class IntroductionViewModel : ViewModel() {
 
         if (isFinished) {
 
+            addingInformation.value = InformationState(InformationState.ADDING_INFORMATION)
+
             calculateNutritionNeeds()
 
             db.collection("users").document(userId)
                     .set(mapOf("userInformation" to userInformation as Map<String, Any>), SetOptions.merge())
                     .addOnSuccessListener {
                         if (isEverythingReady) {
-                            addingInformation.value = true
+                            addingInformation.value = InformationState(InformationState.INFORMATION_ADDED)
                         } else {
                             isEverythingReady = true
                         }
                     }.addOnFailureListener {
-                        Log.d(TAG,it.message.toString())
+                        Log.e(TAG,it.message.toString())
                     }
 
         }
@@ -78,7 +80,7 @@ class IntroductionViewModel : ViewModel() {
 
         if (current != null || height != null || wanted != null || age != null) {
             val ppm = when (userInformation["gender"]) {
-                "male" -> {
+                "Male" -> {
                     (10.0 * current!!) + (6.25 * height!!) - (5.0 * age!!) + 5.0
                 }
                 else -> {
@@ -140,15 +142,23 @@ class IntroductionViewModel : ViewModel() {
         db.collection("users").document(userId)
                 .set(mapOf("nutritionValues" to map), SetOptions.merge()).addOnSuccessListener {
                     if (isEverythingReady) {
-                        addingInformation.value = true
+                        addingInformation.value = InformationState(InformationState.INFORMATION_ADDED)
                     } else {
                         isEverythingReady = true
                     }
                 }
                 .addOnFailureListener {
-                    Log.w(TAG,it.message.toString())
+                    Log.e(TAG,it.message.toString())
                 }
     }
 
-    fun getInformationStatus(): MutableLiveData<Boolean> = addingInformation
+    fun getInformationStatus(): MutableLiveData<InformationState> = addingInformation
+}
+
+class InformationState(val value: Int) {
+
+    companion object {
+        const val ADDING_INFORMATION = 0
+        const val INFORMATION_ADDED = 1
+    }
 }

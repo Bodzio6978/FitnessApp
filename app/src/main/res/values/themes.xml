@@ -71,7 +71,11 @@
     </style>
 
     <style name="secondaryMealInformation" parent="Paragraph_Secondary_Caption">
-        <item name="android:textColor">@color/bottomText</item>
+        <item name="android:textColor">@color/grey35</item>
+    </style>
+
+    <style name="mealLayoutSecondary" parent="Paragraph_Secondary_Caption">
+        <item name="android:textColor">@color/grey4</item>
     </style>
 
     <style name="settingsEditText" parent="newEditText">

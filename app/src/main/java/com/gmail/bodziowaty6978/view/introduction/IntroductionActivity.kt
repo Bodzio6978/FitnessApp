@@ -13,6 +13,7 @@ import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
 import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
 import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
 import com.gmail.bodziowaty6978.view.MainActivity
+import com.gmail.bodziowaty6978.viewmodel.InformationState
 import com.gmail.bodziowaty6978.viewmodel.IntroductionViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -32,10 +33,12 @@ class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequ
         viewModel = ViewModelProvider(this).get(IntroductionViewModel::class.java)
 
         viewModel.getInformationStatus().observe(this,{
-            if (it){
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+            when (it.value){
+                InformationState.INFORMATION_ADDED -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }
         })
 

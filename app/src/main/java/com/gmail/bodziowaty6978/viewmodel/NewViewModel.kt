@@ -14,7 +14,7 @@ class NewViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val userId = FirebaseAuth.getInstance().uid.toString()
 
-    private val mAction = MutableLiveData<Action>()
+    private val mAction = MutableLiveData<NewProductState>()
     private val currentKey = MutableLiveData<String>()
 
     fun addNewProduct(name: String, brand: String, weight: String, position: Int, unit: String, calories: String, carbs: String, protein: String, fat: String, barCode: String) {
@@ -26,17 +26,23 @@ class NewViewModel : ViewModel() {
             NotificationText.setText("fields")
             NotificationText.startAnimation()
         } else {
-            mAction.value = Action(Action.ADDING_MEAL)
+            val caloriesValue = calories.toDouble()
+            val carbohydratesValue = carbs.replace(",",".").toDouble()
+            val proteinValue = protein.replace(",",".").toDouble()
+            val fatValue = fat.replace(",",".").toDouble()
+            val weightValue = weight.toDouble()
+
+            mAction.value = NewProductState(NewProductState.ADDING_MEAL)
             val meal = when (position) {
                 0 -> {
-                    Product(userId, name, brand, weight, position, unit, calories, carbs, protein, fat)
+                    Product(userId, name, brand, weightValue, position, unit, caloriesValue.toInt(), carbohydratesValue, proteinValue, fatValue)
                 }
                 else -> {
-                    Product(userId, name, brand, weight, position, unit,
-                            (calories.toDouble() / weight.toDouble() * 100).toInt().toString(),
-                            (carbs.toDouble() / weight.toDouble() * 100).round(2).toString(),
-                            (protein.toDouble() / weight.toDouble() * 100).round(2).toString(),
-                            (fat.toDouble() / weight.toDouble() * 100).round(2).toString())
+                    Product(userId, name, brand, weightValue, position, unit,
+                            (caloriesValue / weightValue * 100.0).toInt(),
+                            (carbohydratesValue / weightValue * 100.0).round(2),
+                            (proteinValue / weightValue * 100.0).round(2),
+                            (fatValue / weightValue * 100.0).round(2))
                 }
 
             }
@@ -49,17 +55,17 @@ class NewViewModel : ViewModel() {
                                     mapOf(barCode to it.id)
                             )
                         }
-                        mAction.value = Action(Action.MEAL_ADDED)
+                        mAction.value = NewProductState(NewProductState.MEAL_ADDED)
 
                     }
         }
     }
 
-    fun getAction(): MutableLiveData<Action> = mAction
+    fun getAction(): MutableLiveData<NewProductState> = mAction
     fun getKey(): String = currentKey.value.toString()
 }
 
-class Action(val value: Int) {
+class NewProductState(val value: Int) {
 
     companion object {
         const val ADDING_MEAL = 0

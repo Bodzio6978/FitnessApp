@@ -3,7 +3,9 @@ package com.gmail.bodziowaty6978.customviews
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +38,7 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
         binding.tvNameMealView.text = attributes.getString(R.styleable.MealView_mealName)
-        (attributes.getInteger(R.styleable.MealView_kcalValue, 0).toString()+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
+        (attributes.getInteger(R.styleable.MealView_kcalValue, 0).toString()+" "+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
         (attributes.getInteger(R.styleable.MealView_carbValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
         (attributes.getInteger(R.styleable.MealView_protValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
         (attributes.getInteger(R.styleable.MealView_fatValue, 0).toString()+Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
@@ -63,24 +65,39 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         var protein = 0.0
         var fat = 0.0
         for(meal in entriesList){
-            calories += meal.calories.toInt()
-            carbs += meal.carbs.toDouble()
-            protein += meal.protein.toDouble()
-            fat += meal.fat.toDouble()
+            calories += meal.calories
+            carbs += meal.carbs
+            protein += meal.protein
+            fat += meal.fat
         }
         updateValues(calories,carbs ,protein,fat)
     }
 
     private fun updateValues(calories:Int,carbs:Double,protein:Double,fat:Double){
-        (calories.toString()+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
-        (carbs.toInt().toString()+Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
-        (protein.toInt().toString()+Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
-        (fat.toInt().toString()+Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
+        Log.e(binding.tvNameMealView.text.toString(),calories.toString())
+        if(calories==0){
+            binding.tvCarbsValueMeal.visibility = View.GONE
+            binding.tvKcalValueMeal.visibility = View.GONE
+            binding.tvFatValueMeal.visibility = View.GONE
+            binding.tvProteinValueMeal.visibility = View.GONE
+        }else{
+            binding.tvCarbsValueMeal.visibility = View.VISIBLE
+            binding.tvKcalValueMeal.visibility = View.VISIBLE
+            binding.tvFatValueMeal.visibility = View.VISIBLE
+            binding.tvProteinValueMeal.visibility = View.VISIBLE
+        }
+        (calories.toString()+" "+Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
+        (carbs.toString()+Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
+        (protein.toString()+Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
+        (fat.toString()+Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
 
         data.value = arrayListOf(calories,carbs.toInt(),protein.toInt(),fat.toInt())
+//        Log.e(binding.tvNameMealView.text.toString(),data.value.toString())
     }
 
     fun removeProduct(position: Int){
+        val entry = entriesList[position]
+        data.value = arrayListOf(-entry.calories,-entry.carbs.toInt(),-entry.protein.toInt(),-entry.fat.toInt())
         entriesList.removeAt(position)
         binding.rvMeal.adapter?.notifyDataSetChanged()
         calculateValues()

@@ -13,7 +13,7 @@ class QueryMealRecyclerAdapter(private var meals: MutableList<Product>,private v
     inner class ViewHolder(private val binding: MealQueryLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(item: Product){
-            binding.meal = item
+            binding.product = item
             binding.executePendingBindings()
         }
 

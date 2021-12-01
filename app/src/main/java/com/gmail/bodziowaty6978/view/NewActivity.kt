@@ -16,7 +16,7 @@ import com.budiyev.android.codescanner.*
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityNewBinding
 import com.gmail.bodziowaty6978.singleton.NotificationText
-import com.gmail.bodziowaty6978.viewmodel.Action
+import com.gmail.bodziowaty6978.viewmodel.NewProductState
 import com.gmail.bodziowaty6978.viewmodel.NewViewModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -45,14 +45,14 @@ class NewActivity : AppCompatActivity(), LifecycleOwner, AdapterView.OnItemClick
 
         viewModel.getAction().observe(this, {
             when (it.value) {
-                Action.ADDING_MEAL -> {
+                NewProductState.ADDING_MEAL -> {
                     NotificationText.setText("Adding new meal")
                 }
-                Action.MEAL_ADDED -> {
+                NewProductState.MEAL_ADDED -> {
                     NotificationText.setText("Meal has been added")
                     startMealActivity()
                 }
-                Action.ERROR_ADDING_MEAL -> {
+                NewProductState.ERROR_ADDING_MEAL -> {
                     NotificationText.setText("An error has occurred during adding your product")
                 }
             }
