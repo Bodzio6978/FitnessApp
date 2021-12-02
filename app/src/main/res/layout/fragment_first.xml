@@ -74,6 +74,7 @@
             android:id="@+id/etAgeIntroduction"
             style="@style/introductionEditText"
             android:layout_alignParentEnd="true"
+            android:inputType="number"
             android:autofillHints="@string/age" />
 
     </RelativeLayout>
@@ -101,7 +102,9 @@
         <EditText
             android:id="@+id/etCurrentIntroduction"
             style="@style/introductionEditText"
+            android:digits="0123456789,."
             android:layout_toStartOf="@+id/tvCurrentUnitIntroduction"
+            android:inputType="numberDecimal"
             android:autofillHints="@string/current_weight" />
 
         <TextView
@@ -133,6 +136,8 @@
         <EditText
             android:id="@+id/etDesiredIntroduction"
             style="@style/introductionEditText"
+            android:inputType="number"
+            android:digits="0123456789,."
             android:layout_toStartOf="@+id/tvDesiredUnitIntroduction"
             android:autofillHints="@string/desired_weight" />
 

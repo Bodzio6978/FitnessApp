@@ -43,13 +43,13 @@ class MealViewModel : ViewModel() {
             val protein = (currentMeal.protein*weightValue/100.0).round(2)
             val fat = (currentMeal.fat*weightValue/100.0).round(2)
 
-            val journalEntry = JournalEntry(currentMeal.name,
+            val journalEntry = JournalEntry(currentMeal.name!!,
                     id,
                     mealName,
                     CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"),
-                    currentMeal.brand,
+                    currentMeal.brand!!,
                     weightValue,
-                    currentMeal.unit,
+                    currentMeal.unit!!,
                     calories,
                     carbohydrates,
                     protein,

@@ -6,6 +6,7 @@ import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -27,38 +28,62 @@ class NewViewModel : ViewModel() {
             NotificationText.startAnimation()
         } else {
             val caloriesValue = calories.toDouble()
-            val carbohydratesValue = carbs.replace(",",".").toDouble()
-            val proteinValue = protein.replace(",",".").toDouble()
-            val fatValue = fat.replace(",",".").toDouble()
+            val carbohydratesValue = carbs.replace(",", ".").toDouble()
+            val proteinValue = protein.replace(",", ".").toDouble()
+            val fatValue = fat.replace(",", ".").toDouble()
             val weightValue = weight.toDouble()
 
             mAction.value = NewProductState(NewProductState.ADDING_MEAL)
             val meal = when (position) {
                 0 -> {
-                    Product(userId, name, brand, weightValue, position, unit, caloriesValue.toInt(), carbohydratesValue, proteinValue, fatValue)
+                    Product(userId, name, brand, weightValue, position, unit, caloriesValue.toInt(), carbohydratesValue, proteinValue, fatValue, barCode)
                 }
                 else -> {
                     Product(userId, name, brand, weightValue, position, unit,
                             (caloriesValue / weightValue * 100.0).toInt(),
                             (carbohydratesValue / weightValue * 100.0).round(2),
                             (proteinValue / weightValue * 100.0).round(2),
-                            (fatValue / weightValue * 100.0).round(2))
+                            (fatValue / weightValue * 100.0).round(2),
+                            barCode)
                 }
 
             }
 
-            db.collection("products")
-                    .add(meal).addOnSuccessListener {
-                        currentKey.value = it.id
-                        if (barCode.isNotEmpty()) {
-                            db.collection("barcodes").add(
-                                    mapOf(barCode to it.id)
-                            )
-                        }
-                        mAction.value = NewProductState(NewProductState.MEAL_ADDED)
+            val searchKeywords = meal.name?.let { generateKeyWords(it) }
 
-                    }
+            val batch = db.batch()
+            val productsRef = db.collection("products").document()
+
+            batch.set(productsRef, meal, SetOptions.merge())
+
+            batch.set(productsRef, mapOf("searchKeywords" to searchKeywords), SetOptions.merge())
+
+            batch.commit().addOnSuccessListener {
+                currentKey.value = productsRef.id
+                mAction.value = NewProductState(NewProductState.MEAL_ADDED)
+            }
         }
+    }
+
+    private fun generateKeyWords(text: String): MutableList<String> {
+        var mealName = text.toLowerCase()
+        val keywords = mutableListOf<String>()
+
+        val words = mealName.split(" ")
+
+        for (word in words) {
+            var appendString = ""
+
+            for (charPosition in mealName.indices) {
+                appendString += mealName[charPosition].toString()
+                keywords.add(appendString)
+            }
+
+            mealName = mealName.replace("$word ", "")
+
+        }
+
+        return keywords
     }
 
     fun getAction(): MutableLiveData<NewProductState> = mAction

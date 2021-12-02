@@ -15,6 +15,7 @@ import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.util.*
 
 @DelicateCoroutinesApi
 class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListener {
@@ -69,7 +70,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
         }
 
         binding.fabSearchAdd.setOnClickListener {
-            viewModel.search(binding.etSearchAdd.text.toString().trim())
+            viewModel.search(binding.etSearchAdd.text.toString().trim().toLowerCase(Locale.ROOT))
         }
 
     }

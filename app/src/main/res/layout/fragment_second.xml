@@ -164,6 +164,8 @@
         <EditText
             android:id="@+id/etHeightIntroduction"
             style="@style/introductionEditText"
+            android:digits="0123456789,."
+            android:inputType="numberDecimal"
             android:layout_toStartOf="@+id/tvHeightUnitIntroduction"
             android:autofillHints="@string/height" />
 

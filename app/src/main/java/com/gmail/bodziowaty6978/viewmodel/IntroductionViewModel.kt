@@ -34,8 +34,6 @@ class IntroductionViewModel : ViewModel() {
 
     private val addingInformation = MutableLiveData<InformationState>()
 
-    private var isEverythingReady = false
-
     fun getFragments(): ArrayList<Fragment> {
         val list = ArrayList<Fragment>()
         list.add(fragment1)

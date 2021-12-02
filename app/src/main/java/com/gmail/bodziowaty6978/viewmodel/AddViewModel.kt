@@ -19,7 +19,7 @@ class AddViewModel:ViewModel() {
 
     fun search(text: String){
 
-        db.collection("products").orderBy("name").startAt(text).endAt("$text\\uf8ff").limit(20).get().addOnSuccessListener {
+        db.collection("products").whereArrayContains("searchKeywords",text).limit(20).get().addOnSuccessListener {
             val meals = ArrayList<Product>()
             val ids = ArrayList<String>()
 

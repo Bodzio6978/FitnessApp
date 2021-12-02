@@ -14,7 +14,7 @@
     <color name="grey35">#676767</color>
     <color name="grey4">#8c8c8c</color>
 
-    <color name="editText">@color/grey1</color>
+    <color name="editText">@color/grey2</color>
     <color name="toolbar">@color/darkGrey</color>
     <color name="progressBar">@color/primary</color>
     <color name="tabLayout">@color/grey1</color>

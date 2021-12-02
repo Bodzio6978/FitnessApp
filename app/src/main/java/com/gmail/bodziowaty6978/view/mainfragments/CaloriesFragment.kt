@@ -22,6 +22,49 @@ class CaloriesFragment() : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(CaloriesViewModel::class.java)
 
+        viewModel.setUpValues()
+
+        viewModel.getJournalEntries()
+
+        observeMealValues()
+
+        observeOverallValues()
+
+        observeProducts()
+
+        observeMealViews()
+
+        observeDeletedProduct()
+
+        return binding.root
+    }
+
+    private fun setUpUI(map:Map<*,*>){
+        binding.nvCalories.setWanted(((map["wantedCalories"]) as Double).toInt())
+        binding.nvCarbohydrates.setWanted(((map["wantedCarbohydrates"]) as Double).toInt())
+        binding.nvProtein.setWanted(((map["wantedProtein"]) as Double).toInt())
+        binding.nvFat.setWanted(((map["wantedFat"]) as Double).toInt())
+
+        binding.nvCalories.updateProgress()
+        binding.nvCarbohydrates.updateProgress()
+        binding.nvProtein.updateProgress()
+        binding.nvFat.updateProgress()
+    }
+
+    private fun observeDeletedProduct(){
+        viewModel.getDeleteProduct().observe(viewLifecycleOwner,{
+            deletedProduct(it)
+        })
+
+    }
+
+    private fun observeOverallValues(){
+        viewModel.getValues().observe(viewLifecycleOwner,{
+            setUpUI(it)
+        })
+    }
+
+    private fun observeMealValues(){
         binding.mvBreakfastCalories.getValues().observe(viewLifecycleOwner,{
             updateValues(it)
         })
@@ -37,53 +80,6 @@ class CaloriesFragment() : Fragment() {
         binding.mvSupperCalories.getValues().observe(viewLifecycleOwner,{
             updateValues(it)
         })
-
-        viewModel.setUpValues()
-
-        viewModel.getValues().observe(viewLifecycleOwner,{
-            setUpUI(it)
-        })
-
-        viewModel.getJournalEntries()
-
-        viewModel.getBreakfastProducts().observe(viewLifecycleOwner,{
-            binding.mvBreakfastCalories.addProducts(it)
-        })
-
-        viewModel.getLunchProducts().observe(viewLifecycleOwner,{
-            binding.mvLunchCalories.addProducts(it)
-        })
-
-        viewModel.getDinnerProducts().observe(viewLifecycleOwner,{
-            binding.mvDinnerCalories.addProducts(it)
-        })
-
-        viewModel.getSupperProducts().observe(viewLifecycleOwner,{
-            binding.mvSupperCalories.addProducts(it)
-        })
-
-        observeMealViews()
-
-        viewModel.getDeleteProduct().observe(viewLifecycleOwner,{
-            deletedProduct(it)
-        })
-
-
-
-        return binding.root
-    }
-
-    private fun setUpUI(map:Map<*,*>){
-        binding.nvCalories.setWanted(((map["wantedCalories"]) as Double).toInt())
-        binding.nvCarbohydrates.setWanted(((map["wantedCarbohydrates"]) as Double).toInt())
-        binding.nvProtein.setWanted(((map["wantedProtein"]) as Double).toInt())
-        binding.nvFat.setWanted(((map["wantedFat"]) as Double).toInt())
-
-        binding.nvCalories.updateProgress()
-        binding.nvCarbohydrates.updateProgress()
-        binding.nvProtein.updateProgress()
-        binding.nvFat.updateProgress()
-
     }
 
     private fun observeMealViews(){
@@ -98,6 +94,24 @@ class CaloriesFragment() : Fragment() {
         })
         binding.mvSupperCalories.getDeletedProduct().observe(viewLifecycleOwner,{
             viewModel.removeItem(it.first,it.second)
+        })
+    }
+
+    private fun observeProducts(){
+        viewModel.getBreakfastProducts().observe(viewLifecycleOwner,{
+            binding.mvBreakfastCalories.addProducts(it)
+        })
+
+        viewModel.getLunchProducts().observe(viewLifecycleOwner,{
+            binding.mvLunchCalories.addProducts(it)
+        })
+
+        viewModel.getDinnerProducts().observe(viewLifecycleOwner,{
+            binding.mvDinnerCalories.addProducts(it)
+        })
+
+        viewModel.getSupperProducts().observe(viewLifecycleOwner,{
+            binding.mvSupperCalories.addProducts(it)
         })
     }
 
