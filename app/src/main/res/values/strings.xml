@@ -102,6 +102,8 @@
     <string name="nutrition_values_in">Nutrition values in:</string>
     <string name="g">g</string>
     <string name="bar_code">Bar code</string>
+    <string name="weight">Weight</string>
+    <string name="camera_permission_is_required_to_scan_a_product_barcode">Camera permission is required to scan a product barcode</string>
 
     <string-array name="works">
         <item>Sedentary</item>
@@ -133,8 +135,6 @@
         <item>g</item>
         <item>ml</item>
     </string-array>
-
-
 
 
 </resources>

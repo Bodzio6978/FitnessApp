@@ -19,7 +19,7 @@
         <activity android:name=".view.GoalActivity" />
         <activity android:name=".view.MealActivity" />
         <activity
-            android:name=".view.NewActivity"
+            android:name=".view.newproduct.NewActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.AddActivity" />

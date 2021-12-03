@@ -10,8 +10,8 @@ import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentFirstBinding
-import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
-import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
+import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.singleton.NotificationText
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -22,8 +22,8 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var dataPasser: OnDataPassIntroduction
-    private lateinit var fragmentChanger: OnRequestFragmentChange
+    private lateinit var dataPasser: OnMapPassed
+    private lateinit var fragmentChanger: OnFragmentChangeRequest
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -44,8 +44,8 @@ class FirstFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        dataPasser = context as OnDataPassIntroduction
-        fragmentChanger = context as OnRequestFragmentChange
+        dataPasser = context as OnMapPassed
+        fragmentChanger = context as OnFragmentChangeRequest
     }
 
     override fun onResume() {

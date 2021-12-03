@@ -10,15 +10,15 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.ViewPagerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityIntroductionBinding
 import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
-import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
-import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
+import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.view.MainActivity
 import com.gmail.bodziowaty6978.viewmodel.InformationState
 import com.gmail.bodziowaty6978.viewmodel.IntroductionViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
-class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequestFragmentChange, OnClearDataRequest, LifecycleOwner {
+class IntroductionActivity : AppCompatActivity(), OnMapPassed, OnFragmentChangeRequest, OnClearDataRequest, LifecycleOwner {
 
     lateinit var binding:ActivityIntroductionBinding
     lateinit var viewModel: IntroductionViewModel
@@ -46,11 +46,7 @@ class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequ
         binding.vp2Introduction.adapter = adapter
     }
 
-    override fun onDataPass(data: ArrayMap<String, String>,isFinished:Boolean) {
-        if (!data.isEmpty) {
-            viewModel.addInformation(data, isFinished)
-        }
-    }
+
 
     override fun onRequest(position: Int) {
         binding.vp2Introduction.currentItem = position
@@ -58,5 +54,11 @@ class IntroductionActivity : AppCompatActivity(), OnDataPassIntroduction, OnRequ
 
     override fun onClearDataRequest() {
         viewModel.clearData()
+    }
+
+    override fun onDataPass(data: Map<String, String>, isFinished: Boolean) {
+        if (data.isNotEmpty()) {
+            viewModel.addInformation(data, isFinished)
+        }
     }
 }

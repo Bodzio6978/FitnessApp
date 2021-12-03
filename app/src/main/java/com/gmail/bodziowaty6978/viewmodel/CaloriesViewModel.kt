@@ -2,9 +2,7 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -47,11 +45,11 @@ class CaloriesViewModel : ViewModel() {
     }
 
 
-    fun getJournalEntries() {
-        db.collection("users").document(userId).collection("journal").whereEqualTo("date",CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
+    fun getJournalEntries(date:String) {
+        db.collection("users").document(userId).collection("journal").whereEqualTo("date",date)
                 .get()
                 .addOnSuccessListener {
-                    if (!it.isEmpty){
+
                         val journalProductList = mutableMapOf<String,JournalEntry>()
 
                         for (document in it.documents){
@@ -59,7 +57,7 @@ class CaloriesViewModel : ViewModel() {
                         }
 
                         getProducts(journalProductList)
-                    }
+
                 }
 
     }

@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSecondBinding
 import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
-import com.gmail.bodziowaty6978.interfaces.OnDataPassIntroduction
-import com.gmail.bodziowaty6978.interfaces.OnRequestFragmentChange
+import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.singleton.NotificationText
 
 class SecondFragment : Fragment() {
@@ -20,8 +20,8 @@ class SecondFragment : Fragment() {
     private var _binding : FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var dataPasser: OnDataPassIntroduction
-    private lateinit var fragmentChanger: OnRequestFragmentChange
+    private lateinit var dataPasser: OnMapPassed
+    private lateinit var fragmentChanger: OnFragmentChangeRequest
     private lateinit var dataClear: OnClearDataRequest
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,8 +62,8 @@ class SecondFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        dataPasser = context as OnDataPassIntroduction
-        fragmentChanger = context as OnRequestFragmentChange
+        dataPasser = context as OnMapPassed
+        fragmentChanger = context as OnFragmentChangeRequest
         dataClear = context as OnClearDataRequest
     }
 

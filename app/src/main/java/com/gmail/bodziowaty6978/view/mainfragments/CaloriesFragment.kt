@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
+import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -24,7 +26,7 @@ class CaloriesFragment() : Fragment() {
 
         viewModel.setUpValues()
 
-        viewModel.getJournalEntries()
+        observeDate()
 
         observeMealValues()
 
@@ -49,6 +51,12 @@ class CaloriesFragment() : Fragment() {
         binding.nvCarbohydrates.updateProgress()
         binding.nvProtein.updateProgress()
         binding.nvFat.updateProgress()
+    }
+
+    private fun observeDate(){
+        CurrentDate.date.observe(viewLifecycleOwner,{
+            viewModel.getJournalEntries(it.time.toString("yyyy-MM-dd"))
+        })
     }
 
     private fun observeDeletedProduct(){

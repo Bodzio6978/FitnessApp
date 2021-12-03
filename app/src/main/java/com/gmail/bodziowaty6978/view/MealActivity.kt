@@ -75,13 +75,14 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
     }
 
-    private fun initializeUi(meal: Product){
-        binding.tvProductNameMeal.text = meal.name
-        binding.tvFatValueMeal.text = meal.fat.toString()
-        binding.tvCarbsValueMeal.text = meal.carbs.toString()
-        binding.tvProteinValueMeal.text = meal.protein.toString()
-        binding.tvCaloriesValueMeal.text = meal.calories.toString()
-        binding.tvBrandMeal.text = meal.brand
+    private fun initializeUi(product: Product){
+        binding.tvProductNameMeal.text = product.name
+        binding.tvFatValueMeal.text = product.fat.toString()
+        binding.tvCarbsValueMeal.text = product.carbs.toString()
+        binding.tvProteinValueMeal.text = product.protein.toString()
+        binding.tvCaloriesValueMeal.text = product.calories.toString()
+        binding.tvBrandMeal.text = product.brand
+        binding.tvUnitMeal.text = product.unit
     }
 
     private fun observeDate(){

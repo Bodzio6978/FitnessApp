@@ -1,5 +1,5 @@
 package com.gmail.bodziowaty6978.interfaces
 
-interface OnRequestFragmentChange {
+interface OnFragmentChangeRequest {
     fun onRequest(position: Int)
 }

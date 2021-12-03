@@ -1,10 +1,11 @@
 package com.gmail.bodziowaty6978.viewmodel
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.model.Product
-import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.view.newproduct.ProductFragment
+import com.gmail.bodziowaty6978.view.newproduct.ScannerFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -19,51 +20,25 @@ class NewViewModel : ViewModel() {
     private val mAction = MutableLiveData<NewProductState>()
     private val currentKey = MutableLiveData<String>()
 
-    fun addNewProduct(name: String, brand: String, weight: String, position: Int, unit: String, calories: String, carbs: String, protein: String, fat: String, barCode: String) {
+    private val productFragment = ProductFragment()
+    private val scannerFragment = ScannerFragment()
 
-        if ((name.isEmpty() || calories.isEmpty() || carbs.isEmpty() || protein.isEmpty() || fat.isEmpty())) {
-            NotificationText.setText("fields")
-            NotificationText.startAnimation()
-        } else if (position != 0 && weight.isEmpty()) {
-            NotificationText.setText("fields")
-            NotificationText.startAnimation()
-        } else {
-            val caloriesValue = calories.toDouble()
-            val carbohydratesValue = carbs.replace(",", ".").toDouble()
-            val proteinValue = protein.replace(",", ".").toDouble()
-            val fatValue = fat.replace(",", ".").toDouble()
-            val weightValue = weight.toDouble()
+    fun addNewProduct(product:Product) {
 
-            mAction.value = NewProductState(NewProductState.ADDING_MEAL)
-            val meal = when (position) {
-                0 -> {
-                    Product(userId, name, brand, weightValue, position, unit, caloriesValue.toInt(), carbohydratesValue, proteinValue, fatValue, barCode)
-                }
-                else -> {
-                    Product(userId, name, brand, weightValue, position, unit,
-                            (caloriesValue / weightValue * 100.0).toInt(),
-                            (carbohydratesValue / weightValue * 100.0).round(2),
-                            (proteinValue / weightValue * 100.0).round(2),
-                            (fatValue / weightValue * 100.0).round(2),
-                            barCode)
-                }
+        val searchKeywords = product.name?.let { generateKeyWords(it) }
 
-            }
+        val batch = db.batch()
+        val productsRef = db.collection("products").document()
 
-            val searchKeywords = meal.name?.let { generateKeyWords(it) }
+        batch.set(productsRef, product, SetOptions.merge())
 
-            val batch = db.batch()
-            val productsRef = db.collection("products").document()
+        batch.set(productsRef, mapOf("searchKeywords" to searchKeywords), SetOptions.merge())
 
-            batch.set(productsRef, meal, SetOptions.merge())
-
-            batch.set(productsRef, mapOf("searchKeywords" to searchKeywords), SetOptions.merge())
-
-            batch.commit().addOnSuccessListener {
-                currentKey.value = productsRef.id
-                mAction.value = NewProductState(NewProductState.MEAL_ADDED)
-            }
+        batch.commit().addOnSuccessListener {
+            currentKey.value = productsRef.id
+            mAction.value = NewProductState(NewProductState.MEAL_ADDED)
         }
+
     }
 
     private fun generateKeyWords(text: String): MutableList<String> {
@@ -89,6 +64,9 @@ class NewViewModel : ViewModel() {
 
     fun getAction(): MutableLiveData<NewProductState> = mAction
     fun getKey(): String = currentKey.value.toString()
+
+    fun getProductFragment(): Fragment = productFragment
+    fun getScannerFragment(): Fragment = scannerFragment
 }
 
 class NewProductState(val value: Int) {

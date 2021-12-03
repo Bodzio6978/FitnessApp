@@ -1,7 +1,6 @@
 package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.collection.ArrayMap
-import androidx.collection.SimpleArrayMap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,7 +44,7 @@ class IntroductionViewModel : ViewModel() {
         userInformationMap.clear()
     }
 
-    fun addInformation(data: SimpleArrayMap<String, String>, isFinished: Boolean) {
+    fun addInformation(data: Map<String, String>, isFinished: Boolean) {
         userInformationMap.putAll(data)
 
         if (isFinished && userInformationMap.size == 8) {

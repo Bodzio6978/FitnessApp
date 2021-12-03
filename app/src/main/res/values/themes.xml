@@ -12,6 +12,7 @@
         <item name="colorOnError">@color/black</item>
         <item name="colorError">@color/error</item>
         <item name="android:statusBarColor">@color/darkGrey</item>
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
     </style>
 
     <!--    Text size preset for every app element-->
@@ -42,6 +43,11 @@
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:padding">10dp</item>
         <item name="android:background">@drawable/edit_text</item>
+    </style>
+
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="actionTextColorAlpha">1</item>
+        <item name="backgroundOverlayColorAlpha">1</item>
     </style>
 
     <style name="notification" parent="Paragraph_Secondary_Caption">

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/clProduct"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.newproduct.ProductFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rlTopBarNew"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ibBackNew"
+            style="@style/backArrow"
+            android:contentDescription="@string/back_button" />
+
+        <Button
+            android:id="@+id/btSaveNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textColor="@color/primary"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/rlNameNew"
+        style="@style/newRelativeLayout"
+        android:layout_below="@+id/rlTopBarNew">
+
+        <TextView
+            android:id="@+id/tvNameNew"
+            style="@style/newTextView"
+            android:labelFor="@+id/etNameNew"
+            android:layout_toStartOf="@+id/etNameNew"
+            android:text="@string/name" />
+
+        <EditText
+            android:id="@+id/etNameNew"
+            style="@style/newEditText"
+            android:autofillHints="@string/name"
+            android:inputType="text"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlBrandNew"
+        android:layout_below="@+id/rlNameNew"
+        style="@style/newRelativeLayout">
+
+        <TextView
+            android:id="@+id/tvBrandNew"
+            style="@style/newTextView"
+            android:layout_toStartOf="@+id/etBrandNew"
+            android:labelFor="@+id/etBrandNew"
+            android:text="@string/brand" />
+
+        <EditText
+            android:autofillHints="@string/brand"
+            android:id="@+id/etBrandNew"
+            style="@style/newEditText"
+            android:inputType="text" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlValuesIn"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/rlBrandNew">
+
+        <TextView
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+            android:id="@+id/tvNutritionInNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/toolbar"
+            android:text="@string/nutrition_values_in"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tlNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNutritionInNew"
+            android:background="@color/tabLayout"
+            app:tabSelectedTextColor="@color/primary"
+            app:tabTextColor="@color/bottomTextSelected">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/in_100g" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/in_container" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/in_portion" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlWeightNew"
+        android:layout_below="@+id/rlValuesIn">
+
+        <TextView
+            android:id="@+id/tvWeightNew"
+            style="@style/newTextView"
+            android:layout_toStartOf="@+id/etWeightNew"
+            android:labelFor="@+id/etWeightNew"
+            android:text="@string/container_weight" />
+
+        <EditText
+            android:id="@+id/etWeightNew"
+            style="@style/newEditText"
+            android:layout_toStartOf="@+id/tilUnitIntroduction"
+            android:minWidth="80dp"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="false"
+            android:digits="0123456789,."
+            android:autofillHints="@string/container_weight" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUnitIntroduction"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@color/darkGrey">
+
+            <AutoCompleteTextView
+                android:id="@+id/actvUnitIntroduction"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="none"
+                android:padding="10dp"
+                android:text="@string/g"
+                android:textSize="14sp"
+                tools:ignore="LabelFor" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/rlWeightNew"
+        android:id="@+id/rlCaloriesNew">
+
+        <TextView
+            android:id="@+id/tvCaloriesNew"
+            style="@style/newTextView"
+            android:labelFor="@+id/etCaloriesNew"
+            android:layout_toStartOf="@+id/etCaloriesNew"
+            android:text="@string/caloriesStar" />
+
+
+        <EditText
+            android:id="@+id/etCaloriesNew"
+            style="@style/newEditText"
+            android:autofillHints="@string/calories"
+            android:minWidth="140dp"
+            android:inputType="number"
+            android:layout_toStartOf="@+id/gCalories"
+            android:layout_marginEnd="34dp"/>
+
+        <TextView
+            android:id="@+id/gCalories"
+            style="@style/g"
+            android:text="@string/kcal"
+            android:textSize="14sp"
+            android:layout_marginEnd="0dp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlCarbsNew"
+        android:layout_below="@+id/rlCaloriesNew">
+
+        <TextView
+            android:id="@+id/tvCarbsNew"
+            style="@style/newTextView"
+            android:labelFor="@+id/etCarbsNew"
+            android:layout_toStartOf="@+id/etCarbsNew"
+            android:text="@string/carbohydratesStar" />
+
+        <EditText
+            android:id="@+id/etCarbsNew"
+            style="@style/newEditText"
+            android:autofillHints="@string/carbohydrates"
+            android:minWidth="140dp"
+            android:digits="0123456789,."
+            android:layout_toStartOf="@+id/gCarbs"
+            android:layout_marginEnd="34dp"/>
+
+        <TextView
+            android:id="@+id/gCarbs"
+            style="@style/g" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlProteinNew"
+        android:layout_below="@+id/rlCarbsNew">
+
+        <TextView
+            android:id="@+id/tvProteinNew"
+            style="@style/newTextView"
+            android:layout_toStartOf="@+id/etProteinNew"
+            android:text="@string/proteinStar" />
+
+        <EditText
+            android:id="@+id/etProteinNew"
+            style="@style/newEditText"
+            android:digits="0123456789,."
+            android:layout_toStartOf="@+id/gProtein"
+            android:layout_marginEnd="34dp"
+            android:minWidth="140dp"/>
+
+        <TextView
+            android:id="@+id/gProtein"
+            style="@style/g"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlFatNew"
+        android:layout_below="@+id/rlProteinNew">
+
+        <TextView
+            android:id="@+id/tvFatNew"
+            style="@style/newTextView"
+            android:layout_toStartOf="@+id/etFatNew"
+            android:text="@string/fatStar" />
+
+        <EditText
+            android:id="@+id/etFatNew"
+            style="@style/newEditText"
+            android:digits="0123456789,."
+            android:layout_toStartOf="@+id/gFat"
+            android:layout_marginEnd="34dp"
+            android:minWidth="140dp"/>
+
+        <TextView
+            android:id="@+id/gFat"
+            style="@style/g"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/newRelativeLayout"
+        android:id="@+id/rlBarCodeNew"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/rlFatNew">
+
+        <TextView
+            android:id="@+id/tvCodeNew"
+            style="@style/newTextView"
+            android:layout_toStartOf="@+id/etBarCodeNew"
+            android:text="@string/bar_code" />
+
+        <EditText
+            android:id="@+id/etBarCodeNew"
+            style="@style/newEditText"
+            android:layout_alignParentEnd="false"
+            android:minWidth="140dp"
+            android:inputType="number"
+            android:layout_toStartOf="@+id/ibBarCodeNew"/>
+
+
+        <ImageButton
+            android:layout_centerVertical="true"
+            android:id="@+id/ibBarCodeNew"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/etBarCodeNew"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_bar_code"
+            app:tint="@color/primary" />
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
