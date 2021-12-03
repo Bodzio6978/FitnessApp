@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class NewViewModel : ViewModel() {
 
@@ -66,7 +67,7 @@ class NewViewModel : ViewModel() {
     }
 
     private fun generateKeyWords(text: String): MutableList<String> {
-        var mealName = text.toLowerCase()
+        var mealName = text.toLowerCase(Locale.ROOT)
         val keywords = mutableListOf<String>()
 
         val words = mealName.split(" ")

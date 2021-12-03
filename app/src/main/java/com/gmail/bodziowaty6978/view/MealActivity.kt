@@ -28,10 +28,6 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(MealViewModel::class.java)
 
-        viewModel.getCurrentMeal().observe(this,{
-            initializeUi(it)
-        })
-
         viewModel.getAddingState().observe(this,{
             if (it){
                 val intent = Intent(this,MainActivity::class.java)
@@ -39,24 +35,42 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
             }
         })
 
-        CurrentDate.date.observe(this,{
-            binding.tvDateMeal.text = getDateInAppFormat(it)
-        })
+        observeDate()
 
         val mealName = intent.getStringExtra("mealName")
-
         binding.tvMealNameMeal.text = mealName
 
-        val id = intent.getStringExtra("key")
+        val id = intent.getStringExtra("id")!!
 
-        viewModel.getMeal(id.toString())
+        val product = intent.getParcelableExtra<Product>("product")
+
+        if (product==null){
+            viewModel.getProduct(id)
+
+            viewModel.getCurrentProduct().observe(this,{
+                if (it!=null){
+                    initializeUi(it)
+                }
+            })
+
+        }else{
+            initializeUi(product)
+        }
+
+
 
         binding.ibBackMeal.setOnClickListener {
             super.onBackPressed()
         }
 
         binding.btAddNew.setOnClickListener{
-            viewModel.addMeal(id.toString(),binding.etWeightMeal.text.toString(),mealName.toString())
+            if (product != null) {
+                viewModel.addProduct(product,id,binding.etWeightMeal.text.toString(),mealName.toString())
+            }else{
+                if (viewModel.getAddingState().value!=null){
+                    viewModel.addProduct(viewModel.getCurrentProduct().value!!,id,binding.etWeightMeal.text.toString(),mealName.toString())
+                }
+            }
         }
 
     }
@@ -68,5 +82,11 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
         binding.tvProteinValueMeal.text = meal.protein.toString()
         binding.tvCaloriesValueMeal.text = meal.calories.toString()
         binding.tvBrandMeal.text = meal.brand
+    }
+
+    private fun observeDate(){
+        CurrentDate.date.observe(this,{
+            binding.tvDateMeal.text = getDateInAppFormat(it)
+        })
     }
 }

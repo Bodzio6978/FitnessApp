@@ -52,7 +52,7 @@
                 android:layout_below="@+id/tvNameQuery"
                 android:layout_marginStart="2dp"
                 android:layout_toEndOf="@+id/tvBrandQuery"
-                android:text="100 g"
+                android:text="@{Double.toString(product.containerWeight)+ product.unit}"
                 android:textColor="@color/bottomText" />
 
             <TextView

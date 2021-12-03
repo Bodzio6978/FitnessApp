@@ -23,7 +23,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
     lateinit var binding:ActivityAddBinding
     lateinit var viewModel:AddViewModel
 
-    private var mealList: MutableList<Product> = mutableListOf()
+    private var productList: MutableList<Product> = mutableListOf()
     private var idList:MutableList<String> = mutableListOf()
 
     private lateinit var mealName:String
@@ -38,20 +38,12 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
         viewModel = ViewModelProvider(this).get(AddViewModel::class.java)
 
         binding.rvAdd.layoutManager = LinearLayoutManager(this)
-        binding.rvAdd.adapter = QueryMealRecyclerAdapter(mealList,this)
+        binding.rvAdd.adapter = QueryMealRecyclerAdapter(productList,this)
 
         viewModel.initializeHistory()
 
-        viewModel.getSearchResult().observe(this, {
-            mealList.clear()
-            mealList.addAll(it)
-            binding.rvAdd.adapter?.notifyDataSetChanged()
-        })
-
-        viewModel.getIds().observe(this,{
-            idList.clear()
-            idList.addAll(it)
-        })
+        observeSearchResult()
+        observeIds()
 
         mealName = intent.getStringExtra("mealName").toString()
 
@@ -76,8 +68,31 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
     }
 
     override fun onAdapterItemClickListener(position: Int) {
-        val key = idList[position]
-        val intent = Intent(this, MealActivity::class.java).putExtra("key",key).putExtra("mealName",mealName)
-        startActivity(intent)
+        val clickedProduct = productList[position]
+
+        val intent = Intent(this,MealActivity::class.java).putExtra("mealName",mealName)
+
+        if(clickedProduct.barcode=="fakeProduct"){
+            intent .putExtra("id",clickedProduct.author)
+            startActivity(intent)
+        }else{
+            intent.putExtra("id",idList[position]).putExtra("product",clickedProduct)
+            startActivity(intent)
+        }
+    }
+
+    private fun observeIds(){
+        viewModel.getIds().observe(this,{
+            idList.clear()
+            idList.addAll(it)
+        })
+    }
+
+    private fun observeSearchResult(){
+        viewModel.getSearchResult().observe(this, {
+            productList.clear()
+            productList.addAll(it)
+            binding.rvAdd.adapter?.notifyDataSetChanged()
+        })
     }
 }

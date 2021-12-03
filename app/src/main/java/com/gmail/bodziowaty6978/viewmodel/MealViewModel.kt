@@ -16,62 +16,54 @@ class MealViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
-    private val currentMeal = MutableLiveData<Product>()
-
     private val addingState = MutableLiveData<Boolean>(false)
 
-    fun getMeal(id: String) {
+    private val currentProduct = MutableLiveData<Product>()
+
+    fun addProduct(product: Product, id: String, weight: String, mealName: String) {
+
+
+        val weightValue = weight.replace(",", ".").toDouble()
+
+        val calories = (product.calories.toDouble() * weightValue / 100.0).toInt()
+        val carbohydrates = (product.carbs * weightValue / 100.0).round(2)
+        val protein = (product.protein * weightValue / 100.0).round(2)
+        val fat = (product.fat * weightValue / 100.0).round(2)
+
+        val journalEntry = JournalEntry(
+            product.name!!,
+            id,
+            mealName,
+            CurrentDate.date.value!!.time.toString("yyyy-MM-dd"),
+            CurrentDate.date.value!!.timeInMillis,
+            product.brand!!,
+            weightValue,
+            product.unit!!,
+            calories,
+            carbohydrates,
+            protein,
+            fat
+        )
+
+        db.collection("users").document(userId).collection("journal")
+            .add(journalEntry)
+            .addOnSuccessListener {
+
+                addingState.value = true
+
+            }
+
+
+    }
+
+    fun getProduct(id: String) {
 
         db.collection("products").document(id).get().addOnSuccessListener {
-            if (it.exists()){
-                currentMeal.value = it.toObject(Product::class.java)
-            }
+            currentProduct.value = it.toObject(Product::class.java)
         }
-
     }
 
-    fun addMeal(id: String, weight: String, mealName: String) {
-
-        if(currentMeal.value!=null){
-
-            val currentMeal = currentMeal.value!!
-
-            val weightValue = weight.replace(",",".").toDouble()
-
-            val calories = (currentMeal.calories.toDouble()*weightValue/100.0).toInt()
-            val carbohydrates = (currentMeal.carbs*weightValue/100.0).round(2)
-            val protein = (currentMeal.protein*weightValue/100.0).round(2)
-            val fat = (currentMeal.fat*weightValue/100.0).round(2)
-
-            val journalEntry = JournalEntry(currentMeal.name!!,
-                    id,
-                    mealName,
-                    CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"),
-                    currentMeal.brand!!,
-                    weightValue,
-                    currentMeal.unit!!,
-                    calories,
-                    carbohydrates,
-                    protein,
-                    fat
-            )
-
-            db.collection("users").document(userId).collection("journal")
-                    .add(journalEntry)
-                    .addOnSuccessListener {
-
-                        addingState.value = true
-
-                    }
-        }
-
-
-
-
-
-    }
-
-    fun getCurrentMeal(): MutableLiveData<Product> = currentMeal
     fun getAddingState(): MutableLiveData<Boolean> = addingState
+    fun getCurrentProduct(): MutableLiveData<Product> = currentProduct
 
 }

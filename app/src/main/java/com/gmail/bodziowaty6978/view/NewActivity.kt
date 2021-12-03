@@ -166,7 +166,7 @@ class NewActivity : AppCompatActivity(), LifecycleOwner, AdapterView.OnItemClick
 
     private fun startMealActivity() {
         val key = viewModel.getKey()
-        val intent = Intent(this, MealActivity::class.java).putExtra("key", key).putExtra("mealName", intent.getStringExtra("mealName"))
+        val intent = Intent(this, MealActivity::class.java).putExtra("id", key).putExtra("mealName", intent.getStringExtra("mealName"))
         startActivity(intent)
         finish()
     }

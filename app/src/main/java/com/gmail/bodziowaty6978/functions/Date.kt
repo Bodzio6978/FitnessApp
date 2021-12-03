@@ -10,6 +10,8 @@ fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String 
     return formatter.format(this)
 }
 
+
+
 fun getCurrentDateTime(): Calendar {
     return Calendar.getInstance()
 }

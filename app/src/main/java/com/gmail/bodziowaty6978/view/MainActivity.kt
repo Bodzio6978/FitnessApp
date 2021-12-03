@@ -19,7 +19,6 @@ import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.gmail.bodziowaty6978.viewmodel.UserState
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-
 @DelicateCoroutinesApi
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -33,7 +32,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        CurrentDate.date.value = getCurrentDateTime()
 
         viewModel.checkInformation()
 
@@ -48,8 +50,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         CurrentDate.date.observe(this,{
             binding.tvDateCalendar.text = getDateInAppFormat(it)
         })
-
-        CurrentDate.date.value = getCurrentDateTime()
 
         viewModel.getUserState().observe(this,{
             when(it.value){

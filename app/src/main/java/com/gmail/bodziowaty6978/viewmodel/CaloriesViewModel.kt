@@ -48,7 +48,7 @@ class CaloriesViewModel : ViewModel() {
 
 
     fun getJournalEntries() {
-        db.collection("users").document(userId).collection("journal").whereEqualTo("date",CurrentDate.getDate()!!.time.toString("EEEE, dd-MM-yyyy"))
+        db.collection("users").document(userId).collection("journal").whereEqualTo("date",CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
                 .get()
                 .addOnSuccessListener {
                     if (!it.isEmpty){
