@@ -19,7 +19,6 @@ import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.gmail.bodziowaty6978.viewmodel.UserState
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityMainBinding

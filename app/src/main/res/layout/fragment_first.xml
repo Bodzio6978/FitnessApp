@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.introduction.FirstFragment">
+    android:id="@+id/clIntroductionFirst"
+    tools:context=".view.introduction.FirstIntroductionFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/rlGenderIntroduction"
@@ -160,10 +165,7 @@
         android:text="@string/next"
         android:textColor="@color/primary" />
 
-    <com.gmail.bodziowaty6978.customviews.NotificationView
-        android:id="@+id/ntvFirstIntroduction"
-        android:elevation="6dp"
-        style="@style/notification" />
+    </RelativeLayout>
 
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

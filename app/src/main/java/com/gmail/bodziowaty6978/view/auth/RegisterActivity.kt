@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityRegisterBinding
 import com.gmail.bodziowaty6978.viewmodel.auth.RegisterViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.google.android.material.snackbar.Snackbar
 
-@DelicateCoroutinesApi
+
 class RegisterActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var binding: ActivityRegisterBinding
@@ -31,13 +31,33 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
                 finish()
             }
         })
+
+        viewModel.getSnackbarText().observe(this,{
+            Snackbar.make(binding.clRegister,it, Snackbar.LENGTH_LONG).show()
+        })
+
         binding.btRegister.setOnClickListener {
-            viewModel.registerUser(binding.etEmailRegister.text.toString(), binding.etPasswordRegister.text.toString(), binding.etConfirmRegister.text.toString())
+            registerUser()
         }
 
         binding.tvLoginRegister.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun registerUser(){
+        val email = binding.etEmailRegister.text.toString().trim()
+        val password = binding.etPasswordRegister.text.toString().trim()
+        val confirm = binding.etConfirmRegister.text.toString().trim()
+
+        if (email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+            Snackbar.make(binding.clRegister,R.string.please_make_sure_all_fields_are_filled_in_correctly, Snackbar.LENGTH_LONG).show()
+        }else if(password != confirm){
+            Snackbar.make(binding.clRegister,R.string.please_make_sure_both_passwords_are_the_same, Snackbar.LENGTH_LONG).show()
+        }else{
+            viewModel.registerUser(email,password)
+        }
+
     }
 }

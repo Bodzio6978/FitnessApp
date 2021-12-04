@@ -105,6 +105,9 @@
     <string name="weight">Weight</string>
     <string name="camera_permission_is_required_to_scan_a_product_barcode">Camera permission is required to scan a product barcode</string>
 
+    <string name="an_error_has_occurred_during_adding_your_product">An error has occurred during adding your product</string>
+    <string name="adding_new_meal">Adding new meal</string>
+
     <string-array name="works">
         <item>Sedentary</item>
         <item>Mixed</item>

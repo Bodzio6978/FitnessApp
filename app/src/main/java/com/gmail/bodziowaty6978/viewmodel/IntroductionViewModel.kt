@@ -5,25 +5,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.round
-import com.gmail.bodziowaty6978.view.introduction.FirstFragment
-import com.gmail.bodziowaty6978.view.introduction.SecondFragment
+import com.gmail.bodziowaty6978.view.introduction.FirstIntroductionFragment
+import com.gmail.bodziowaty6978.view.introduction.SecondIntroductionFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-val Any.TAG: String
-    get() {
-        val tag = javaClass.simpleName
-        return if (tag.length <= 23) tag else tag.substring(0, 23)
-    }
-
-@DelicateCoroutinesApi
 class IntroductionViewModel : ViewModel() {
 
-    private val fragment1 = FirstFragment()
-    private val fragment2 = SecondFragment()
+    private val fragment1 = FirstIntroductionFragment()
+    private val fragment2 = SecondIntroductionFragment()
 
     private val db = Firebase.firestore
 

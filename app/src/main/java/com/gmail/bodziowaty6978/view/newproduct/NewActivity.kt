@@ -12,19 +12,20 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityNewBinding
+import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.interfaces.OnProductPassed
+import com.gmail.bodziowaty6978.interfaces.OnStringPassed
 import com.gmail.bodziowaty6978.model.Product
-import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.gmail.bodziowaty6978.view.MealActivity
 import com.gmail.bodziowaty6978.viewmodel.NewProductState
 import com.gmail.bodziowaty6978.viewmodel.NewViewModel
-import com.gmail.bodziowaty6978.viewmodel.TAG
+
 import com.google.android.material.snackbar.Snackbar
 
 const val CAMERA_REQUEST_CODE = 101
 
-class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,OnProductPassed {
+class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,OnProductPassed,OnStringPassed {
 
     private lateinit var viewModel: NewViewModel
     lateinit var binding: ActivityNewBinding
@@ -40,29 +41,27 @@ class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,
 
         setupPermissions()
 
-        setFragment(viewModel.getProductFragment())
+        setFragment(viewModel.getProductFragment(),"PRODUCT_FRAGMENT")
 
         viewModel.getAction().observe(this, {
             when (it.value) {
                 NewProductState.ADDING_MEAL -> {
-                    NotificationText.setText("Adding new meal")
+                    Snackbar.make(binding.clNew,R.string.adding_new_meal, Snackbar.LENGTH_LONG).show()
                 }
                 NewProductState.MEAL_ADDED -> {
-                    NotificationText.setText("Meal has been added")
                     startMealActivity()
                 }
                 NewProductState.ERROR_ADDING_MEAL -> {
-                    NotificationText.setText("An error has occurred during adding your product")
+                    Snackbar.make(binding.clNew,R.string.an_error_has_occurred_during_adding_your_product, Snackbar.LENGTH_LONG).show()
                 }
             }
-            NotificationText.startAnimation()
         })
 
     }
 
-    private fun setFragment(fragment: Fragment) {
+    private fun setFragment(fragment: Fragment,tag:String) {
         supportFragmentManager.apply {
-            beginTransaction().replace(R.id.fcvNew, fragment).commit()
+            beginTransaction().replace(R.id.fcvNew, fragment,tag).commit()
         }
     }
 
@@ -74,11 +73,28 @@ class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,
     }
 
     override fun onRequest(position: Int) {
-        TODO("Not yet implemented")
+        when(position){
+            1 -> setFragment(viewModel.getScannerFragment(),"SCANNER_FRAGMENT")
+            0 -> setFragment(viewModel.getProductFragment(),"PRODUCT_FRAGMENT")
+        }
     }
 
     override fun onProductPass(product: Product) {
         viewModel.addNewProduct(product)
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.findFragmentByTag("SCANNER_FRAGMENT")!=null){
+            setFragment(viewModel.getProductFragment(),"PRODUCT_FRAGMENT")
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+    override fun onStringPass(text: String) {
+        val bundle = Bundle()
+        bundle.putString("barcode",text)
+        viewModel.getProductFragment().arguments = bundle
     }
 
     private fun makeRequest() {
@@ -93,7 +109,6 @@ class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,
             this,
             android.Manifest.permission.CAMERA
         )
-
         if (permission != PackageManager.PERMISSION_GRANTED) {
             makeRequest()
         }

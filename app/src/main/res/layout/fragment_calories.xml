@@ -158,11 +158,6 @@
 
         </RelativeLayout>
 
-
-        <com.gmail.bodziowaty6978.customviews.NotificationView
-            android:id="@+id/ntvCalories"
-            style="@style/notification" />
-
 </RelativeLayout>
 
 

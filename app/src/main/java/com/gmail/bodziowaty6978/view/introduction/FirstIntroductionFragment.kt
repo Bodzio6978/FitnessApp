@@ -10,14 +10,13 @@ import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentFirstBinding
-import com.gmail.bodziowaty6978.interfaces.OnMapPassed
 import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
-import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
-@DelicateCoroutinesApi
-class FirstFragment : Fragment() {
+class FirstIntroductionFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
@@ -65,8 +64,7 @@ class FirstFragment : Fragment() {
         val wanted = binding.etDesiredIntroduction.text.toString().trim()
 
         if (age.isEmpty() || current.isEmpty() || wanted.isEmpty()) {
-            NotificationText.setText(getString(R.string.please_make_sure_all_fields_are_filled_in_correctly))
-            NotificationText.startAnimation()
+            Snackbar.make(binding.clIntroductionFirst,R.string.please_make_sure_all_fields_are_filled_in_correctly, Snackbar.LENGTH_LONG).show()
         } else {
             data.putIfAbsent("gender",gender)
             data.putIfAbsent("age",age)

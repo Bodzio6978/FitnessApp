@@ -4,13 +4,12 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.view.mainfragments.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class MainViewModel : ViewModel() {
     private val calories = CaloriesFragment()
     private val training = TrainingFragment()
@@ -25,8 +24,6 @@ class MainViewModel : ViewModel() {
 
     private val mUserState = MutableLiveData<UserState>()
 
-    private var errorMessage = ""
-
     fun getCalories(): Fragment = calories
     fun getTraining(): Fragment = training
     fun getRecipes(): Fragment = recipes
@@ -34,8 +31,6 @@ class MainViewModel : ViewModel() {
     fun getSettings(): Fragment = settings
 
     fun getUserState(): MutableLiveData<UserState> = mUserState
-
-    fun getErrorMessage(): String = errorMessage
 
     fun checkInformation() {
 

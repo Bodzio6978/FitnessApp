@@ -11,9 +11,8 @@ import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.MealViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
+
 class MealActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityMealBinding

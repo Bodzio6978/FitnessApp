@@ -179,9 +179,5 @@
 
     </RelativeLayout>
 
-    <com.gmail.bodziowaty6978.customviews.NotificationView
-        android:id="@+id/nfvMeal"
-        style="@style/notification" />
-
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -46,7 +47,7 @@ class CaloriesViewModel : ViewModel() {
 
 
     fun getJournalEntries(date:String) {
-        db.collection("users").document(userId).collection("journal").whereEqualTo("date",date)
+        db.collection("users").document(userId).collection("journal").whereEqualTo("date",date).orderBy("time",Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
 
@@ -64,7 +65,7 @@ class CaloriesViewModel : ViewModel() {
 
     private fun getProducts(list:MutableMap<String,JournalEntry>){
 
-        if (list.isNotEmpty()){
+
             val breakfast = mutableMapOf<String,JournalEntry>()
             val lunch = mutableMapOf<String,JournalEntry>()
             val dinner = mutableMapOf<String,JournalEntry>()
@@ -82,7 +83,7 @@ class CaloriesViewModel : ViewModel() {
             mLunchProducts.value = lunch
             mDinnerProducts.value = dinner
             mSupperProducts.value = supper
-        }
+
 
     }
 

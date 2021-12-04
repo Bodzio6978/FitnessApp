@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.R
-import com.gmail.bodziowaty6978.singleton.NotificationText
 import com.gmail.bodziowaty6978.singleton.Strings
-import com.gmail.bodziowaty6978.viewmodel.TAG
+import com.gmail.bodziowaty6978.functions.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -17,20 +16,9 @@ class UsernameViewModel : ViewModel() {
     private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private val isUsernameSet: MutableLiveData<Boolean> = MutableLiveData(false)
 
+    private val snackbarText = MutableLiveData<String>()
+
     fun addUsername(username: String) {
-        if (username.isEmpty()) {
-            NotificationText.setText(Strings.get(R.string.please_enter_your_username))
-            NotificationText.startAnimation()
-        } else if (username.length < 6 || username.length > 24) {
-            NotificationText.setText(Strings.get(R.string.username_length_notification))
-            NotificationText.startAnimation()
-        } else {
-            checkIfUserExists(username)
-        }
-
-    }
-
-    private fun checkIfUserExists(username: String) {
 
         db.collection("users").whereEqualTo("username", username).get().addOnSuccessListener {
             if (it.isEmpty) {
@@ -40,9 +28,7 @@ class UsernameViewModel : ViewModel() {
                 }
 
             } else {
-
-                NotificationText.setText(Strings.get(R.string.username_exists_notification))
-                NotificationText.startAnimation()
+                snackbarText.value = Strings.get(R.string.username_exists_notification)
             }
         }.addOnFailureListener {
             Log.d(TAG, it.message.toString())
@@ -51,6 +37,7 @@ class UsernameViewModel : ViewModel() {
     }
 
     fun getState(): MutableLiveData<Boolean> = isUsernameSet
+    fun getSnackbarText():MutableLiveData<String> = snackbarText
 
 
 }

@@ -33,8 +33,6 @@ class ProductFragment : Fragment(), AdapterView.OnItemClickListener {
 
         _binding = FragmentProductBinding.inflate(inflater, container, false)
 
-
-
         binding.actvUnitIntroduction.onItemClickListener = this
 
         binding.tlNew.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -54,11 +52,17 @@ class ProductFragment : Fragment(), AdapterView.OnItemClickListener {
         })
 
 
+
+
         binding.btSaveNew.setOnClickListener {
             checkData()
         }
 
         binding.ibBackNew.setOnClickListener {
+        }
+
+        binding.ibBarCodeNew.setOnClickListener {
+            fragmentChanger.onRequest(1)
         }
 
 
@@ -88,6 +92,12 @@ class ProductFragment : Fragment(), AdapterView.OnItemClickListener {
         val unit = resources.getStringArray(R.array.unit)
         val unitAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, unit)
         binding.actvUnitIntroduction.setAdapter(unitAdapter)
+
+        val barcode = arguments?.getString("barcode")
+
+        if (!barcode.isNullOrEmpty()){
+            binding.etBarCodeNew.setText(barcode)
+        }
     }
 
     private fun checkData(){

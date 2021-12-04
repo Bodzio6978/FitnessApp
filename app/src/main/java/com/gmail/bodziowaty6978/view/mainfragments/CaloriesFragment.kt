@@ -12,7 +12,6 @@ import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class CaloriesFragment() : Fragment() {
 
     private var _binding : FragmentCaloriesBinding? = null

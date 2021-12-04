@@ -9,9 +9,10 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityUsernameBinding
 import com.gmail.bodziowaty6978.view.MainActivity
 import com.gmail.bodziowaty6978.viewmodel.auth.UsernameViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
+
 class UsernameActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var binding: ActivityUsernameBinding
@@ -32,8 +33,28 @@ class UsernameActivity : AppCompatActivity(), LifecycleOwner {
                 finish()
             }
         })
+
+        viewModel.getSnackbarText().observe(this,{
+            Snackbar.make(binding.clUsername,it, Snackbar.LENGTH_LONG).show()
+        })
+
         binding.btUsername.setOnClickListener {
-            viewModel.addUsername(binding.etUsername.text.toString())
+            addUsername()
+
         }
+    }
+
+    private fun addUsername(){
+        val username = binding.etUsername.text.toString().trim()
+
+        if (username.isEmpty()) {
+            Snackbar.make(binding.clUsername,R.string.please_enter_your_username, Snackbar.LENGTH_LONG).show()
+        }else if (username.length < 6 || username.length > 24) {
+            Snackbar.make(binding.clUsername,R.string.username_length_notification, Snackbar.LENGTH_LONG).show()
+        }else{
+            viewModel.addUsername(username)
+        }
+
+
     }
 }

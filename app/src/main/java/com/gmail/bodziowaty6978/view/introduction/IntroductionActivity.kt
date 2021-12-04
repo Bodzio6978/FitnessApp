@@ -17,7 +17,7 @@ import com.gmail.bodziowaty6978.viewmodel.InformationState
 import com.gmail.bodziowaty6978.viewmodel.IntroductionViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
+
 class IntroductionActivity : AppCompatActivity(), OnMapPassed, OnFragmentChangeRequest, OnClearDataRequest, LifecycleOwner {
 
     lateinit var binding:ActivityIntroductionBinding

@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSecondBinding
 import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
-import com.gmail.bodziowaty6978.interfaces.OnMapPassed
 import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
-import com.gmail.bodziowaty6978.singleton.NotificationText
+import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.google.android.material.snackbar.Snackbar
 
-class SecondFragment : Fragment() {
+class SecondIntroductionFragment : Fragment() {
 
     private var _binding : FragmentSecondBinding? = null
     private val binding get() = _binding!!
@@ -76,8 +76,7 @@ class SecondFragment : Fragment() {
         val height = binding.etHeightIntroduction.text.toString().trim()
 
         if(height.isEmpty()){
-            NotificationText.setText(getString(R.string.please_make_sure_you_have_entered_your_height))
-            NotificationText.startAnimation()
+            Snackbar.make(binding.clIntroductionSecond,R.string.please_make_sure_you_have_entered_your_height, Snackbar.LENGTH_LONG).show()
         }else{
             data.putIfAbsent("type",type)
             data.putIfAbsent("workouts",workouts)
