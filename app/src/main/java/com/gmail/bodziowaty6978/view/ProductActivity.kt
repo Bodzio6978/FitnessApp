@@ -6,23 +6,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
-import com.gmail.bodziowaty6978.databinding.ActivityMealBinding
+import com.gmail.bodziowaty6978.databinding.ActivityProductBinding
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.MealViewModel
 
 
-class MealActivity : AppCompatActivity(), LifecycleOwner {
+class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
-    lateinit var binding: ActivityMealBinding
+    lateinit var binding: ActivityProductBinding
     lateinit var viewModel: MealViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_meal)
+        setContentView(R.layout.activity_product)
 
-        binding = ActivityMealBinding.inflate(layoutInflater)
+        binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MealViewModel::class.java)
@@ -67,7 +67,7 @@ class MealActivity : AppCompatActivity(), LifecycleOwner {
                 viewModel.addProduct(product,id,binding.etWeightMeal.text.toString(),mealName.toString())
             }else{
                 if (viewModel.getAddingState().value!=null){
-                    viewModel.addProduct(viewModel.getCurrentProduct().value!!,id,binding.etWeightMeal.text.toString(),mealName.toString())
+                    viewModel.addProduct(viewModel.getCurrentProduct().value!!,id,binding.etWeightMeal.text.toString().replace(",",".").trim(),mealName.toString())
                 }
             }
         }

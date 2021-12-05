@@ -15,7 +15,6 @@ import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.view.newproduct.NewActivity
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListener {
@@ -70,7 +69,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
     override fun onAdapterItemClickListener(position: Int) {
         val clickedProduct = productList[position]
 
-        val intent = Intent(this,MealActivity::class.java).putExtra("mealName",mealName)
+        val intent = Intent(this,ProductActivity::class.java).putExtra("mealName",mealName)
 
         if(clickedProduct.barcode=="fakeProduct"){
             intent .putExtra("id",clickedProduct.author)

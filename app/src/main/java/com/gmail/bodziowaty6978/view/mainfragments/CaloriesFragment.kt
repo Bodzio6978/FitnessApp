@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
 import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
 
@@ -37,9 +38,7 @@ class CaloriesFragment() : Fragment() {
 
         observeProducts()
 
-        observeClickedEntry()
-
-        observeDeletedProduct()
+        observeLongClickedEntry()
 
         return binding.root
     }
@@ -49,18 +48,25 @@ class CaloriesFragment() : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.entry_dialog_layout)
         val entryName = dialog.findViewById(R.id.tvEntryNameDialog) as TextView
-        entryName.text = getProductName(position,mealName)
+
+        val entry = getEntry(position,mealName)
+
+        entryName.text = entry.name
 
         val delete = dialog.findViewById(R.id.btDeleteDialog) as Button
-        val edit = dialog.findViewById(R.id.btEditDialog) as TextView
 
         delete.setOnClickListener{
-            viewModel.removeItem(position,mealName)
+            viewModel.removeItem(entry,mealName,position)
             dialog.dismiss()
         }
+
         dialog.show()
 
     }
+
+//    private fun startProductActivity(position: Int,mealName: String){
+//        val entry = viewModel.getJournalEntry(position: Int,mealName: String)
+//    }
 
     private fun setUpUI(map: Map<*, *>) {
         binding.nvCalories.setWanted(((map["wantedCalories"]) as Double).toInt())
@@ -80,17 +86,6 @@ class CaloriesFragment() : Fragment() {
         })
     }
 
-    private fun observeDeletedProduct() {
-        viewModel.getDeleteProduct().observe(viewLifecycleOwner, {
-            when (it.second) {
-                "Breakfast" -> binding.mvBreakfastCalories.removeProduct(it.first)
-                "Lunch" -> binding.mvLunchCalories.removeProduct(it.first)
-                "Dinner" -> binding.mvDinnerCalories.removeProduct(it.first)
-                "Supper" -> binding.mvSupperCalories.removeProduct(it.first)
-            }
-        })
-
-    }
 
     private fun observeOverallValues() {
         viewModel.getValues().observe(viewLifecycleOwner, {
@@ -116,17 +111,16 @@ class CaloriesFragment() : Fragment() {
         })
     }
 
-    private fun getProductName(position: Int,mealName: String):String{
+    private fun getEntry(position: Int,mealName: String):JournalEntry{
         return when (mealName) {
-            "Breakfast" -> binding.mvBreakfastCalories.getProductName(position)
-            "Lunch" -> binding.mvLunchCalories.getProductName(position)
-            "Dinner" -> binding.mvDinnerCalories.getProductName(position)
-            "Supper" -> binding.mvSupperCalories.getProductName(position)
-            else -> "Error"
+            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
+            "Lunch" -> binding.mvLunchCalories.getEntry(position)
+            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
+            else -> binding.mvSupperCalories.getEntry(position)
         }
     }
 
-    private fun observeClickedEntry() {
+    private fun observeLongClickedEntry() {
         binding.mvBreakfastCalories.getClickedEntry().observe(viewLifecycleOwner, {
             showEntryDialog(it.first, it.second)
         })
@@ -144,18 +138,22 @@ class CaloriesFragment() : Fragment() {
     private fun observeProducts() {
         viewModel.getBreakfastProducts().observe(viewLifecycleOwner, {
             binding.mvBreakfastCalories.addProducts(it)
+            binding.mvBreakfastCalories.updateValues(viewModel.getBreakfastValues())
         })
 
         viewModel.getLunchProducts().observe(viewLifecycleOwner, {
             binding.mvLunchCalories.addProducts(it)
+            binding.mvLunchCalories.updateValues(viewModel.getLunchValues())
         })
 
         viewModel.getDinnerProducts().observe(viewLifecycleOwner, {
             binding.mvDinnerCalories.addProducts(it)
+            binding.mvDinnerCalories.updateValues(viewModel.getDinnerValues())
         })
 
         viewModel.getSupperProducts().observe(viewLifecycleOwner, {
             binding.mvSupperCalories.addProducts(it)
+            binding.mvSupperCalories.updateValues(viewModel.getSupperValues())
         })
     }
 

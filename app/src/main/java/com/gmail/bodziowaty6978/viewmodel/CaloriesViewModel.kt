@@ -15,85 +15,151 @@ class CaloriesViewModel : ViewModel() {
 
     private val mValues = MutableLiveData<Map<*, *>>()
 
-    private val mBreakfastProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
-    private val mLunchProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
-    private val mDinnerProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
-    private val mSupperProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
-
-    private val mDeletedProduct = MutableLiveData<Pair<Int,String>>()
+    private val mBreakfastProducts = MutableLiveData<MutableMap<String, JournalEntry>>()
+    private val mLunchProducts = MutableLiveData<MutableMap<String, JournalEntry>>()
+    private val mDinnerProducts = MutableLiveData<MutableMap<String, JournalEntry>>()
+    private val mSupperProducts = MutableLiveData<MutableMap<String, JournalEntry>>()
 
     fun setUpValues() {
         db.collection("users").document(userId).get().addOnSuccessListener {
-            if (it.data?.get("nutritionValues")!=null) {
+            if (it.data?.get("nutritionValues") != null) {
                 mValues.value = it.data?.get("nutritionValues") as Map<*, *>
             }
         }
     }
 
-    fun removeItem(position:Int,mealName:String){
-        val mealList = when(mealName){
+    fun getBreakfastValues(): Map<String,Double> {
+        if (mBreakfastProducts.value != null) {
+            val values = mBreakfastProducts.value!!.values.toList()
+            return mapOf(
+                    "calories" to values.sumOf(JournalEntry::calories).toDouble(),
+                    "carbohydrates" to values.sumOf(JournalEntry::carbs),
+                    "protein" to  values.sumOf(JournalEntry::protein),
+                    "fat" to values.sumOf(JournalEntry::fat)
+            )
+        }
+        return mapOf()
+    }
+
+    fun getLunchValues(): Map<String,Double> {
+        if (mLunchProducts.value != null) {
+            val values = mLunchProducts.value!!.values.toList()
+            return mapOf(
+                    "calories" to values.sumOf(JournalEntry::calories).toDouble(),
+                    "carbohydrates" to values.sumOf(JournalEntry::carbs),
+                    "protein" to  values.sumOf(JournalEntry::protein),
+                    "fat" to values.sumOf(JournalEntry::fat)
+            )
+        }
+        return mapOf()
+    }
+
+    fun getDinnerValues(): Map<String,Double> {
+        if (mDinnerProducts.value != null) {
+            val values = mDinnerProducts.value!!.values.toList()
+            return mapOf(
+                    "calories" to values.sumOf(JournalEntry::calories).toDouble(),
+                    "carbohydrates" to values.sumOf(JournalEntry::carbs),
+                    "protein" to  values.sumOf(JournalEntry::protein),
+                    "fat" to values.sumOf(JournalEntry::fat)
+            )
+        }
+        return mapOf()
+    }
+
+    fun getSupperValues(): Map<String,Double> {
+        if (mSupperProducts.value != null) {
+            val values = mSupperProducts.value!!.values.toList()
+            return mapOf(
+                    "calories" to values.sumOf(JournalEntry::calories).toDouble(),
+                    "carbohydrates" to values.sumOf(JournalEntry::carbs),
+                    "protein" to  values.sumOf(JournalEntry::protein),
+                    "fat" to values.sumOf(JournalEntry::fat)
+            )
+        }
+        return mapOf()
+    }
+
+    fun removeItem(entry: JournalEntry, mealName: String, position: Int) {
+        val entryList = when (mealName) {
             "Breakfast" -> mBreakfastProducts.value
             "Lunch" -> mLunchProducts.value
             "Dinner" -> mDinnerProducts.value
             else -> mSupperProducts.value
         }
-        val key = mealList?.keys?.toList()?.get(position)
+        if (entryList != null) {
 
-        db.collection("users").document(userId).collection("journal").document(key.toString()).delete().addOnSuccessListener {
-            mDeletedProduct.value = Pair<Int,String>(position,mealName)
+            for (key in entryList.keys) {
+                if (entryList[key] == entry) {
+                    db.collection("users").document(userId).collection("journal").document(key).delete().addOnSuccessListener {
+                        entryList.remove(key)
+                        when (mealName) {
+                            "Breakfast" -> {
+                                mBreakfastProducts.value = entryList!!
+                            }
+                            "Lunch" -> {
+                                mBreakfastProducts.value = entryList!!
+                            }
+                            "Dinner" -> {
+                                mDinnerProducts.value = entryList!!
+                            }
+                            else -> {
+                                mBreakfastProducts.value = entryList!!
+                            }
+                        }
+                    }
+                }
+            }
         }
+
 
     }
 
 
-    fun getJournalEntries(date:String) {
-        db.collection("users").document(userId).collection("journal").whereEqualTo("date",date).orderBy("time",Query.Direction.DESCENDING)
+    fun getJournalEntries(date: String) {
+        db.collection("users").document(userId).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
 
-                        val journalProductList = mutableMapOf<String,JournalEntry>()
+                    val journalProductList = mutableMapOf<String, JournalEntry>()
 
-                        for (document in it.documents){
-                            journalProductList[document.id] = document.toObject(JournalEntry::class.java)!!
-                        }
+                    for (document in it.documents) {
+                        journalProductList[document.id] = document.toObject(JournalEntry::class.java)!!
+                    }
 
-                        getProducts(journalProductList)
+                    getProducts(journalProductList)
 
                 }
 
     }
 
-    private fun getProducts(list:MutableMap<String,JournalEntry>){
+    private fun getProducts(list: MutableMap<String, JournalEntry>) {
+        val breakfast = mutableMapOf<String, JournalEntry>()
+        val lunch = mutableMapOf<String, JournalEntry>()
+        val dinner = mutableMapOf<String, JournalEntry>()
+        val supper = mutableMapOf<String, JournalEntry>()
 
-
-            val breakfast = mutableMapOf<String,JournalEntry>()
-            val lunch = mutableMapOf<String,JournalEntry>()
-            val dinner = mutableMapOf<String,JournalEntry>()
-            val supper = mutableMapOf<String,JournalEntry>()
-
-            for (key in list.keys){
-                when(list[key]?.mealName){
-                    "Breakfast" -> breakfast[key] = list[key]!!
-                    "Lunch" -> lunch[key] = list[key]!!
-                    "Dinner" -> dinner[key] = list[key]!!
-                    "Supper" -> supper[key] = list[key]!!
-                }
+        for (key in list.keys) {
+            when (list[key]?.mealName) {
+                "Breakfast" -> breakfast[key] = list[key]!!
+                "Lunch" -> lunch[key] = list[key]!!
+                "Dinner" -> dinner[key] = list[key]!!
+                "Supper" -> supper[key] = list[key]!!
             }
-            mBreakfastProducts.value = breakfast
-            mLunchProducts.value = lunch
-            mDinnerProducts.value = dinner
-            mSupperProducts.value = supper
+        }
+        mBreakfastProducts.value = breakfast
+        mLunchProducts.value = lunch
+        mDinnerProducts.value = dinner
+        mSupperProducts.value = supper
 
 
     }
 
     fun getValues(): MutableLiveData<Map<*, *>> = mValues
 
-    fun getBreakfastProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mBreakfastProducts
-    fun getLunchProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mLunchProducts
-    fun getDinnerProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mDinnerProducts
-    fun getSupperProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mSupperProducts
-
-    fun getDeleteProduct():MutableLiveData<Pair<Int,String>> = mDeletedProduct
+    fun getBreakfastProducts(): MutableLiveData<MutableMap<String, JournalEntry>> = mBreakfastProducts
+    fun getLunchProducts(): MutableLiveData<MutableMap<String, JournalEntry>> = mLunchProducts
+    fun getDinnerProducts(): MutableLiveData<MutableMap<String, JournalEntry>> = mDinnerProducts
+    fun getSupperProducts(): MutableLiveData<MutableMap<String, JournalEntry>> = mSupperProducts
 
 }

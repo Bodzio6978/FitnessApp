@@ -17,7 +17,7 @@ import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.interfaces.OnProductPassed
 import com.gmail.bodziowaty6978.interfaces.OnStringPassed
 import com.gmail.bodziowaty6978.model.Product
-import com.gmail.bodziowaty6978.view.MealActivity
+import com.gmail.bodziowaty6978.view.ProductActivity
 import com.gmail.bodziowaty6978.viewmodel.NewProductState
 import com.gmail.bodziowaty6978.viewmodel.NewViewModel
 
@@ -67,7 +67,7 @@ class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,
 
     private fun startMealActivity() {
         val key = viewModel.getKey()
-        val intent = Intent(this, MealActivity::class.java).putExtra("id", key).putExtra("mealName", intent.getStringExtra("mealName"))
+        val intent = Intent(this, ProductActivity::class.java).putExtra("id", key).putExtra("mealName", intent.getStringExtra("mealName"))
         startActivity(intent)
         finish()
     }

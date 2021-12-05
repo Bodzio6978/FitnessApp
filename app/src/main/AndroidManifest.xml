@@ -17,7 +17,7 @@
         <activity android:name=".view.introduction.IntroductionActivity"/>
         <activity android:name=".view.NutritionSettings" />
         <activity android:name=".view.GoalActivity" />
-        <activity android:name=".view.MealActivity" />
+        <activity android:name=".view.ProductActivity" />
         <activity
             android:name=".view.newproduct.NewActivity"
             android:windowSoftInputMode="adjustPan" />
