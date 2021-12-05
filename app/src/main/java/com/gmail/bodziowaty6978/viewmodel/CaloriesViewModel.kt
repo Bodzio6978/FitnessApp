@@ -20,7 +20,7 @@ class CaloriesViewModel : ViewModel() {
     private val mDinnerProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
     private val mSupperProducts = MutableLiveData<MutableMap<String,JournalEntry>>()
 
-    private val mDeletedProduct = MutableLiveData<ArrayList<String>>()
+    private val mDeletedProduct = MutableLiveData<Pair<Int,String>>()
 
     fun setUpValues() {
         db.collection("users").document(userId).get().addOnSuccessListener {
@@ -40,7 +40,7 @@ class CaloriesViewModel : ViewModel() {
         val key = mealList?.keys?.toList()?.get(position)
 
         db.collection("users").document(userId).collection("journal").document(key.toString()).delete().addOnSuccessListener {
-            mDeletedProduct.value = arrayListOf(position.toString(),mealName)
+            mDeletedProduct.value = Pair<Int,String>(position,mealName)
         }
 
     }
@@ -94,6 +94,6 @@ class CaloriesViewModel : ViewModel() {
     fun getDinnerProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mDinnerProducts
     fun getSupperProducts():MutableLiveData<MutableMap<String,JournalEntry>> = mSupperProducts
 
-    fun getDeleteProduct():MutableLiveData<ArrayList<String>> = mDeletedProduct
+    fun getDeleteProduct():MutableLiveData<Pair<Int,String>> = mDeletedProduct
 
 }

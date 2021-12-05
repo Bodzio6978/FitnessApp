@@ -16,7 +16,6 @@ import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.Strings
 import com.gmail.bodziowaty6978.view.AddActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs),OnAdapterItemClickListener{
 
@@ -25,15 +24,13 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
     private var entriesList:MutableList<JournalEntry> = mutableListOf()
 
     private val data = MutableLiveData<ArrayList<Int>>()
-
-    private var deletedProduct = MutableLiveData<Pair<Int,String>>()
+    private val mClickedEntry = MutableLiveData<Pair<Int,String>>()
 
     init {
         addView(binding.root)
 
         binding.rvMeal.layoutManager = LinearLayoutManager(context)
         binding.rvMeal.adapter = CaloriesRecyclerAdapter(entriesList,this)
-
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MealView)
         binding.tvNameMealView.text = attributes.getString(R.styleable.MealView_mealName)
@@ -98,15 +95,19 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         val entry = entriesList[position]
         data.value = arrayListOf(-entry.calories,-entry.carbs.toInt(),-entry.protein.toInt(),-entry.fat.toInt())
         entriesList.removeAt(position)
-        binding.rvMeal.adapter?.notifyDataSetChanged()
+        val adapter = binding.rvMeal.adapter
+        adapter?.notifyItemRemoved(position)
+        adapter?.notifyItemRangeChanged(position,adapter.itemCount)
         calculateValues()
     }
 
+    fun getProductName(position: Int):String = entriesList[position].name
+
     fun getValues():MutableLiveData<ArrayList<Int>> = data
 
-    fun getDeletedProduct():MutableLiveData<Pair<Int,String>> = deletedProduct
+    fun getClickedEntry():MutableLiveData<Pair<Int,String>> = mClickedEntry
 
     override fun onAdapterItemClickListener(position: Int) {
-        deletedProduct.value = Pair(position,binding.tvNameMealView.text.toString())
+        mClickedEntry.value = Pair(position,binding.tvNameMealView.text.toString())
     }
 }

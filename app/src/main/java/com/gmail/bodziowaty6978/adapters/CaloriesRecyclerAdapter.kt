@@ -10,7 +10,7 @@ import com.gmail.bodziowaty6978.model.JournalEntry
 
 class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEntry>, private var adapterItemClickListener: OnAdapterItemClickListener): RecyclerView.Adapter<CaloriesRecyclerAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: MealLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener{
+    inner class ViewHolder(private val binding: MealLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnLongClickListener{
 
         fun bind(item: JournalEntry){
             binding.item = item
@@ -18,7 +18,7 @@ class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEnt
         }
 
         init{
-            binding.rlMeal.setOnClickListener(this)
+            binding.rlMeal.setOnLongClickListener(this)
 
             if (binding.mealProducer.text.isNullOrEmpty()){
                 binding.mealProducer.visibility = View.GONE
@@ -26,8 +26,9 @@ class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEnt
 
         }
 
-        override fun onClick(v: View?) {
+        override fun onLongClick(v: View?): Boolean {
             adapterItemClickListener.onAdapterItemClickListener(adapterPosition)
+            return true
         }
     }
 

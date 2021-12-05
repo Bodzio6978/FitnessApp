@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/card_word"
+    android:paddingStart="15dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/tvEntryNameDialog"
+        style="@style/PageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Coca Cola" />
+
+    <Button
+        android:id="@+id/btEditDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEntryNameDialog"
+        android:layout_marginEnd="25dp"
+        android:layout_toStartOf="@+id/btDeleteDialog"
+        android:background="@android:color/transparent"
+
+        android:text="Edit"
+        android:textColor="@color/primary" />
+
+    <Button
+        android:id="@+id/btDeleteDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEntryNameDialog"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:text="Delete"
+        android:textColor="@color/primary" />
+
+
+</RelativeLayout>

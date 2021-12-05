@@ -108,6 +108,8 @@
     <string name="an_error_has_occurred_during_adding_your_product">An error has occurred during adding your product</string>
     <string name="adding_new_meal">Adding new meal</string>
 
+    <string name="edit">edit</string>
+
     <string-array name="works">
         <item>Sedentary</item>
         <item>Mixed</item>
