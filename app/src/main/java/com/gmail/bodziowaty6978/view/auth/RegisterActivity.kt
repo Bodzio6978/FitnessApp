@@ -51,10 +51,23 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
         val password = binding.etPasswordRegister.text.toString().trim()
         val confirm = binding.etConfirmRegister.text.toString().trim()
 
+        val snackbar = Snackbar.make(binding.clRegister,"",Snackbar.LENGTH_LONG)
+
         if (email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-            Snackbar.make(binding.clRegister,R.string.please_make_sure_all_fields_are_filled_in_correctly, Snackbar.LENGTH_LONG).show()
+            snackbar.apply {
+                setText(R.string.please_make_sure_all_fields_are_filled_in_correctly)
+                show()
+            }
         }else if(password != confirm){
-            Snackbar.make(binding.clRegister,R.string.please_make_sure_both_passwords_are_the_same, Snackbar.LENGTH_LONG).show()
+            snackbar.apply {
+                setText(R.string.please_make_sure_both_passwords_are_the_same)
+                show()
+            }
+        }else if(password.length<6||password.length>24){
+            snackbar.apply {
+                setText(R.string.please_make_sure_your_password_is_at_least_6_characters_and_is_not_longer_than_24_characters)
+                show()
+            }
         }else{
             viewModel.registerUser(email,password)
         }
