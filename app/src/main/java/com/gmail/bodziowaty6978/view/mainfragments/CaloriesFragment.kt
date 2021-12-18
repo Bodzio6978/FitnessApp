@@ -32,8 +32,6 @@ class CaloriesFragment() : Fragment() {
 
         observeDate()
 
-        observeMealValues()
-
         observeOverallValues()
 
         observeProducts()
@@ -93,23 +91,7 @@ class CaloriesFragment() : Fragment() {
         })
     }
 
-    private fun observeMealValues() {
-        binding.mvBreakfastCalories.getValues().observe(viewLifecycleOwner, {
-            updateValues(it)
-        })
 
-        binding.mvLunchCalories.getValues().observe(viewLifecycleOwner, {
-            updateValues(it)
-        })
-
-        binding.mvDinnerCalories.getValues().observe(viewLifecycleOwner, {
-            updateValues(it)
-        })
-
-        binding.mvSupperCalories.getValues().observe(viewLifecycleOwner, {
-            updateValues(it)
-        })
-    }
 
     private fun getEntry(position: Int,mealName: String):JournalEntry{
         return when (mealName) {
@@ -136,32 +118,50 @@ class CaloriesFragment() : Fragment() {
     }
 
     private fun observeProducts() {
-        viewModel.getBreakfastProducts().observe(viewLifecycleOwner, {
-            binding.mvBreakfastCalories.addProducts(it)
-            binding.mvBreakfastCalories.updateValues(viewModel.getBreakfastValues())
-        })
+        viewModel.getProducts().observe(viewLifecycleOwner,{
+            if (!it.isNullOrEmpty()){
+                for (key in it.keys){
+                    when(key){
+                        "Breakfast" -> it[key]?.let { it1 -> binding.mvBreakfastCalories.addProducts(it1) }
+                        "Lunch" -> it[key]?.let { it1 -> binding.mvLunchCalories.addProducts(it1) }
+                        "Dinner" -> it[key]?.let { it1 -> binding.mvDinnerCalories.addProducts(it1) }
+                        else -> it[key]?.let { it1 -> binding.mvSupperCalories.addProducts(it1) }
+                    }
+                }
 
-        viewModel.getLunchProducts().observe(viewLifecycleOwner, {
-            binding.mvLunchCalories.addProducts(it)
-            binding.mvLunchCalories.updateValues(viewModel.getLunchValues())
-        })
-
-        viewModel.getDinnerProducts().observe(viewLifecycleOwner, {
-            binding.mvDinnerCalories.addProducts(it)
-            binding.mvDinnerCalories.updateValues(viewModel.getDinnerValues())
-        })
-
-        viewModel.getSupperProducts().observe(viewLifecycleOwner, {
-            binding.mvSupperCalories.addProducts(it)
-            binding.mvSupperCalories.updateValues(viewModel.getSupperValues())
+            }
+            calculateValues(it.values.toList())
         })
     }
 
-    private fun updateValues(list: ArrayList<Int>) {
-        binding.nvCalories.updateValue(list[0])
-        binding.nvCarbohydrates.updateValue(list[1])
-        binding.nvProtein.updateValue(list[2])
-        binding.nvFat.updateValue(list[3])
+    private fun calculateValues(list: List<MutableMap<String,JournalEntry>>) {
+        val values:MutableMap<String,Int> = mutableMapOf(
+                "calories" to 0,
+                "carbohydrates" to 0,
+                "protein" to 0,
+                "fat" to 0
+        )
+
+        for(meal in list){
+            values["calories"] = values["calories"]!!.plus(meal.values.toList().sumOf(JournalEntry::calories))
+            values["carbohydrates"] = values["carbohydrates"]!!.plus(meal.values.toList().sumOf(JournalEntry::carbs).toInt())
+            values["protein"] = values["protein"]!!.plus(meal.values.toList().sumOf(JournalEntry::protein).toInt())
+            values["fat"] = values["fat"]!!.plus(meal.values.toList().sumOf(JournalEntry::fat).toInt())
+        }
+
+        setValues(values)
+
+    }
+
+    private fun setValues(map:Map<String,Int>){
+        for (key in map.keys){
+            when(key){
+                "calories" -> map[key]?.let { binding.nvCalories.updateValue(it) }
+                "carbohydrates" -> map[key]?.let { binding.nvCarbohydrates.updateValue(it) }
+                "protein" -> map[key]?.let { binding.nvProtein.updateValue(it) }
+                "fat" -> map[key]?.let { binding.nvFat.updateValue(it) }
+            }
+        }
     }
 
     override fun onDestroyView() {

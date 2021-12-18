@@ -3,7 +3,6 @@ package com.gmail.bodziowaty6978.customviews
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.Strings
@@ -24,7 +22,6 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     private var entriesList: MutableList<JournalEntry> = mutableListOf()
 
-    private val data = MutableLiveData<ArrayList<Int>>()
     private val mClickedEntry = MutableLiveData<Pair<Int, String>>()
 
     init {
@@ -49,15 +46,22 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     }
 
-    fun addProducts(list: MutableMap<String, JournalEntry>) {
+    fun addProducts(map: MutableMap<String, JournalEntry>) {
         entriesList.clear()
-        entriesList.addAll(list.values)
+        entriesList.addAll(map.values)
         binding.rvMeal.adapter?.notifyDataSetChanged()
+        updateValues(map.values.toList())
     }
 
-    fun updateValues(values: Map<String, Double>) {
-        Log.e(TAG, values.toString())
-        if (values["calories"]==0.0){
+    private fun updateValues(entries: List<JournalEntry>) {
+        val values = mapOf(
+                "calories" to entries.sumOf(JournalEntry::calories).toDouble(),
+                "carbohydrates" to entries.sumOf(JournalEntry::carbs),
+                "protein" to  entries.sumOf(JournalEntry::protein),
+                "fat" to entries.sumOf(JournalEntry::fat)
+        )
+
+        if (entries.isEmpty()){
             binding.tvCarbsValueMeal.visibility = View.GONE
             binding.tvKcalValueMeal.visibility = View.GONE
             binding.tvFatValueMeal.visibility = View.GONE
@@ -70,15 +74,13 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         }
 
         (values["calories"]?.toInt().toString() + " " + Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
-        (values["carbohydrates"]?.toString() + Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
-        (values["protein"]?.toString() + Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
-        (values["fat"]?.toString() + Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
+        (values["carbohydrates"].toString() + Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
+        (values["protein"].toString() + Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
+        (values["fat"].toString() + Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
     }
 
 
     fun getEntry(position: Int): JournalEntry = entriesList[position]
-
-    fun getValues(): MutableLiveData<ArrayList<Int>> = data
 
     fun getClickedEntry(): MutableLiveData<Pair<Int, String>> = mClickedEntry
 
