@@ -30,6 +30,8 @@ class CaloriesFragment() : Fragment() {
 
         viewModel.setUpValues()
 
+        setUpRefreshLayout()
+
         observeDate()
 
         observeOverallValues()
@@ -60,6 +62,13 @@ class CaloriesFragment() : Fragment() {
 
         dialog.show()
 
+    }
+
+    private fun setUpRefreshLayout(){
+        binding.srlSwipeCalories.setOnRefreshListener {
+            viewModel.refresh()
+            binding.srlSwipeCalories.isRefreshing = false
+        }
     }
 
 //    private fun startProductActivity(position: Int,mealName: String){

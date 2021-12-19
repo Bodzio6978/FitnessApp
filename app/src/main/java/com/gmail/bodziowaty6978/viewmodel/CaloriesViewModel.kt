@@ -2,7 +2,9 @@ package com.gmail.bodziowaty6978.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -16,6 +18,12 @@ class CaloriesViewModel : ViewModel() {
     private val mValues = MutableLiveData<Map<*, *>>()
 
     private val products = MutableLiveData<MutableMap<String,MutableMap<String,JournalEntry>>>()
+
+    fun refresh(){
+        if (CurrentDate.date.value!=null){
+            getJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
+        }
+    }
 
     fun setUpValues() {
         db.collection("users").document(userId).get().addOnSuccessListener {
@@ -53,13 +61,12 @@ class CaloriesViewModel : ViewModel() {
                         journalProductList[document.id] = document.toObject(JournalEntry::class.java)!!
                     }
 
-                    getProducts(journalProductList)
-
+                    sortProducts(journalProductList)
                 }
 
     }
 
-    private fun getProducts(list: MutableMap<String, JournalEntry>) {
+    private fun sortProducts(list: MutableMap<String, JournalEntry>) {
         val breakfast = mutableMapOf<String, JournalEntry>()
         val lunch = mutableMapOf<String, JournalEntry>()
         val dinner = mutableMapOf<String, JournalEntry>()

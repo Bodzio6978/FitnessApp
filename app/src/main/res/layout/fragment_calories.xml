@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/srlSwipeCalories"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +9,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
+            android:layout_above="@+id/rlNutritionValuesCalories"
             android:layout_height="match_parent">
 
             <RelativeLayout
@@ -105,6 +107,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/rlNutritionValuesCalories"
             android:background="@drawable/bottom_nutrition_values"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,6 +161,6 @@
 
         </RelativeLayout>
 
-</RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
