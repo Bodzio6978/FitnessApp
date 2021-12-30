@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/tvNameMealView"
-            style="@style/mealTitle"
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true" />
@@ -103,29 +103,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Add Product"
+            android:text="@string/add_product"
             android:layout_marginStart="10dp"
             android:textColor="@color/primary"
-            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"/>
+            style="@style/Button_Tab"/>
 
 
 
     </RelativeLayout>
 
-
-<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
-<!--        android:id="@+id/fabMeal"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/rvMeal"-->
-<!--        app:backgroundTint="@android:color/transparent"-->
-<!--        android:elevation="0dp"-->
-<!--        android:text="Add"-->
-<!--        android:textColor="@color/primary"-->
-<!--        android:layout_marginEnd="10dp"-->
-<!--        app:icon="@drawable/ic_baseline_add_24"-->
-<!--        app:iconTint="@color/primary"-->
-<!--        app:fabSize="mini"-->
-<!--        android:contentDescription="@string/add_button" />-->
 
 </RelativeLayout>

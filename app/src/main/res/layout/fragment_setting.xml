@@ -6,26 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".view.mainfragments.SettingFragment">
 
-    <com.gmail.bodziowaty6978.customviews.SettingsView
-        android:layout_marginTop="20dp"
-        android:id="@+id/svBodySettings"
-        style="@style/SettingsView"
-        app:image="@drawable/ic_baseline_balance_24"
-        app:settingText="Body measurements" />
+    <TextView
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:id="@+id/tvSettingsTitle"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        style="@style/TextInput_ListItemTitles_ImportantText_Snippet"/>
 
-    <com.gmail.bodziowaty6978.customviews.SettingsView
-        android:id="@+id/svGoalsSettings"
-        android:layout_below="@+id/svBodySettings"
-        style="@style/SettingsView"
-        app:image="@drawable/ic_baseline_adjust_24"
-        app:settingText="Adjust goals"/>
+    <RelativeLayout
+        android:layout_below="@+id/tvSettingsTitle"
+        android:id="@+id/rlGoalSettings"
+        style="@style/SettingsRl"
+        android:background="@drawable/settings_layout">
 
-    <com.gmail.bodziowaty6978.customviews.SettingsView
-        android:id="@+id/svLogoutSettings"
-        android:layout_below="@+id/svGoalsSettings"
-        style="@style/SettingsView"
-        app:image="@drawable/ic_baseline_logout_24"
-        app:settingText="Log out"/>
+        <TextView
+            android:id="@+id/tvLabelGoal"
+            style="@style/ListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calories goals" />
+
+        <TextView
+            android:id="@+id/tvValuesGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLabelGoal"
+            android:layout_marginTop="5dp"
+            android:layout_toStartOf="@+id/ibEditGoal"
+            android:text="3694 kcal, Carbs: 528g, Prot: 179g, Fat: 95g" />
+
+        <ImageButton
+            android:id="@+id/ibEditGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_baseline_edit_24"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlMeasurementsSettings"
+        style="@style/SettingsRl"
+        android:layout_below="@+id/rlGoalSettings"
+        android:background="@drawable/settings_layout">
+
+        <TextView
+            android:id="@+id/tvLabelMeasurements"
+            style="@style/ListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/body_measurements" />
+
+        <TextView
+            android:id="@+id/tvLastValueMeasurement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLabelMeasurements"
+            android:layout_toStartOf="@+id/ibAddMeasurement"
+            android:layout_marginTop="5dp"
+            android:text="2021/12/24: 106.5 kg"/>
+
+        <ImageButton
+            android:id="@+id/ibAddMeasurement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_add_24"
+            android:background="@android:color/transparent"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlLogOutSettings"
+        style="@style/SettingsRl"
+        android:layout_below="@+id/rlMeasurementsSettings">
+
+        <ImageView
+            android:id="@+id/ivLogOutSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_logout_24" />
+
+        <TextView
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/ivLogOutSettings"
+            android:text="@string/log_out" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

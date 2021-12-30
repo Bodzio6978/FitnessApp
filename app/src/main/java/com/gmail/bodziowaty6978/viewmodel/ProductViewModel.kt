@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class MealViewModel : ViewModel() {
+class ProductViewModel : ViewModel() {
 
     private val db = Firebase.firestore
     private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()

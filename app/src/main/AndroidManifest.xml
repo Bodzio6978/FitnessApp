@@ -21,22 +21,20 @@
         <activity
             android:name=".view.newproduct.NewActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.MainActivity" />
-        <activity android:name=".view.AddActivity" />
-        <activity android:name=".view.auth.UsernameActivity" />
-        <activity android:name=".view.auth.ForgotActivity" />
-        <activity android:name=".view.auth.RegisterActivity" />
-        <activity android:name=".view.auth.LoginActivity" />
-        <activity android:name=".view.ErrorActivity" />
-        <activity
-            android:name=".view.SplashActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+        <activity android:name=".view.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.AddActivity" />
+        <activity android:name=".view.auth.UsernameActivity" />
+        <activity android:name=".view.auth.ForgotActivity" />
+        <activity android:name=".view.auth.RegisterActivity" />
+        <activity android:name=".view.auth.LoginActivity" />
+        <activity android:name=".view.ErrorActivity" />
+
     </application>
 
 </manifest>

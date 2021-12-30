@@ -1,165 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/srlSwipeCalories"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/srlSwipeCalories"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.mainfragments.CaloriesFragment">
+    tools:context=".view.mainfragments.DiaryFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_above="@+id/rlNutritionValuesCalories"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rlNutritionValuesCalories">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
-
-                <View
-                    style="@style/secondaryMealInformation"
-                    android:layout_width="0dp"
-                    android:layout_weight=".25"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    style="@style/secondaryMealInformation"
-                    android:layout_width="0dp"
-                    android:layout_weight=".25"
-                    android:textAlignment="center"
-                    android:text="@string/carbs"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    style="@style/secondaryMealInformation"
-                    android:layout_width="0dp"
-                    android:textAlignment="center"
-                    android:text="@string/protein"
-                    android:layout_weight=".25"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    style="@style/secondaryMealInformation"
-                    android:layout_width="0dp"
-                    android:text="@string/fat"
-                    android:textAlignment="center"
-                    android:layout_weight=".25"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-
-
-            <RelativeLayout
-                android:id="@+id/rlMealViewsCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/mvBreakfastCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:mealName="@string/breakfast" />
-
-            <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/mvLunchCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mvBreakfastCalories"
-                android:layout_marginTop="15dp"
-                app:mealName="@string/lunch" />
-
-            <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/mvDinnerCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mvLunchCalories"
-                android:layout_marginTop="15dp"
-                app:mealName="@string/dinner" />
-
-            <com.gmail.bodziowaty6978.customviews.MealView
-                android:id="@+id/mvSupperCalories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mvDinnerCalories"
-                android:layout_marginTop="15dp"
-                app:mealName="@string/supper" />
-
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_below="@+id/mvSupperCalories"
-                    android:background="@android:color/transparent"
-                    android:layout_height="80dp"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp">
+
+                    <View
+                        style="@style/secondaryMealInformation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".25" />
+
+                    <TextView
+                        style="@style/secondaryMealInformation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".25"
+                        android:text="@string/carbs"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        style="@style/secondaryMealInformation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".25"
+                        android:text="@string/protein"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        style="@style/secondaryMealInformation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".25"
+                        android:text="@string/fat"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rlMealViewsCalories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.gmail.bodziowaty6978.customviews.MealView
+                        android:id="@+id/mvBreakfastCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        app:mealName="@string/breakfast" />
+
+                    <com.gmail.bodziowaty6978.customviews.MealView
+                        android:id="@+id/mvLunchCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/mvBreakfastCalories"
+                        android:layout_marginTop="15dp"
+                        app:mealName="@string/lunch" />
+
+                    <com.gmail.bodziowaty6978.customviews.MealView
+                        android:id="@+id/mvDinnerCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/mvLunchCalories"
+                        android:layout_marginTop="15dp"
+                        app:mealName="@string/dinner" />
+
+                    <com.gmail.bodziowaty6978.customviews.MealView
+                        android:id="@+id/mvSupperCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/mvDinnerCalories"
+                        android:layout_marginTop="15dp"
+                        app:mealName="@string/supper" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_below="@+id/mvSupperCalories"
+                        android:background="@android:color/transparent" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
-
-            </RelativeLayout>
-
 
         </ScrollView>
 
 
         <RelativeLayout
             android:id="@+id/rlNutritionValuesCalories"
-            android:background="@drawable/bottom_nutrition_values"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bottom_nutrition_values"
+            android:paddingTop="5dp">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:elevation="7dp"
-                android:padding="5dp"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
-                android:layout_centerHorizontal="true"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <com.gmail.bodziowaty6978.customviews.NutritionView
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:id="@+id/nvCalories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:name="@string/calories"/>
+                <com.gmail.bodziowaty6978.customviews.NutritionView
+                    android:id="@+id/nvCalories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    app:name="@string/calories" />
 
-            <com.gmail.bodziowaty6978.customviews.NutritionView
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_toEndOf="@+id/nvCalories"
-                android:id="@+id/nvCarbohydrates"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:name="@string/carbs"/>
+                <com.gmail.bodziowaty6978.customviews.NutritionView
+                    android:id="@+id/nvCarbohydrates"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    app:name="@string/carbs" />
 
-            <com.gmail.bodziowaty6978.customviews.NutritionView
-                android:layout_toEndOf="@+id/nvCarbohydrates"
-                android:id="@+id/nvProtein"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:name="@string/protein"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"/>
+                <com.gmail.bodziowaty6978.customviews.NutritionView
 
-            <com.gmail.bodziowaty6978.customviews.NutritionView
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_toEndOf="@+id/nvProtein"
-                android:id="@+id/nvFat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:name="@string/fat"/>
+                    android:id="@+id/nvProtein"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    app:name="@string/protein" />
 
-            </RelativeLayout>
+                <com.gmail.bodziowaty6978.customviews.NutritionView
+
+                    android:id="@+id/nvFat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    app:name="@string/fat" />
+
+            </LinearLayout>
+
 
         </RelativeLayout>
+
+    </RelativeLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

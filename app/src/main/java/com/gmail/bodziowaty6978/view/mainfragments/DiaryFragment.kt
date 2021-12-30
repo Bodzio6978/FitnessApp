@@ -15,26 +15,25 @@ import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.viewmodel.CaloriesViewModel
+import com.gmail.bodziowaty6978.singleton.UserInformation
+import com.gmail.bodziowaty6978.viewmodel.DiaryViewModel
 
-class CaloriesFragment() : Fragment() {
+class DiaryFragment() : Fragment() {
 
     private var _binding: FragmentCaloriesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: CaloriesViewModel
+    private lateinit var viewModel: DiaryViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(requireActivity()).get(CaloriesViewModel::class.java)
-
-        viewModel.setUpValues()
+        viewModel = ViewModelProvider(requireActivity()).get(DiaryViewModel::class.java)
 
         setUpRefreshLayout()
 
         observeDate()
 
-        observeOverallValues()
+        observeWantedValues()
 
         observeProducts()
 
@@ -71,20 +70,31 @@ class CaloriesFragment() : Fragment() {
         }
     }
 
-//    private fun startProductActivity(position: Int,mealName: String){
-//        val entry = viewModel.getJournalEntry(position: Int,mealName: String)
+//    private fun editEntry(position: Int,mealName: String){
+//        val entry = when(mealName){
+//            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
+//            "Lunch" -> binding.mvLunchCalories.getEntry(position)
+//            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
+//            else -> binding.mvSupperCalories.getEntry(position)
+//        }
+//
+//        val intent = Intent(requireContext(),ProductActivity::class.java).putExtra("mealName",mealName)
+//
 //    }
 
-    private fun setUpUI(map: Map<*, *>) {
-        binding.nvCalories.setWanted(((map["wantedCalories"]) as Double).toInt())
-        binding.nvCarbohydrates.setWanted(((map["wantedCarbohydrates"]) as Double).toInt())
-        binding.nvProtein.setWanted(((map["wantedProtein"]) as Double).toInt())
-        binding.nvFat.setWanted(((map["wantedFat"]) as Double).toInt())
+    private fun observeWantedValues(){
+        UserInformation.mValues.observe(viewLifecycleOwner,{
+            if (it.isNotEmpty()){
+                setUpUI(it)
+            }
+        })
+    }
 
-        binding.nvCalories.updateProgress()
-        binding.nvCarbohydrates.updateProgress()
-        binding.nvProtein.updateProgress()
-        binding.nvFat.updateProgress()
+    private fun setUpUI(map: Map<String, Double>) {
+        binding.nvCalories.setWanted(((map["wantedCalories"])?.toInt()))
+        binding.nvCarbohydrates.setWanted((map["wantedCarbohydrates"])?.toInt())
+        binding.nvProtein.setWanted((map["wantedProtein"])?.toInt())
+        binding.nvFat.setWanted((map["wantedFat"])?.toInt())
     }
 
     private fun observeDate() {
@@ -93,12 +103,6 @@ class CaloriesFragment() : Fragment() {
         })
     }
 
-
-    private fun observeOverallValues() {
-        viewModel.getValues().observe(viewLifecycleOwner, {
-            setUpUI(it)
-        })
-    }
 
 
 

@@ -11,22 +11,4 @@
         style="@style/backArrow" />
 
 
-    <com.gmail.bodziowaty6978.customviews.SettingsView
-        android:id="@+id/svWeightGoal"
-        style="@style/SettingsView"
-        android:layout_below="@+id/ibBackGoal"
-        android:layout_marginTop="20dp"
-        app:image="@drawable/ic_baseline_scale_24"
-        app:settingText="Target Weight:   60kg -> 74kg" />
-
-    <com.gmail.bodziowaty6978.customviews.SettingsView
-        android:id="@+id/svCaloriesGoal"
-        style="@style/SettingsView"
-        android:layout_below="@+id/svWeightGoal"
-        app:settingText="Target Nutrition:   2100 kcal / 200 C / 160 P / 90 T"
-        app:image="@drawable/ic_baseline_eco_24"/>
-
-
-
-
 </RelativeLayout>

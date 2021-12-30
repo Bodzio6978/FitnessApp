@@ -1,6 +1,5 @@
 package com.gmail.bodziowaty6978.view
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
@@ -23,10 +22,14 @@ class GoalActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
 
-        binding.svCaloriesGoal.setOnClickListener {
-            val intent = Intent(this, NutritionSettings::class.java)
-            startActivity(intent)
+        binding.ibBackGoal.setOnClickListener {
+            super.onBackPressed()
         }
+
+//        binding.rl.setOnClickListener {
+//            val intent = Intent(this, NutritionSettings::class.java)
+//            startActivity(intent)
+//        }
 
 
 

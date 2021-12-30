@@ -23,7 +23,7 @@ class NutritionView(context: Context, attrs: AttributeSet) : LinearLayout(contex
         attributes.recycle()
     }
 
-    fun setWanted(value:Int){
+    fun setWanted(value: Int?){
         binding.tvWantedValueNutrition.text = value.toString()
     }
 

@@ -27,14 +27,14 @@ class SettingFragment : Fragment() {
         _binding = FragmentSettingBinding.inflate(inflater,container,false)
         instance = FirebaseAuth.getInstance()
 
-        binding.svLogoutSettings.setOnClickListener {
+        binding.rlLogOutSettings.setOnClickListener {
             instance.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()
         }
 
-        binding.svGoalsSettings.setOnClickListener {
+        binding.rlGoalSettings.setOnClickListener {
             val intent = Intent(activity, GoalActivity::class.java)
             startActivity(intent)
         }

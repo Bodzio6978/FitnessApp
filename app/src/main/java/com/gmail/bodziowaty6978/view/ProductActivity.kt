@@ -10,13 +10,13 @@ import com.gmail.bodziowaty6978.databinding.ActivityProductBinding
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.viewmodel.MealViewModel
+import com.gmail.bodziowaty6978.viewmodel.ProductViewModel
 
 
 class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityProductBinding
-    lateinit var viewModel: MealViewModel
+    lateinit var viewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +25,15 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MealViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
-        viewModel.getAddingState().observe(this,{
-            if (it){
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
-            }
-        })
+        observeIfAddedProduct()
 
-        observeDate()
+        initializeDate()
+
+        binding.ibBackMeal.setOnClickListener {
+            super.onBackPressed()
+        }
 
         val mealName = intent.getStringExtra("mealName")
         binding.tvMealNameMeal.text = mealName
@@ -56,12 +55,6 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
             initializeUi(product)
         }
 
-
-
-        binding.ibBackMeal.setOnClickListener {
-            super.onBackPressed()
-        }
-
         binding.btAddNew.setOnClickListener{
             if (product != null) {
                 viewModel.addProduct(product,id,binding.etWeightMeal.text.toString(),mealName.toString())
@@ -74,6 +67,15 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
     }
 
+    private fun observeIfAddedProduct(){
+        viewModel.getAddingState().observe(this,{
+            if (it){
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
+    }
+
     private fun initializeUi(product: Product){
         binding.tvProductNameMeal.text = product.name
         binding.tvFatValueMeal.text = product.fat.toString()
@@ -84,9 +86,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
         binding.tvUnitMeal.text = product.unit
     }
 
-    private fun observeDate(){
-        CurrentDate.date.observe(this,{
-            binding.tvDateMeal.text = getDateInAppFormat(it)
-        })
+    private fun initializeDate(){
+            binding.tvDateMeal.text = CurrentDate.date.value?.let { getDateInAppFormat(it) }
     }
 }

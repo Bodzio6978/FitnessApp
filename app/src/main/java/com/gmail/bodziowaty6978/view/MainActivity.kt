@@ -12,12 +12,12 @@ import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
 import com.gmail.bodziowaty6978.functions.getCurrentDateTime
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.singleton.CurrentDate
+import com.gmail.bodziowaty6978.singleton.InformationState
+import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.view.auth.UsernameActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
-import com.gmail.bodziowaty6978.viewmodel.UserState
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -31,12 +31,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         CurrentDate.date.value = getCurrentDateTime()
-
-        viewModel.checkInformation()
 
         binding.ibNextCalendar.setOnClickListener {
             CurrentDate.addDay()
@@ -50,55 +47,32 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             binding.tvDateCalendar.text = getDateInAppFormat(it)
         })
 
-        viewModel.getUserState().observe(this,{
-            when(it.value){
-                UserState.USER_NOT_LOGGED -> {
-                    val intent = Intent(this,LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                UserState.USER_NO_USERNAME -> {
-                    val intent = Intent(this,UsernameActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                UserState.USER_NO_INFORMATION -> {
-                    val intent = Intent(this,IntroductionActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }
-        })
+        checkUserInformation()
 
-        setFragment(viewModel.getCalories())
+        setUpBottomNav()
+
+    }
+
+    private fun setUpBottomNav(){
+        setFragment(viewModel.getSummary())
 
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.menu_calories -> {
+                R.id.menu_summary -> {
+                    binding.rlCalendar.visibility = View.GONE
+                    setFragment(viewModel.getSummary())
+                }
+                R.id.menu_diary -> {
                     binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(viewModel.getCalories())
+                    setFragment(viewModel.getDiary())
                 }
                 R.id.menu_training -> {
                     binding.rlCalendar.visibility = View.VISIBLE
                     setFragment(viewModel.getTraining())
                 }
-                R.id.menu_recipes -> {
-                    binding.rlCalendar.visibility = View.GONE
-                    setFragment(viewModel.getRecipes())
-                }
-                R.id.menu_shopping -> {
-                    binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(viewModel.getShopping())
-
-                }
-                R.id.menu_settings -> {
-                    binding.rlCalendar.visibility = View.GONE
-                    setFragment(viewModel.getSettings())
-                }
             }
             true
         }
-
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -106,4 +80,31 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             beginTransaction().replace(R.id.main_fl, fragment).commit()
         }
     }
+
+    private fun checkUserInformation(){
+        UserInformation.getUserId()
+
+        UserInformation.mInformationState.observe(this,{
+            when(it.value){
+                InformationState.USER_NOT_LOGGED -> {
+                    startActivity(Intent(this,LoginActivity::class.java))
+                    finish()
+                }
+
+                InformationState.USER_LOGGED -> UserInformation.getValues()
+
+                InformationState.USER_NO_USERNAME -> {
+                    startActivity(Intent(this,UsernameActivity::class.java))
+                    finish()
+                }
+
+                InformationState.USER_NO_INFORMATION -> {
+                    startActivity(Intent(this,IntroductionActivity::class.java))
+                    finish()
+                }
+
+            }
+        })
+    }
+
 }

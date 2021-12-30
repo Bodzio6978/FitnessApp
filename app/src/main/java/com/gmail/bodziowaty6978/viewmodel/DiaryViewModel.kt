@@ -10,26 +10,17 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class CaloriesViewModel : ViewModel() {
+class DiaryViewModel : ViewModel() {
     private val userId = FirebaseAuth.getInstance().uid.toString()
 
     private val db = Firebase.firestore
 
-    private val mValues = MutableLiveData<Map<*, *>>()
 
     private val products = MutableLiveData<MutableMap<String,MutableMap<String,JournalEntry>>>()
 
     fun refresh(){
         if (CurrentDate.date.value!=null){
             getJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
-        }
-    }
-
-    fun setUpValues() {
-        db.collection("users").document(userId).get().addOnSuccessListener {
-            if (it.data?.get("nutritionValues") != null) {
-                mValues.value = it.data?.get("nutritionValues") as Map<*, *>
-            }
         }
     }
 
@@ -87,8 +78,6 @@ class CaloriesViewModel : ViewModel() {
                 "Supper" to supper
         )
     }
-
-    fun getValues(): MutableLiveData<Map<*, *>> = mValues
 
     fun getProducts():MutableLiveData<MutableMap<String,MutableMap<String,JournalEntry>>> = products
 
