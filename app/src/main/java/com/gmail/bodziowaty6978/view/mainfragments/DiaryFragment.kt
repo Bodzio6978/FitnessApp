@@ -2,6 +2,7 @@ package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
+import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
@@ -55,7 +57,7 @@ class DiaryFragment() : Fragment() {
         val delete = dialog.findViewById(R.id.btDeleteDialog) as Button
 
         delete.setOnClickListener{
-            viewModel.removeItem(entry,mealName,position)
+            viewModel.removeItem(entry,mealName)
             dialog.dismiss()
         }
 
@@ -103,9 +105,6 @@ class DiaryFragment() : Fragment() {
         })
     }
 
-
-
-
     private fun getEntry(position: Int,mealName: String):JournalEntry{
         return when (mealName) {
             "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
@@ -133,6 +132,7 @@ class DiaryFragment() : Fragment() {
     private fun observeProducts() {
         viewModel.getProducts().observe(viewLifecycleOwner,{
             if (!it.isNullOrEmpty()){
+                Log.e(TAG,"huj")
                 for (key in it.keys){
                     when(key){
                         "Breakfast" -> it[key]?.let { it1 -> binding.mvBreakfastCalories.addProducts(it1) }

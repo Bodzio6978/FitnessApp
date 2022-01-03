@@ -32,7 +32,7 @@ class NutritionView(context: Context, attrs: AttributeSet) : LinearLayout(contex
         updateProgress()
     }
 
-    fun updateProgress(){
+    private fun updateProgress(){
         val current = binding.tvCurrentValueNutrition.text.toString().toDouble()
         val wanted = binding.tvWantedValueNutrition.text.toString().toDouble()
 

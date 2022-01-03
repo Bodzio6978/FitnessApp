@@ -19,11 +19,6 @@
         android:text="@string/save"
         android:textColor="@color/primary" />
 
-    <com.gmail.bodziowaty6978.customviews.NutritionSettingsView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btSaveNutrition"
-        app:nutritionName="@string/carbohydrates"/>
 
 
     <TextView

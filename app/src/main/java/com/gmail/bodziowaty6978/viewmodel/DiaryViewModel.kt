@@ -5,44 +5,47 @@ import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.google.firebase.auth.FirebaseAuth
+import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class DiaryViewModel : ViewModel() {
-    private val userId = FirebaseAuth.getInstance().uid.toString()
-
     private val db = Firebase.firestore
 
+    private val products = MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>>()
 
-    private val products = MutableLiveData<MutableMap<String,MutableMap<String,JournalEntry>>>()
-
-    fun refresh(){
-        if (CurrentDate.date.value!=null){
+    fun refresh() {
+        if (CurrentDate.date.value != null) {
             getJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
         }
     }
 
-    fun removeItem(entry: JournalEntry, mealName: String, position: Int) {
-        val entryList = products.value?.get(mealName)
+    fun removeItem(entry: JournalEntry, mealName: String) {
+        val entryList = products.value
         if (entryList != null) {
 
-            for (key in entryList.keys) {
-                if (entryList[key] == entry) {
-                    db.collection("users").document(userId).collection("journal").document(key).delete().addOnSuccessListener {
-                        entryList.remove(key)
-                        products.value?.set(mealName, entryList)
+            val mealList = entryList[mealName]
+
+            if (mealList != null) {
+                for (key in mealList.keys) {
+
+                    if (mealList[key] == entry) {
+
+                        db.collection("users").document(UserInformation.userId!!).collection("journal").document(key).delete().addOnSuccessListener {
+                            mealList.remove(key)
+                            entryList[mealName] = mealList
+                            products.value = entryList!!
+                        }
+
                     }
                 }
             }
         }
-
-
     }
 
     fun getJournalEntries(date: String) {
-        db.collection("users").document(userId).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
+        db.collection("users").document(UserInformation.userId!!).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
 
@@ -71,7 +74,7 @@ class DiaryViewModel : ViewModel() {
                 "Supper" -> supper[key] = list[key]!!
             }
         }
-        products.value = mutableMapOf<String,MutableMap<String,JournalEntry>>(
+        products.value = mutableMapOf<String, MutableMap<String, JournalEntry>>(
                 "Breakfast" to breakfast,
                 "Lunch" to lunch,
                 "Dinner" to dinner,
@@ -79,6 +82,6 @@ class DiaryViewModel : ViewModel() {
         )
     }
 
-    fun getProducts():MutableLiveData<MutableMap<String,MutableMap<String,JournalEntry>>> = products
+    fun getProducts(): MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>> = products
 
 }

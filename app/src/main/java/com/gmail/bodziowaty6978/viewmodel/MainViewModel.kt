@@ -14,6 +14,4 @@ class MainViewModel : ViewModel() {
     fun getDiary(): Fragment = diary
     fun getTraining(): Fragment = training
     fun getSummary(): Fragment = summary
-
-
 }

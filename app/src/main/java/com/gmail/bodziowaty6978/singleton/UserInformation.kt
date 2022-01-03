@@ -68,8 +68,6 @@ object UserInformation {
         val values = map as Map<String,Double>
 
         mValues.value = values
-
-        Log.e(TAG,values.toString())
     }
 }
 
