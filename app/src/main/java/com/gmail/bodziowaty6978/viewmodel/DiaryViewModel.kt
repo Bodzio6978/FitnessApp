@@ -1,5 +1,6 @@
 package com.gmail.bodziowaty6978.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.toString
@@ -21,6 +22,7 @@ class DiaryViewModel : ViewModel() {
         }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun removeItem(entry: JournalEntry, mealName: String) {
         val entryList = products.value
         if (entryList != null) {
@@ -32,10 +34,10 @@ class DiaryViewModel : ViewModel() {
 
                     if (mealList[key] == entry) {
 
-                        db.collection("users").document(UserInformation.userId!!).collection("journal").document(key).delete().addOnSuccessListener {
+                        db.collection("users").document(UserInformation.mUser.value?.userId!!).collection("journal").document(key).delete().addOnSuccessListener {
                             mealList.remove(key)
                             entryList[mealName] = mealList
-                            products.value = entryList!!
+                            products.value = entryList
                         }
 
                     }
@@ -45,10 +47,9 @@ class DiaryViewModel : ViewModel() {
     }
 
     fun getJournalEntries(date: String) {
-        db.collection("users").document(UserInformation.userId!!).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
+        db.collection("users").document(UserInformation.mUser.value?.userId!!).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
-
                     val journalProductList = mutableMapOf<String, JournalEntry>()
 
                     for (document in it.documents) {

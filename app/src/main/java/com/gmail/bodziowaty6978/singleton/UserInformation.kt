@@ -3,24 +3,20 @@ package com.gmail.bodziowaty6978.singleton
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 object UserInformation {
-//    val isLogged = MutableLiveData<Boolean>()
-//    val mValuesState = MutableLiveData<Boolean>()
-//    val mUsernameState = MutableLiveData<Boolean>()
-
     val mInformationState = MutableLiveData<InformationState>()
 
-    val mValues = MutableLiveData<Map<String, Double>>()
-    var mUsername = MutableLiveData<String>()
-    var userId: String? = null
+    val mUser = MutableLiveData(User())
 
+    val currentCalories = MutableLiveData<Int>()
 
     fun getUserId() {
-        if (userId == null) {
+        if (mUser.value?.userId == null) {
 
             val instance = FirebaseAuth.getInstance()
 
@@ -28,7 +24,7 @@ object UserInformation {
                 mInformationState.value = InformationState(InformationState.USER_NOT_LOGGED)
             } else {
                 mInformationState.value = InformationState(InformationState.USER_LOGGED)
-                userId = instance.currentUser!!.uid
+                mUser.value?.userId = instance.currentUser!!.uid
             }
 
         } else {
@@ -37,38 +33,37 @@ object UserInformation {
 
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getValues() {
-        if (mValues.value == null|| mUsername.value==null) {
+        if (mUser.value?.nutritionValues == null || mUser.value?.userInformation==null || mUser.value?.username==null) {
             val db = Firebase.firestore
 
-            Log.e(TAG,"Getting values")
-
-            db.collection("users").document(userId!!).get().addOnSuccessListener {
+            db.collection("users").document(mUser.value?.userId!!).get().addOnSuccessListener {
                 if (it.exists()) {
-
-                    if (it.data?.get("nutritionValues") != null) {
-                        setUpValues(it.data?.get("nutritionValues") as Map<*, *>)
-                    } else {
-                        mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
-                    }
-
-                    if (it.data?.get("username") != null) {
-                        mUsername.value = it.data?.get("username") as String
-                    } else {
-                        mInformationState.value = InformationState(InformationState.USER_NO_USERNAME)
-                    }
+                    mUser.value?.nutritionValues = it.data?.get("nutritionValues") as Map<String, Double>
+                    mUser.value?.userInformation = it.data?.get("userInformation") as Map<String, String>
+                    mUser.value?.username = it.data?.get("username") as String
+                    mInformationState.value = InformationState(InformationState.USER_INFORMATION_REQUIRED)
                 } else {
                     mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
                 }
             }
+        }else{
+            Log.e(TAG,"User has all information")
+            mInformationState.value = InformationState(InformationState.USER_INFORMATION_REQUIRED)
         }
     }
-    @Suppress("UNCHECKED_CAST")
-    private fun setUpValues(map: Map<*, *>) {
-        val values = map as Map<String,Double>
 
-        mValues.value = values
+    fun checkUser(){
+        if (mUser.value?.username==null){
+            mInformationState.value = InformationState(InformationState.USER_NO_USERNAME)
+        }else if(mUser.value?.userInformation==null||mUser.value?.nutritionValues==null){
+            mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
+        }else{
+            mInformationState.value = InformationState(InformationState.USER_HAS_EVERYTHING)
+        }
     }
+
 }
 
 class InformationState(val value: Int) {
@@ -77,6 +72,8 @@ class InformationState(val value: Int) {
         const val USER_NOT_LOGGED = 0
         const val USER_LOGGED = 1
         const val USER_NO_USERNAME = 2
-        const val USER_NO_INFORMATION = 3
+        const val USER_INFORMATION_REQUIRED = 3
+        const val USER_NO_INFORMATION = 4
+        const val USER_HAS_EVERYTHING = 5
     }
 }

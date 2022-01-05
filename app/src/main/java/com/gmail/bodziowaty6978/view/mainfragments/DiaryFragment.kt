@@ -2,7 +2,6 @@ package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
@@ -85,9 +83,9 @@ class DiaryFragment() : Fragment() {
 //    }
 
     private fun observeWantedValues(){
-        UserInformation.mValues.observe(viewLifecycleOwner,{
-            if (it.isNotEmpty()){
-                setUpUI(it)
+        UserInformation.mUser.observe(viewLifecycleOwner,{
+            if (it.nutritionValues!=null){
+                setUpUI(it.nutritionValues!!)
             }
         })
     }
@@ -132,7 +130,6 @@ class DiaryFragment() : Fragment() {
     private fun observeProducts() {
         viewModel.getProducts().observe(viewLifecycleOwner,{
             if (!it.isNullOrEmpty()){
-                Log.e(TAG,"huj")
                 for (key in it.keys){
                     when(key){
                         "Breakfast" -> it[key]?.let { it1 -> binding.mvBreakfastCalories.addProducts(it1) }
@@ -169,7 +166,9 @@ class DiaryFragment() : Fragment() {
     private fun setValues(map:Map<String,Int>){
         for (key in map.keys){
             when(key){
-                "calories" -> map[key]?.let { binding.nvCalories.updateValue(it) }
+                "calories" -> {map[key]?.let { binding.nvCalories.updateValue(it)}
+                UserInformation.currentCalories.value = map[key]
+                }
                 "carbohydrates" -> map[key]?.let { binding.nvCarbohydrates.updateValue(it) }
                 "protein" -> map[key]?.let { binding.nvProtein.updateValue(it) }
                 "fat" -> map[key]?.let { binding.nvFat.updateValue(it) }

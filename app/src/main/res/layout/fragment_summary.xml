@@ -1,14 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.mainfragments.SummaryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/tvTitleSummary"
+        style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/summary" />
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/llLoggedSummary"
+        style="@style/SettingsRl"
+        android:layout_below="@+id/tvTitleSummary"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6">
+
+            <TextView
+                android:id="@+id/tvLoggedSummary"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/you_have_logged_for" />
+
+            <TextView
+                android:id="@+id/tvDaysLoggedSummary"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvLoggedSummary"
+                android:layout_marginTop="5dp"
+                android:text="12 days" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCaloriesSummary"
+        style="@style/SettingsRl"
+        android:layout_below="@+id/llLoggedSummary">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6">
+
+            <TextView
+                android:id="@+id/tvCaloriesSummary"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calories" />
+
+            <TextView
+                android:id="@+id/tvCurrentCaloriesSummary"
+                style="@style/PageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCaloriesSummary"
+                android:layout_marginTop="5dp"
+                android:text="0"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvWantedCaloriesSummary"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvCurrentCaloriesSummary"
+                android:layout_marginStart="1dp"
+                android:layout_marginBottom="2dp"
+                android:layout_toEndOf="@+id/tvCurrentCaloriesSummary"
+                android:text="/0 kcal"
+                tools:ignore="HardcodedText" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4">
+
+            <TextView
+                android:id="@+id/tvCaloriesProgress"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/pbCaloriesSummary"
+                android:textAlignment="center" />
+
+            <ProgressBar
+                android:id="@+id/pbCaloriesSummary"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/SettingsRl"
+        android:layout_below="@+id/llCaloriesSummary">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6">
+
+
+            <TextView
+                android:id="@+id/tvWeightSummary"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/weight" />
+
+            <TextView
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvWeightSummary"
+                android:layout_marginTop="5dp"
+                android:text="103.2kg" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvWeightChangeSummary"
+            style="@style/Paragraph_Secondary_Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_weight="0.4"
+            android:text="+1.2"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+</RelativeLayout>

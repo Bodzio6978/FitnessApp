@@ -17,12 +17,19 @@ import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.view.auth.UsernameActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
+import com.gmail.bodziowaty6978.view.mainfragments.DiaryFragment
+import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
+import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
+
+    private val summary = SummaryFragment()
+    private val diary = DiaryFragment()
+    private val training = TrainingFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,31 +55,30 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         })
 
         checkUserInformation()
-
-        setUpBottomNav()
-
     }
 
     private fun setUpBottomNav(){
-        setFragment(viewModel.getSummary())
+        binding.rlCalendar.visibility = View.GONE
 
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_summary -> {
                     binding.rlCalendar.visibility = View.GONE
-                    setFragment(viewModel.getSummary())
+                    setFragment(summary)
                 }
                 R.id.menu_diary -> {
                     binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(viewModel.getDiary())
+                    setFragment(diary)
                 }
                 R.id.menu_training -> {
                     binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(viewModel.getTraining())
+                    setFragment(training)
                 }
             }
             true
         }
+
+        binding.bnvMain.selectedItemId = R.id.menu_diary
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -93,6 +99,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
                 InformationState.USER_LOGGED -> UserInformation.getValues()
 
+                InformationState.USER_INFORMATION_REQUIRED -> UserInformation.checkUser()
+
                 InformationState.USER_NO_USERNAME -> {
                     startActivity(Intent(this,UsernameActivity::class.java))
                     finish()
@@ -102,6 +110,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     startActivity(Intent(this,IntroductionActivity::class.java))
                     finish()
                 }
+
+                InformationState.USER_HAS_EVERYTHING -> setUpBottomNav()
 
             }
         })

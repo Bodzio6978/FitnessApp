@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.mainfragments.SettingFragment">
+    tools:context=".view.SettingsActivity">
 
     <TextView
         android:layout_marginEnd="20dp"
@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/tvLabelGoal"
-            style="@style/ListTitle"
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Calories goals" />
@@ -59,7 +59,7 @@
 
         <TextView
             android:id="@+id/tvLabelMeasurements"
-            style="@style/ListTitle"
+            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/body_measurements" />

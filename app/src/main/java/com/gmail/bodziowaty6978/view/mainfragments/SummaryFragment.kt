@@ -5,54 +5,54 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.gmail.bodziowaty6978.R
+import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
+import com.gmail.bodziowaty6978.singleton.UserInformation
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SummaryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SummaryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentSummaryBinding? = null
+    private val binding get() = _binding!!
+
+    private var wantedCalories:Double? = null
+    private var currentCalories:Double? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_summary, container, false)
+        _binding = FragmentSummaryBinding.inflate(inflater, container, false)
+
+        observeCalories()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SummaryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                SummaryFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun observeCalories(){
+        UserInformation.currentCalories.observe(viewLifecycleOwner,{
+            binding.tvCurrentCaloriesSummary.text = it.toString()
+            currentCalories = it.toDouble()
+            updateCaloriesProgress()
+        })
+
+        UserInformation.mUser.observe(viewLifecycleOwner,{ user ->
+            ("/"+user.nutritionValues?.get("wantedCalories")?.toInt().toString()+" kcal").also { binding.tvWantedCaloriesSummary.text = it }
+            wantedCalories = user.nutritionValues?.get("wantedCalories")
+            updateCaloriesProgress()
+        })
+    }
+
+    private fun updateCaloriesProgress(){
+        if (wantedCalories!=null&&currentCalories!=null){
+            val progress = (currentCalories!!/wantedCalories!!).toInt()
+            ("$progress%").also { binding.tvCaloriesProgress.text = it }
+            binding.pbCaloriesSummary.progress = progress
+        }else{
+            binding.pbCaloriesSummary.progress = 0
+            ("0%").also { binding.tvCaloriesProgress.text = it }
+        }
     }
 }
