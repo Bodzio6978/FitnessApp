@@ -1,13 +1,10 @@
 package com.gmail.bodziowaty6978.view.mainfragments
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
@@ -17,6 +14,7 @@ import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.viewmodel.DiaryViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DiaryFragment() : Fragment() {
 
@@ -43,24 +41,23 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun showEntryDialog(position: Int, mealName: String) {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.entry_dialog_layout)
-        val entryName = dialog.findViewById(R.id.tvEntryNameDialog) as TextView
 
         val entry = getEntry(position,mealName)
 
-        entryName.text = entry.name
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            background = ResourcesCompat.getDrawable(resources,R.drawable.dialog,null)
 
-        val delete = dialog.findViewById(R.id.btDeleteDialog) as Button
+            setTitle("${entry.name} (${entry.weight}${entry.unit})")
 
-        delete.setOnClickListener{
-            viewModel.removeItem(entry,mealName)
-            dialog.dismiss()
+            setNegativeButton(resources.getString(R.string.delete)){ dialog, which ->
+                viewModel.removeItem(entry,mealName)
+            }
+
+            setNeutralButton(resources.getString(R.string.edit)){ dialog, which ->
+
+            }
+            show()
         }
-
-        dialog.show()
-
     }
 
     private fun setUpRefreshLayout(){

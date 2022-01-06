@@ -15,7 +15,6 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
 import com.gmail.bodziowaty6978.functions.getCurrentDateTime
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
-import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.InformationState
 import com.gmail.bodziowaty6978.singleton.UserInformation
@@ -48,12 +47,12 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         CurrentDate.date.value = getCurrentDateTime()
 
-        showNumberPickerDialog(
-                value = 75.0, // in kilograms
-                range = 10.0 .. 300.0,
-                stepSize = 0.1,
-                formatToString = { "${it.round(1)} kg" }
-        )
+//        showNumberPickerDialog(
+//                value = 75.0, // in kilograms
+//                range = 10.0 .. 300.0,
+//                stepSize = 0.1,
+//                formatToString = { "${it.round(1)} kg" }
+//        )
 
         binding.ibNextCalendar.setOnClickListener {
             CurrentDate.addDay()
@@ -143,7 +142,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         val dialog = MaterialAlertDialogBuilder(this).apply {
             background = ColorDrawable(Color.TRANSPARENT)
             setView(layout)
-            setCancelable(false)
+            setCancelable(true)
         }
 
         val picker = layout.findViewById(R.id.npWeightPicker) as NumberPicker
