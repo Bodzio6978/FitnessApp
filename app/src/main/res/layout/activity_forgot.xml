@@ -43,8 +43,4 @@
         android:layout_marginStart="20dp"
         android:text="@string/reset_my_password"/>
 
-    <TextView
-        android:id="@+id/username_notification"
-        style="@style/notification"/>
-
 </RelativeLayout>

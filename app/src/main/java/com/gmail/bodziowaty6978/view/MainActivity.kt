@@ -1,8 +1,12 @@
 package com.gmail.bodziowaty6978.view
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
+import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -11,6 +15,7 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
 import com.gmail.bodziowaty6978.functions.getCurrentDateTime
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
+import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.InformationState
 import com.gmail.bodziowaty6978.singleton.UserInformation
@@ -21,6 +26,7 @@ import com.gmail.bodziowaty6978.view.mainfragments.DiaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -41,6 +47,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         CurrentDate.date.value = getCurrentDateTime()
+
+        showNumberPickerDialog(
+                value = 75.0, // in kilograms
+                range = 10.0 .. 300.0,
+                stepSize = 0.1,
+                formatToString = { "${it.round(1)} kg" }
+        )
 
         binding.ibNextCalendar.setOnClickListener {
             CurrentDate.addDay()
@@ -115,6 +128,37 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
             }
         })
+    }
+
+    private fun showNumberPickerDialog(
+            value: Double,
+            range: ClosedRange<Double>,
+            stepSize: Double,
+            formatToString: (Double) -> String
+    ) {
+        val inflater = this.layoutInflater
+
+        val layout = inflater.inflate(R.layout.weight_picker_layout,null)
+
+        val dialog = MaterialAlertDialogBuilder(this).apply {
+            background = ColorDrawable(Color.TRANSPARENT)
+            setView(layout)
+            setCancelable(false)
+        }
+
+        val picker = layout.findViewById(R.id.npWeightPicker) as NumberPicker
+                picker.apply {
+            setFormatter { formatToString(it.toDouble() * stepSize) }
+            wrapSelectorWheel = false
+
+            minValue = (range.start / stepSize).toInt()
+            maxValue = (range.endInclusive / stepSize).toInt()
+            this.value = (value / stepSize).toInt()
+
+            (NumberPicker::class.java.getDeclaredField("mInputText").apply { isAccessible = true }.get(this) as EditText).filters = emptyArray()
+        }
+
+        dialog.show()
     }
 
 }

@@ -115,6 +115,8 @@
     <string name="diary">Diary</string>
     <string name="summary">Summary</string>
     <string name="you_have_logged_for">You have logged for:</string>
+    <string name="don_t_show_me_this_dialog_again">Don\'t show me this dialog again</string>
+    <string name="cancel">Cancel</string>
 
     <string-array name="works">
         <item>Sedentary</item>
