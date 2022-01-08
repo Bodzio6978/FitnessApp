@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
@@ -45,15 +44,13 @@ class DiaryFragment() : Fragment() {
         val entry = getEntry(position,mealName)
 
         MaterialAlertDialogBuilder(requireContext()).apply {
-            background = ResourcesCompat.getDrawable(resources,R.drawable.dialog,null)
-
             setTitle("${entry.name} (${entry.weight}${entry.unit})")
 
-            setNegativeButton(resources.getString(R.string.delete)){ dialog, which ->
+            setNegativeButton(resources.getString(R.string.delete)){ _, _ ->
                 viewModel.removeItem(entry,mealName)
             }
 
-            setNeutralButton(resources.getString(R.string.edit)){ dialog, which ->
+            setNeutralButton(resources.getString(R.string.edit)){ _, _ ->
 
             }
             show()
@@ -80,7 +77,7 @@ class DiaryFragment() : Fragment() {
 //    }
 
     private fun observeWantedValues(){
-        UserInformation.mUser.observe(viewLifecycleOwner,{
+        UserInformation.getUser().observe(viewLifecycleOwner,{
             if (it.nutritionValues!=null){
                 setUpUI(it.nutritionValues!!)
             }

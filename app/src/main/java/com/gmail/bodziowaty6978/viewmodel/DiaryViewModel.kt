@@ -34,7 +34,7 @@ class DiaryViewModel : ViewModel() {
 
                     if (mealList[key] == entry) {
 
-                        db.collection("users").document(UserInformation.mUser.value?.userId!!).collection("journal").document(key).delete().addOnSuccessListener {
+                        db.collection("users").document(UserInformation.getUser().value?.userId!!).collection("journal").document(key).delete().addOnSuccessListener {
                             mealList.remove(key)
                             entryList[mealName] = mealList
                             products.value = entryList
@@ -47,7 +47,7 @@ class DiaryViewModel : ViewModel() {
     }
 
     fun getJournalEntries(date: String) {
-        db.collection("users").document(UserInformation.mUser.value?.userId!!).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
+        db.collection("users").document(UserInformation.getUser().value?.userId!!).collection("journal").whereEqualTo("date", date).orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
                     val journalProductList = mutableMapOf<String, JournalEntry>()

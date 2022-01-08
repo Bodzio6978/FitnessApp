@@ -118,6 +118,13 @@
     <string name="don_t_show_me_this_dialog_again">Don\'t show me this dialog again</string>
     <string name="cancel">Cancel</string>
 
+    <string name="are_weight_dialogs_enabled">AreWeightDialogsEnabled</string>
+
+    <string name="do_you_want_us_to_help_you_track_your_weight">Do you want us to help you track your weight?</string>
+    <string name="we_will_ask_you_everyday_about_your_weight_automatically">We will ask you everyday about your weight automatically, so you that don\'t forget about it</string>
+    <string name="accept">accept</string>
+    <string name="decline">decline</string>
+
     <string-array name="works">
         <item>Sedentary</item>
         <item>Mixed</item>

@@ -11,7 +11,7 @@ import com.google.firebase.ktx.Firebase
 object UserInformation {
     val mInformationState = MutableLiveData<InformationState>()
 
-    val mUser = MutableLiveData(User())
+    private val mUser = MutableLiveData(User())
 
     val currentCalories = MutableLiveData<Int>()
 
@@ -40,9 +40,21 @@ object UserInformation {
 
             db.collection("users").document(mUser.value?.userId!!).get().addOnSuccessListener {
                 if (it.exists()) {
-                    mUser.value?.nutritionValues = it.data?.get("nutritionValues") as Map<String, Double>
-                    mUser.value?.userInformation = it.data?.get("userInformation") as Map<String, String>
-                    mUser.value?.username = it.data?.get("username") as String
+                    if (it.data?.get("nutritionValues")!=null){
+                        mUser.value?.nutritionValues = it.data?.get("nutritionValues") as Map<String, Double>
+                    }
+
+                    if (it.data?.get("userInformation")!=null){
+                        mUser.value?.userInformation = it.data?.get("userInformation") as Map<String, String>
+                    }
+
+                    if (it.data?.get("username")!=null){
+                        mUser.value?.username = it.data?.get("username") as String
+                    }
+
+                    if (it.data?.get("areWeightDialogsEnabled")!=null){
+                        mUser.value?.areWeightDialogsEnabled = it.data?.get("areWeightDialogsEnabled") as Boolean
+                    }
                     mInformationState.value = InformationState(InformationState.USER_INFORMATION_REQUIRED)
                 } else {
                     mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
@@ -63,6 +75,8 @@ object UserInformation {
             mInformationState.value = InformationState(InformationState.USER_HAS_EVERYTHING)
         }
     }
+
+    fun getUser():MutableLiveData<User> = mUser
 
 }
 

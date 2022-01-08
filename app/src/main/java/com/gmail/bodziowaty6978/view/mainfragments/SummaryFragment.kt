@@ -38,7 +38,7 @@ class SummaryFragment : Fragment() {
             updateCaloriesProgress()
         })
 
-        UserInformation.mUser.observe(viewLifecycleOwner,{ user ->
+        UserInformation.getUser().observe(viewLifecycleOwner,{ user ->
             ("/"+user.nutritionValues?.get("wantedCalories")?.toInt().toString()+" kcal").also { binding.tvWantedCaloriesSummary.text = it }
             wantedCalories = user.nutritionValues?.get("wantedCalories")
             updateCaloriesProgress()
