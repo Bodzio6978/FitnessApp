@@ -1,7 +1,9 @@
 package com.gmail.bodziowaty6978.view
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
@@ -10,16 +12,21 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
-import com.gmail.bodziowaty6978.functions.getCurrentDateTime
-import com.gmail.bodziowaty6978.functions.getDateInAppFormat
-import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.*
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
+import com.gmail.bodziowaty6978.state.UserInformationState
+import com.gmail.bodziowaty6978.view.auth.LoginActivity
+import com.gmail.bodziowaty6978.view.auth.UsernameActivity
+import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.view.mainfragments.DiaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -30,8 +37,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private val diary = DiaryFragment()
     private val training = TrainingFragment()
 
-    private val WEIGHT_PREF = "appWeightPref"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,16 +46,49 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        observeUserInformationState()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        checkIfUserIsLogged(currentUser)
+    }
+
+    private fun checkIfUserIsLogged(currentUser: FirebaseUser?) {
+        if (currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        } else {
+            UserInformation.getValues(currentUser.uid)
+        }
+    }
+
+    private fun observeUserInformationState(){
+        UserInformation.mUserInformationState.observe(this, {
+            when (it.value) {
+                UserInformationState.USER_INFORMATION_REQUIRED -> UserInformation.checkInformation()
+                UserInformationState.USER_HAS_INFORMATION -> UserInformation.checkUsername()
+
+                UserInformationState.USER_NO_INFORMATION -> {
+                    startActivity(Intent(this, IntroductionActivity::class.java))
+                    finish()
+                }
+
+                UserInformationState.USER_NO_USERNAME -> {
+                    startActivity(Intent(this, UsernameActivity::class.java))
+                    finish()
+                }
+
+                UserInformationState.USER_HAS_USERNAME -> {
+                    setUpBottomNav()
+                    setUpCalendar()
+                    observeDate()
+                    checkIfWeightDialogEnabled()
+                }
+            }
+        })
+    }
+
+    private fun setUpCalendar() {
         CurrentDate.date.value = getCurrentDateTime()
-
-        checkIfWeightDialogEnabled()
-
-        showNumberPickerDialog(
-                value = 75.0, // in kilograms
-                range = 10.0 .. 300.0,
-                stepSize = 0.1,
-                formatToString = { "${it.round(1)} kg" }
-        )
 
         binding.ibNextCalendar.setOnClickListener {
             CurrentDate.addDay()
@@ -63,34 +101,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         CurrentDate.date.observe(this, {
             binding.tvDateCalendar.text = getDateInAppFormat(it)
         })
-
-        setUpBottomNav()
-
     }
 
-    private fun setUpBottomNav() {
-        binding.rlCalendar.visibility = View.GONE
-
-        binding.bnvMain.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.menu_summary -> {
-                    binding.rlCalendar.visibility = View.GONE
-                    setFragment(summary)
-                }
-                R.id.menu_diary -> {
-                    binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(diary)
-                }
-                R.id.menu_training -> {
-                    binding.rlCalendar.visibility = View.VISIBLE
-                    setFragment(training)
-                }
-            }
-            true
-        }
-
-        binding.bnvMain.selectedItemId = R.id.menu_diary
-    }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.apply {
@@ -98,13 +110,42 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
-    private fun checkIfWeightDialogEnabled() {
-        val areEnabled = UserInformation.getUser().value?.areWeightDialogsEnabled
+    private fun setUpBottomNav() {
+        binding.bnvMain.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_summary -> {
+                    setFragment(summary)
+                }
+                R.id.menu_diary -> {
+                    setFragment(diary)
+                }
+                R.id.menu_training -> {
+                    setFragment(training)
+                }
+            }
+            true
+        }
 
-        if (areEnabled == null){
+        binding.bnvMain.selectedItemId = R.id.menu_summary
+    }
+
+    private fun observeDate(){
+        CurrentDate.date.observe(this,{
+            val dateString = it.time.toString("dd-MM-yyyy")
+
+            viewModel.getJournalEntries(dateString)
+        })
+    }
+
+
+    private fun checkIfWeightDialogEnabled() {
+        val areEnabled = UserInformation.mAreWeightDialogsEnabled.value
+
+        if (areEnabled == null) {
             askForWeightDialogs()
-        }else if(areEnabled){
-            checkIfWeightHasBeenEnteredToday()
+        } else if (areEnabled) {
+            viewModel.checkIfWeightHasBeenEnteredToday()
+            observeWeightToday()
         }
 
     }
@@ -117,8 +158,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             setPositiveButton(R.string.accept) { _, _ ->
                 viewModel.setDialogPermission(true)
 
-                viewModel.getHasBeenSet().observe(this@MainActivity,{
-                    if (it){
+                viewModel.mHasPermissionBeenSet.observe(this@MainActivity, {
+                    if (it) {
                         checkIfWeightDialogEnabled()
                     }
                 })
@@ -131,40 +172,81 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
-    private fun checkIfWeightHasBeenEnteredToday(){
+    private fun observeWeightToday() {
+        viewModel.mHasTodayWeightBeenEntered.observe(this, { hasBeenEnteredToday ->
+            if (!hasBeenEnteredToday) {
+                val lastWeightEntries = viewModel.getLastWeights().value
+
+                val value: Double = if (lastWeightEntries==null||lastWeightEntries.isEmpty()){
+                    UserInformation.mUserInformation.value!!["currentWeight"]!!.toDouble()
+                }else{
+                    lastWeightEntries.sortByDescending { it.time }
+                    lastWeightEntries[0].value
+                }
+                
+                showNumberPickerDialog(
+                        value = value, // in kilograms
+                        formatToString = { "${it.round(1)} kg" }
+                )
+            }
+        })
+
 
     }
 
 
     private fun showNumberPickerDialog(
-        value: Double,
-        range: ClosedRange<Double>,
-        stepSize: Double,
-        formatToString: (Double) -> String
+            value: Double,
+            formatToString: (Double) -> String
     ) {
         val inflater = this.layoutInflater
 
         val layout = inflater.inflate(R.layout.weight_picker_layout, null)
 
-        val dialog = MaterialAlertDialogBuilder(this).apply {
+        val builder = MaterialAlertDialogBuilder(this).apply {
             setView(layout)
-            setCancelable(true)
+            setCancelable(false)
         }
 
         val picker = layout.findViewById(R.id.npWeightPicker) as NumberPicker
         picker.apply {
-            setFormatter { formatToString(it.toDouble() * stepSize) }
+            setFormatter { formatToString(it.toDouble() * 0.1) }
             wrapSelectorWheel = false
 
-            minValue = (range.start / stepSize).toInt()
-            maxValue = (range.endInclusive / stepSize).toInt()
-            this.value = (value / stepSize).toInt()
+            minValue = (10.0 / 0.1).toInt()
+            maxValue = (200.0 / 0.1).toInt()
+            this.value = (value / 0.1).toInt()
 
             (NumberPicker::class.java.getDeclaredField("mInputText").apply { isAccessible = true }
-                .get(this) as EditText).filters = emptyArray()
+                    .get(this) as EditText).filters = emptyArray()
         }
 
-        dialog.show()
+        layout.findViewById<Button>(R.id.btSaveWeightPicker).apply {
+            setOnClickListener {
+                val currentValue = picker.value.toDouble()*0.1
+                viewModel.setTodayWeight(currentValue.round(1))
+            }
+        }
+
+        val dialog = builder.show()
+
+        viewModel.mHasWeightBeenSet.observe(this@MainActivity,{
+            Log.e(TAG,it.toString())
+            if (it){
+                dialog.dismiss()
+            }else{
+                dialog.dismiss()
+                Snackbar.make(binding.clMain,R.string.something_went_wrong, Snackbar.LENGTH_LONG).show()
+            }
+        })
+
+        layout.findViewById<Button>(R.id.btCancelWeightPicker).apply {
+            setOnClickListener {
+                dialog.dismiss()
+
+            }
+        }
+
     }
 
 }

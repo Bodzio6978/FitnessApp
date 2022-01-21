@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/rlCalendar"
@@ -64,5 +69,7 @@
         app:itemTextColor="@drawable/bottom_nav_color"
         app:menu="@menu/main_bottom_nav"/>
 
+    </RelativeLayout>
 
-</RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

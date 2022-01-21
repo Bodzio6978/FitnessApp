@@ -3,91 +3,73 @@ package com.gmail.bodziowaty6978.singleton
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.gmail.bodziowaty6978.functions.TAG
-import com.gmail.bodziowaty6978.model.User
-import com.google.firebase.auth.FirebaseAuth
+import com.gmail.bodziowaty6978.state.UserInformationState
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 object UserInformation {
-    val mInformationState = MutableLiveData<InformationState>()
+    private val mUsername = MutableLiveData<String>()
+    val mNutritionValues = MutableLiveData<Map<String, Double>>()
+    val mUserInformation = MutableLiveData<Map<String, String>>()
 
-    private val mUser = MutableLiveData(User())
+    val mAreWeightDialogsEnabled = MutableLiveData<Boolean>()
+    val mUserInformationState = MutableLiveData<UserInformationState>()
 
-    val currentCalories = MutableLiveData<Int>()
-
-    fun getUserId() {
-        if (mUser.value?.userId == null) {
-
-            val instance = FirebaseAuth.getInstance()
-
-            if (instance.currentUser == null) {
-                mInformationState.value = InformationState(InformationState.USER_NOT_LOGGED)
-            } else {
-                mInformationState.value = InformationState(InformationState.USER_LOGGED)
-                mUser.value?.userId = instance.currentUser!!.uid
-            }
-
-        } else {
-            mInformationState.value = InformationState(InformationState.USER_LOGGED)
-        }
-
-    }
+    private var hasBeenCalled = false
 
     @Suppress("UNCHECKED_CAST")
-    fun getValues() {
-        if (mUser.value?.nutritionValues == null || mUser.value?.userInformation==null || mUser.value?.username==null) {
+    fun getValues(userId: String) {
+        if (!hasBeenCalled){
             val db = Firebase.firestore
 
-            db.collection("users").document(mUser.value?.userId!!).get().addOnSuccessListener {
-                if (it.exists()) {
-                    if (it.data?.get("nutritionValues")!=null){
-                        mUser.value?.nutritionValues = it.data?.get("nutritionValues") as Map<String, Double>
-                    }
+            db.collection("users").document(userId).addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e(TAG, error.message.toString())
+                    return@addSnapshotListener
+                }
 
-                    if (it.data?.get("userInformation")!=null){
-                        mUser.value?.userInformation = it.data?.get("userInformation") as Map<String, String>
-                    }
+                hasBeenCalled = true
 
-                    if (it.data?.get("username")!=null){
-                        mUser.value?.username = it.data?.get("username") as String
+                if (snapshot != null) {
+                    if (snapshot.exists()) {
+                        mUsername.value = snapshot.get("username") as String?
+                        mNutritionValues.value = snapshot.get("nutritionValues") as Map<String, Double>?
+                        mUserInformation.value = snapshot.get("userInformation") as Map<String, String>?
+                        mAreWeightDialogsEnabled.value = snapshot.get("areWeightDialogsEnabled") as Boolean?
+                        mUserInformationState.value = UserInformationState(UserInformationState.USER_INFORMATION_REQUIRED)
+                        return@addSnapshotListener
+                    }else{
+                        mUserInformationState.value = UserInformationState(UserInformationState.USER_NO_INFORMATION)
                     }
-
-                    if (it.data?.get("areWeightDialogsEnabled")!=null){
-                        mUser.value?.areWeightDialogsEnabled = it.data?.get("areWeightDialogsEnabled") as Boolean
-                    }
-                    mInformationState.value = InformationState(InformationState.USER_INFORMATION_REQUIRED)
                 } else {
-                    mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
+                    mUserInformationState.value = UserInformationState(UserInformationState.USER_NO_INFORMATION)
                 }
             }
         }else{
-            Log.e(TAG,"User has all information")
-            mInformationState.value = InformationState(InformationState.USER_INFORMATION_REQUIRED)
+            mUserInformationState.value = UserInformationState(UserInformationState.USER_INFORMATION_REQUIRED)
         }
     }
 
-    fun checkUser(){
-        if (mUser.value?.username==null){
-            mInformationState.value = InformationState(InformationState.USER_NO_USERNAME)
-        }else if(mUser.value?.userInformation==null||mUser.value?.nutritionValues==null){
-            mInformationState.value = InformationState(InformationState.USER_NO_INFORMATION)
+    fun checkUsername(){
+        val username = mUsername.value
+
+        if (username==null){
+            mUserInformationState.value = UserInformationState(UserInformationState.USER_NO_USERNAME)
         }else{
-            mInformationState.value = InformationState(InformationState.USER_HAS_EVERYTHING)
+            mUserInformationState.value = UserInformationState(UserInformationState.USER_HAS_USERNAME)
         }
     }
 
-    fun getUser():MutableLiveData<User> = mUser
+    fun checkInformation(){
+        val nutritionValues = mNutritionValues.value
+        val userInformation = mUserInformation.value
 
-}
-
-class InformationState(val value: Int) {
-
-    companion object {
-        const val USER_NOT_LOGGED = 0
-        const val USER_LOGGED = 1
-        const val USER_NO_USERNAME = 2
-        const val USER_INFORMATION_REQUIRED = 3
-        const val USER_NO_INFORMATION = 4
-        const val USER_HAS_EVERYTHING = 5
+        if (nutritionValues==null||userInformation==null){
+            mUserInformationState.value = UserInformationState(UserInformationState.USER_NO_INFORMATION)
+        }else{
+            mUserInformationState.value = UserInformationState(UserInformationState.USER_HAS_INFORMATION)
+        }
     }
+
 }
+

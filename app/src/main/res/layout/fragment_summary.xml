@@ -75,16 +75,37 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/tvWantedCaloriesSummary"
-                style="@style/Paragraph_Secondary_Caption"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tvCurrentCaloriesSummary"
+                android:id="@+id/slash"
+                android:layout_alignBottom="@id/tvCurrentCaloriesSummary"
+                android:layout_toEndOf="@+id/tvCurrentCaloriesSummary"
                 android:layout_marginStart="1dp"
                 android:layout_marginBottom="2dp"
-                android:layout_toEndOf="@+id/tvCurrentCaloriesSummary"
-                android:text="/0 kcal"
-                tools:ignore="HardcodedText" />
+                android:text="/"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/tvWantedCaloriesSummary"
+                android:layout_toEndOf="@+id/slash"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tvCurrentCaloriesSummary"
+                android:layout_marginStart="1dp"
+                android:layout_marginBottom="2dp"
+                android:text="0"
+                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginBottom="2dp"
+                android:layout_toEndOf="@+id/tvWantedCaloriesSummary"
+                android:layout_alignBottom="@id/tvCurrentCaloriesSummary"
+                android:text="kcal"
+                tools:ignore="HardcodedText"/>
 
         </RelativeLayout>
 
@@ -132,12 +153,12 @@
                 android:text="@string/weight" />
 
             <TextView
+                android:id="@+id/tvCurrentWeightSummary"
                 style="@style/Paragraph_Secondary_Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvWeightSummary"
-                android:layout_marginTop="5dp"
-                android:text="103.2kg" />
+                android:layout_marginTop="5dp"/>
 
         </RelativeLayout>
 
@@ -146,11 +167,8 @@
             style="@style/Paragraph_Secondary_Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_weight="0.4"
-            android:text="+1.2"
             android:textAlignment="center" />
 
     </LinearLayout>

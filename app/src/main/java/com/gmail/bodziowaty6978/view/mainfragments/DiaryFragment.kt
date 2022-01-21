@@ -1,5 +1,6 @@
 package com.gmail.bodziowaty6978.view.mainfragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,23 +13,24 @@ import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
-import com.gmail.bodziowaty6978.viewmodel.DiaryViewModel
+import com.gmail.bodziowaty6978.view.ProductActivity
+import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DiaryFragment() : Fragment() {
 
     private var _binding: FragmentCaloriesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: DiaryViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(requireActivity()).get(DiaryViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
+        viewModel.downloadJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
 
         setUpRefreshLayout()
-
-        observeDate()
 
         observeWantedValues()
 
@@ -38,6 +40,7 @@ class DiaryFragment() : Fragment() {
 
         return binding.root
     }
+
 
     private fun showEntryDialog(position: Int, mealName: String) {
 
@@ -64,23 +67,21 @@ class DiaryFragment() : Fragment() {
         }
     }
 
-//    private fun editEntry(position: Int,mealName: String){
-//        val entry = when(mealName){
-//            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
-//            "Lunch" -> binding.mvLunchCalories.getEntry(position)
-//            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
-//            else -> binding.mvSupperCalories.getEntry(position)
-//        }
-//
-//        val intent = Intent(requireContext(),ProductActivity::class.java).putExtra("mealName",mealName)
-//
-//    }
+    private fun editEntry(position: Int,mealName: String){
+        val entry = when(mealName){
+            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
+            "Lunch" -> binding.mvLunchCalories.getEntry(position)
+            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
+            else -> binding.mvSupperCalories.getEntry(position)
+        }
+
+        val intent = Intent(requireContext(), ProductActivity::class.java).putExtra("mealName",mealName)
+
+    }
 
     private fun observeWantedValues(){
-        UserInformation.getUser().observe(viewLifecycleOwner,{
-            if (it.nutritionValues!=null){
-                setUpUI(it.nutritionValues!!)
-            }
+        UserInformation.mNutritionValues.observe(viewLifecycleOwner,{
+            setUpUI(it)
         })
     }
 
@@ -91,13 +92,7 @@ class DiaryFragment() : Fragment() {
         binding.nvFat.setWanted((map["wantedFat"])?.toInt())
     }
 
-    private fun observeDate() {
-        CurrentDate.date.observe(viewLifecycleOwner, {
-            viewModel.getJournalEntries(it.time.toString("yyyy-MM-dd"))
-        })
-    }
-
-    private fun getEntry(position: Int,mealName: String):JournalEntry{
+    private fun getEntry(position: Int,mealName: String): JournalEntry {
         return when (mealName) {
             "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
             "Lunch" -> binding.mvLunchCalories.getEntry(position)
@@ -122,7 +117,7 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun observeProducts() {
-        viewModel.getProducts().observe(viewLifecycleOwner,{
+        viewModel.mJournalEntries.observe(viewLifecycleOwner,{
             if (!it.isNullOrEmpty()){
                 for (key in it.keys){
                     when(key){
@@ -160,9 +155,7 @@ class DiaryFragment() : Fragment() {
     private fun setValues(map:Map<String,Int>){
         for (key in map.keys){
             when(key){
-                "calories" -> {map[key]?.let { binding.nvCalories.updateValue(it)}
-                UserInformation.currentCalories.value = map[key]
-                }
+                "calories" -> map[key]?.let { binding.nvCalories.updateValue(it)}
                 "carbohydrates" -> map[key]?.let { binding.nvCarbohydrates.updateValue(it) }
                 "protein" -> map[key]?.let { binding.nvProtein.updateValue(it) }
                 "fat" -> map[key]?.let { binding.nvFat.updateValue(it) }

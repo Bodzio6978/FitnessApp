@@ -124,6 +124,7 @@
     <string name="we_will_ask_you_everyday_about_your_weight_automatically">We will ask you everyday about your weight automatically, so you that don\'t forget about it</string>
     <string name="accept">accept</string>
     <string name="decline">decline</string>
+    <string name="something_went_wrong">Something went wrong</string>
 
     <string-array name="works">
         <item>Sedentary</item>
