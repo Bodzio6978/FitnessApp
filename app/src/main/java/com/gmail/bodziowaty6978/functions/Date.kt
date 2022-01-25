@@ -16,10 +16,18 @@ fun getCurrentDateTime(): Calendar {
     return Calendar.getInstance()
 }
 
-fun getDateInAppFormat(date:Calendar):String{
+fun getDateInAppFormat(date: Calendar):String{
     return if(date.time.toString("EEEE, dd-MM-yyyy")== getCurrentDateTime().time.toString("EEEE, dd-MM-yyyy")){
         Strings.get(R.string.today)
     }else{
         date.time.toString("EEEE, dd-MM-yyyy")
     }
+}
+
+fun Calendar.toShortString():String = this.time.toString("dd-MM-yyyy")
+
+fun toCalendar(date: Date): Calendar? {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    return cal
 }

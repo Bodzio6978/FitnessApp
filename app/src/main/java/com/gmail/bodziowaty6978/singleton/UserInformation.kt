@@ -37,7 +37,6 @@ object UserInformation {
                         mUserInformation.value = snapshot.get("userInformation") as Map<String, String>?
                         mAreWeightDialogsEnabled.value = snapshot.get("areWeightDialogsEnabled") as Boolean?
                         mUserInformationState.value = UserInformationState(UserInformationState.USER_INFORMATION_REQUIRED)
-                        return@addSnapshotListener
                     }else{
                         mUserInformationState.value = UserInformationState(UserInformationState.USER_NO_INFORMATION)
                     }

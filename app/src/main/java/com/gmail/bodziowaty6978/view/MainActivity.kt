@@ -3,6 +3,7 @@ package com.gmail.bodziowaty6978.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
@@ -27,6 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import java.util.*
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -115,12 +117,15 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             when (it.itemId) {
                 R.id.menu_summary -> {
                     setFragment(summary)
+                    binding.rlCalendar.visibility = View.GONE
                 }
                 R.id.menu_diary -> {
                     setFragment(diary)
+                    binding.rlCalendar.visibility = View.VISIBLE
                 }
                 R.id.menu_training -> {
                     setFragment(training)
+                    binding.rlCalendar.visibility = View.VISIBLE
                 }
             }
             true
@@ -133,7 +138,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         CurrentDate.date.observe(this,{
             val dateString = it.time.toString("dd-MM-yyyy")
 
-            viewModel.getJournalEntries(dateString)
+            viewModel.downloadJournalEntries(dateString)
         })
     }
 
@@ -175,7 +180,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private fun observeWeightToday() {
         viewModel.mHasTodayWeightBeenEntered.observe(this, { hasBeenEnteredToday ->
             if (!hasBeenEnteredToday) {
-                val lastWeightEntries = viewModel.getLastWeights().value
+                val lastWeightEntries = viewModel.mLastWeights.value
 
                 val value: Double = if (lastWeightEntries==null||lastWeightEntries.isEmpty()){
                     UserInformation.mUserInformation.value!!["currentWeight"]!!.toDouble()

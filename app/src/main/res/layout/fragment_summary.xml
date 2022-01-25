@@ -39,8 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvLoggedSummary"
-                android:layout_marginTop="5dp"
-                android:text="12 days" />
+                android:layout_marginTop="5dp"/>
 
         </RelativeLayout>
 

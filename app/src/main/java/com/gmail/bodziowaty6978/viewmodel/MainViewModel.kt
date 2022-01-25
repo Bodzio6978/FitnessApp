@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.functions.toString
 import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.model.LogEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
@@ -27,8 +29,11 @@ class MainViewModel : ViewModel() {
 
     val mJournalEntries = MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>>()
 
-    private val mLastWeights = MutableLiveData<MutableList<WeightEntry>>()
-    private val mTodayJournalEntries = MutableLiveData<MutableList<JournalEntry>>()
+    val mLastWeights = MutableLiveData<MutableList<WeightEntry>>()
+
+    val mLastLogEntry = MutableLiveData<LogEntry>()
+
+    val mCurrentLogStrike = MutableLiveData<Int>()
 
     //WEIGHT************************************************************************************************
 
@@ -48,25 +53,27 @@ class MainViewModel : ViewModel() {
     fun checkIfWeightHasBeenEnteredToday() {
         Log.e(TAG, "Check if weight has been entered today")
         db.collection("users").document(userId).collection("weight")
-                .whereEqualTo("date", Calendar.getInstance().time.toString("dd-MM-yyyy")).addSnapshotListener { value, error ->
-                    if (error != null) {
-                        Log.e(TAG, error.message.toString())
-                        return@addSnapshotListener
-                    }
-
-                    if (value == null) {
-                        mHasTodayWeightBeenEntered.value = false
-                    } else {
-                        mHasTodayWeightBeenEntered.value = !value.isEmpty
-                    }
+                .whereEqualTo("date", Calendar.getInstance().time.toString("dd-MM-yyyy")).get().addOnSuccessListener {
+                    mHasTodayWeightBeenEntered.value = !it.isEmpty
+                }.addOnFailureListener {
+                    Log.e(TAG, it.message.toString())
                 }
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun setTodayWeight(value: Double) {
+        val weightEntry = WeightEntry(time = Calendar.getInstance().timeInMillis, value = value, date = Calendar.getInstance().toShortString())
         Log.e(TAG, "Set today weight")
         db.collection("users").document(userId).collection("weight").add(
-                WeightEntry(time = Calendar.getInstance().timeInMillis, value = value, date = Calendar.getInstance().time.toString("dd-MM-yyyy"))
+                WeightEntry()
         ).addOnSuccessListener {
+            val weightEntries = mLastWeights.value
+            weightEntries?.add(weightEntry)
+
+            if (weightEntries!=null){
+                mLastWeights.value = weightEntries
+            }
+
             mHasWeightBeenSet.value = true
         }.addOnFailureListener {
             mHasWeightBeenSet.value = false
@@ -118,7 +125,7 @@ class MainViewModel : ViewModel() {
 
     fun refresh() {
         if (CurrentDate.date.value != null) {
-            downloadJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
+            downloadJournalEntries(CurrentDate.date.value!!.time.toString("dd-MM-yyyy"))
         }
     }
 
@@ -151,53 +158,56 @@ class MainViewModel : ViewModel() {
 
     //SUMMARY************************************************************************************************
 
-    fun downloadLastWeightEntries() {
+    fun getWeightEntries() {
         db.collection("users").document(userId).collection("weight")
                 .limit(14).orderBy("time", Query.Direction.DESCENDING)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        Log.e(TAG, error.message.toString())
-                        return@addSnapshotListener
-                    }
+                .get().addOnSuccessListener {
+                    val weightDocuments = mutableListOf<WeightEntry>()
 
-                    if (snapshot != null) {
-
-                        val weightDocuments = mutableListOf<WeightEntry>()
-
-                        for (document in snapshot.documents) {
-                            if (document != null) {
-                                weightDocuments.add(document.toObject(WeightEntry::class.java)!!)
-                            }
+                    for (document in it.documents) {
+                        if (document != null) {
+                            weightDocuments.add(document.toObject(WeightEntry::class.java)!!)
                         }
-
-                        mLastWeights.value = weightDocuments
                     }
-                }
-    }
 
-    fun getJournalEntries(date: String) {
-        db.collection("users").document(userId).collection("journal")
-                .whereEqualTo("date", date).get().addOnSuccessListener {
-                    if (!it.isEmpty) {
-                        val todayEntries = mutableListOf<JournalEntry>()
+                    mLastWeights.value = weightDocuments
 
-                        for (document in it.documents) {
-                            if (document != null) {
-                                todayEntries.add(document.toObject(JournalEntry::class.java)!!)
-                            }
-                        }
-
-                        mTodayJournalEntries.value = todayEntries
-
-                    }
                 }.addOnFailureListener {
                     Log.e(TAG, it.message.toString())
                 }
     }
 
+    fun addLogEntry(calendar:Calendar = Calendar.getInstance(), strike:Int = 1){
+
+        db.collection("users").document(userId).collection("logEntries").add(LogEntry(calendar.timeInMillis,strike)).addOnSuccessListener {
+            mCurrentLogStrike.value = strike
+        }.addOnFailureListener {
+            Log.e(TAG,it.message.toString())
+        }
+    }
+
+    fun getLastTimeLogged(limit:Long){
+        Log.e(TAG,"Getting log entries")
+        db.collection("users").document(userId).collection("logEntries").limit(limit).orderBy("time", Query.Direction.DESCENDING).get().addOnSuccessListener {
+            if (!it.isEmpty){
+                var lastEntry = LogEntry()
+
+                for(document in it.documents){
+                    lastEntry = document.toObject(LogEntry::class.java)!!
+                }
+
+                mLastLogEntry.value = lastEntry
+
+            }else{
+                addLogEntry()
+            }
+
+        }.addOnFailureListener {
+            Log.e(TAG,it.message.toString())
+        }
+    }
+
 
     //SUMMARY************************************************************************************************
 
-    fun getLastWeights(): MutableLiveData<MutableList<WeightEntry>> = mLastWeights
-    fun getTodayEntries(): MutableLiveData<MutableList<JournalEntry>> = mTodayJournalEntries
 }

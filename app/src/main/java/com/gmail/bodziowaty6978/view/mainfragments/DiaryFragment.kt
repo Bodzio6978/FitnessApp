@@ -60,6 +60,7 @@ class DiaryFragment() : Fragment() {
         }
     }
 
+
     private fun setUpRefreshLayout(){
         binding.srlSwipeCalories.setOnRefreshListener {
             viewModel.refresh()

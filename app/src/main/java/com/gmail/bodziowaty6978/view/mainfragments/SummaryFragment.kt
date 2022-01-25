@@ -10,10 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.toCalendar
+import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.model.LogEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
+import java.util.*
 
 
 class SummaryFragment : Fragment() {
@@ -28,13 +32,18 @@ class SummaryFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        viewModel.downloadLastWeightEntries()
+        viewModel.getWeightEntries()
+
+        viewModel.getLastTimeLogged(1)
+
+        observeLastTimeLogged()
+        setLogStrike()
 
         observeLastWeight()
 
         observeWantedCalories()
 
-        observeTodayCalories()
+        observeCurrentCalories()
 
         return binding.root
     }
@@ -44,8 +53,45 @@ class SummaryFragment : Fragment() {
         _binding = null
     }
 
+    private fun setLogStrike() {
+        viewModel.mCurrentLogStrike.observe(viewLifecycleOwner, {
+            "$it days".also { binding.tvDaysLoggedSummary.text = it }
+        })
+    }
+
+    private fun observeLastTimeLogged() {
+        viewModel.mLastLogEntry.observe(viewLifecycleOwner, {
+            calculateStrike(it)
+        })
+    }
+
+    private fun calculateStrike(entry: LogEntry) {
+        val currentDate = Calendar.getInstance()
+        val lastDateCalendar = toCalendar(Date(entry.time))
+
+        if (lastDateCalendar != null) {
+
+            val lastTimeLogged = lastDateCalendar.toShortString()
+
+            if (lastTimeLogged != currentDate.toShortString()) {
+                lastDateCalendar.add(Calendar.DAY_OF_MONTH, 1)
+
+                if (lastDateCalendar.toShortString() == currentDate.toShortString()) {
+                    Log.e(TAG,"User logged for another day in a row")
+                    viewModel.addLogEntry(currentDate, entry.strike + 1)
+                }else{
+                    Log.e(TAG,"User logged again but not for another day in a row")
+                    viewModel.addLogEntry()
+                }
+            } else {
+                Log.e(TAG,"entry for this day has been already entered")
+                viewModel.mCurrentLogStrike.value = entry.strike
+            }
+        }
+    }
+
     private fun observeLastWeight() {
-        viewModel.getLastWeights().observe(viewLifecycleOwner, {
+        viewModel.mLastWeights.observe(viewLifecycleOwner, {
             setWeight(it)
         })
     }
@@ -62,7 +108,7 @@ class SummaryFragment : Fragment() {
     }
 
     private fun updateWeightProgress(weights: MutableList<WeightEntry>) {
-        if (weights.size>1){
+        if (weights.size > 1) {
             val size = weights.size
 
             val firstHalf = weights.toTypedArray().copyOfRange(0, (size + 1) / 2)
@@ -71,12 +117,10 @@ class SummaryFragment : Fragment() {
             val firstAverage = firstHalf.toMutableList().sumOf { it.value } / firstHalf.size.toDouble()
             val secondAverage = secondHalf.toMutableList().sumOf { it.value } / secondHalf.size.toDouble()
 
-            Log.e(TAG,firstAverage.toString())
-
             val difference = (firstAverage - secondAverage).round(2)
-            val sign = if (firstAverage>secondAverage) "+" else ""
+            val sign = if (firstAverage > secondAverage) "+" else ""
 
-            if (difference!=0.0) ("$sign${difference}kg").also { binding.tvWeightChangeSummary.text = it }
+            if (difference != 0.0) ("$sign${difference}kg").also { binding.tvWeightChangeSummary.text = it }
         }
     }
 
@@ -86,10 +130,14 @@ class SummaryFragment : Fragment() {
         })
     }
 
-    private fun observeTodayCalories() {
-        viewModel.getTodayEntries().observe(viewLifecycleOwner, {
-            setCurrentCalories(it)
+    private fun observeCurrentCalories(){
+        viewModel.mJournalEntries.observe(viewLifecycleOwner,{
+            getEntries(it.values.toList())
         })
+    }
+
+    private fun getEntries(entries:List<MutableMap<String,JournalEntry>>){
+        
     }
 
     private fun setCurrentCalories(entries: MutableList<JournalEntry>) {
