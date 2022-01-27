@@ -1,109 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/clAdd"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     tools:context=".view.AddActivity">
 
-
-        <ImageButton
-            android:id="@+id/ibBackAdd"
-            style="@style/backArrow" />
-
-        <TextView
-            android:id="@+id/tvMealNameAdd"
-            style="@style/PageTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvDayAdd"
-            style="@style/secondaryMealInformation"
-            android:layout_below="@+id/tvMealNameAdd"
-            android:layout_centerHorizontal="true"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/rlTopAdd"
-        android:layout_below="@+id/tvDayAdd"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
-
-
-        <EditText
-            android:id="@+id/etSearchAdd"
-            android:layout_marginTop="10dp"
-            style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/ibAdd"
-            android:background="@drawable/edit_text"
-            android:elevation="6dp"
-            android:hint="@string/product_name"
-            android:padding="8dp" />
-
-        <ImageButton
-            android:id="@+id/ibAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/ibBarCodeAdd"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_add_24"
-            app:tint="@color/primary" />
-
-        <ImageButton
-            android:id="@+id/ibBarCodeAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_bar_code"
-            app:tint="@color/primary" />
-
-
-    </RelativeLayout>
-
-
-
-    <ScrollView
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rlTopAdd">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/meal_query_layout"/>
-
-    </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabSearchAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_baseline_search_24"
-        android:text="@string/search"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"/>
+        android:id="@+id/fcvAdd"/>
 
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

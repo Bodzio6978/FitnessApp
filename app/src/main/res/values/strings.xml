@@ -125,6 +125,7 @@
     <string name="accept">accept</string>
     <string name="decline">decline</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="filters">filters</string>
 
     <string-array name="works">
         <item>Sedentary</item>

@@ -13,7 +13,6 @@ import com.gmail.bodziowaty6978.databinding.FragmentFirstBinding
 import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.interfaces.OnMapPassed
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 
 class FirstIntroductionFragment : Fragment() {
@@ -32,6 +31,7 @@ class FirstIntroductionFragment : Fragment() {
         binding.btNavigationNextIntroduction.setOnClickListener {
             dataPasser.onDataPass(getData(), false)
         }
+
 
         return binding.root
     }

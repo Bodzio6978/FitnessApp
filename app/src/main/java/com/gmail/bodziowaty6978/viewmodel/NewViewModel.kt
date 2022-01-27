@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.view.newproduct.ProductFragment
-import com.gmail.bodziowaty6978.view.newproduct.ScannerFragment
+import com.gmail.bodziowaty6978.view.newproduct.NewScannerFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -21,7 +21,7 @@ class NewViewModel : ViewModel() {
     private val currentKey = MutableLiveData<String>()
 
     private val productFragment = ProductFragment()
-    private val scannerFragment = ScannerFragment()
+    private val scannerFragment = NewScannerFragment()
 
     fun addNewProduct(product:Product) {
 

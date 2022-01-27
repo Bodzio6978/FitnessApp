@@ -3,29 +3,24 @@ package com.gmail.bodziowaty6978.view
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
-import com.gmail.bodziowaty6978.adapters.QueryMealRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.ActivityAddBinding
-import com.gmail.bodziowaty6978.functions.getDateInAppFormat
-import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
-import com.gmail.bodziowaty6978.model.Product
-import com.gmail.bodziowaty6978.singleton.CurrentDate
+import com.gmail.bodziowaty6978.view.addactivity.AddFragment
+import com.gmail.bodziowaty6978.view.addactivity.AddScannerFragment
 import com.gmail.bodziowaty6978.view.newproduct.NewActivity
 import com.gmail.bodziowaty6978.viewmodel.AddViewModel
-import java.util.*
+import com.google.android.material.snackbar.Snackbar
 
-class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListener {
+class AddActivity : AppCompatActivity(),LifecycleOwner {
 
     lateinit var binding:ActivityAddBinding
     lateinit var viewModel:AddViewModel
 
-    private var productList: MutableList<Product> = mutableListOf()
-    private var idList:MutableList<String> = mutableListOf()
-
-    private lateinit var mealName:String
+    private val scannerFragment = AddScannerFragment()
+    private val addFragment = AddFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,62 +31,78 @@ class AddActivity : AppCompatActivity(),LifecycleOwner, OnAdapterItemClickListen
 
         viewModel = ViewModelProvider(this).get(AddViewModel::class.java)
 
-        binding.rvAdd.layoutManager = LinearLayoutManager(this)
-        binding.rvAdd.adapter = QueryMealRecyclerAdapter(productList,this)
-
         viewModel.initializeHistory()
 
-        observeSearchResult()
-        observeIds()
+        observeButtonPressed()
+        observeClickedProduct()
+        observeScannedBarcode()
+        observeSnackbarMessage()
 
-        mealName = intent.getStringExtra("mealName").toString()
+        setUpMealName()
 
-        CurrentDate.date.observe(this,{
-            binding.tvDayAdd.text = getDateInAppFormat(it)
+        setFragment(addFragment,"ADD_FRAGMENT")
+    }
+
+    private fun observeClickedProduct(){
+
+        viewModel.mClickedProduct.observe(this,{
+            val product = it.second
+            val id = it.first
+
+            val intent = Intent(this, ProductActivity::class.java).putExtra("mealName",viewModel.mMealName.value)
+
+            if(product.barcode=="fakeProduct"){
+                intent .putExtra("id",product.author)
+                startActivity(intent)
+            }else{
+                intent.putExtra("id",id).putExtra("product",product)
+                startActivity(intent)
+            }
         })
+    }
 
-        binding.tvMealNameAdd.text = mealName
-
-        binding.ibAdd.setOnClickListener {
-            val intent = Intent(this, NewActivity::class.java).putExtra("mealName",mealName)
-            startActivity(intent)
+    private fun setFragment(fragment: Fragment,tag:String) {
+        supportFragmentManager.apply {
+            beginTransaction().replace(R.id.fcvAdd, fragment,tag).commit()
         }
-        binding.ibBackAdd.setOnClickListener {
+    }
+
+    private fun observeScannedBarcode(){
+        viewModel.mScannedBarcode.observe(this,{
+            viewModel.checkIfBarcodeExists(it)
+        })
+    }
+
+    private fun observeButtonPressed(){
+        viewModel.mButtonPressed.observe(this,{
+            when(it){
+                1 -> startActivity(Intent(this, NewActivity::class.java).putExtra("mealName",viewModel.mMealName.value))
+                2 -> super.onBackPressed()
+                3 -> setFragment(scannerFragment,"SCANNER_FRAGMENT")
+            }
+        })
+    }
+
+    private fun observeSnackbarMessage(){
+        viewModel.mSnackbarMessage.observe(this,{
+            Snackbar.make(binding.clAdd,it,Snackbar.LENGTH_LONG).show()
+        })
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.findFragmentByTag("SCANNER_FRAGMENT")!=null){
+            setFragment(addFragment,"ADD_FRAGMENT")
+        }else{
             super.onBackPressed()
         }
+    }
 
-        binding.fabSearchAdd.setOnClickListener {
-            viewModel.search(binding.etSearchAdd.text.toString().trim().toLowerCase(Locale.ROOT))
+    private fun setUpMealName(){
+        val mealName = intent.getStringExtra("mealName")
+
+        if (mealName!=null){
+            viewModel.mMealName.value = mealName.toString()
         }
 
-    }
-
-    override fun onAdapterItemClickListener(position: Int) {
-        val clickedProduct = productList[position]
-
-        val intent = Intent(this,ProductActivity::class.java).putExtra("mealName",mealName)
-
-        if(clickedProduct.barcode=="fakeProduct"){
-            intent .putExtra("id",clickedProduct.author)
-            startActivity(intent)
-        }else{
-            intent.putExtra("id",idList[position]).putExtra("product",clickedProduct)
-            startActivity(intent)
-        }
-    }
-
-    private fun observeIds(){
-        viewModel.getIds().observe(this,{
-            idList.clear()
-            idList.addAll(it)
-        })
-    }
-
-    private fun observeSearchResult(){
-        viewModel.getSearchResult().observe(this, {
-            productList.clear()
-            productList.addAll(it)
-            binding.rvAdd.adapter?.notifyDataSetChanged()
-        })
     }
 }

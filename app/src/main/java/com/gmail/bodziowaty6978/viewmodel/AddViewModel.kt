@@ -17,6 +17,13 @@ class AddViewModel : ViewModel() {
     private val searchResult = MutableLiveData<List<Product>>()
     private val idsResult = MutableLiveData<List<String>>()
 
+    val mSnackbarMessage = MutableLiveData<String>()
+
+    val mButtonPressed = MutableLiveData<Int>()
+    val mMealName = MutableLiveData<String>()
+    val mClickedProduct = MutableLiveData<Pair<String,Product>>()
+    val mScannedBarcode = MutableLiveData<String>()
+
     fun initializeHistory() {
 
         if (userId != null) {
@@ -29,7 +36,6 @@ class AddViewModel : ViewModel() {
         }
 
     }
-
 
     fun search(text: String) {
 
@@ -73,6 +79,14 @@ class AddViewModel : ViewModel() {
         }
 
         return products
+    }
+
+    fun checkIfBarcodeExists(barcode:String){
+        db.collection("products").whereEqualTo("barcode",barcode).get().addOnSuccessListener {
+            if (it.isEmpty){
+                mSnackbarMessage.value = "There is no product with this barcode"
+            }
+        }
     }
 
     fun getSearchResult(): MutableLiveData<List<Product>> = searchResult
