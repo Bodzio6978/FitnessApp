@@ -43,7 +43,8 @@ class MainViewModel(
 
     private suspend fun checkUser(id:String) {
         withContext(Dispatchers.IO) {
-            UserInformation.getUser(id)
+            val userTask = async{UserInformation.getUser(id)}
+            userTask.await()
             val user = UserInformation.user().value!!
             if (user.nutritionValues==null||user.userInformation==null) uiState.postValue(UiState.NoInformation)
         }
@@ -52,7 +53,7 @@ class MainViewModel(
     fun requireData() {
         viewModelScope.launch {
             val userId = setUserId()
-
+            
             val user = async{checkUser(userId)}
             user.await()
 

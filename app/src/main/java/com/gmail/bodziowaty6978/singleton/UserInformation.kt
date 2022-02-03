@@ -13,16 +13,18 @@ object UserInformation {
     fun user() = user
 
     @Suppress("UNCHECKED_CAST")
-    suspend fun getUser(userId: String) {
+    suspend fun getUser(userId: String):Boolean {
         if (!hasBeenCalled) {
             val db = Firebase.firestore
 
-            try {
+            return try {
                 user.postValue(db.collection("users").document(userId).get().await().toObject(User::class.java))
+                true
             } catch (e: Exception) {
-                User()
+                false
             }
         }
+        return false
     }
 }
 
