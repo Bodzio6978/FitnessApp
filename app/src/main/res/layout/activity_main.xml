@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rlCalendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bottomNavigation"
+        android:visibility="gone"
         app:labelVisibilityMode="labeled"
         android:layout_alignParentBottom="true"
         app:itemIconTint="@drawable/bottom_nav_color"

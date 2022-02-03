@@ -68,7 +68,7 @@ class AddFragment : Fragment(), OnAdapterItemClickListener {
     }
 
     private fun observeDate() {
-        CurrentDate.date.observe(viewLifecycleOwner, {
+        CurrentDate.date().observe(viewLifecycleOwner, {
             binding.tvDayAdd.text = getDateInAppFormat(it)
         })
     }

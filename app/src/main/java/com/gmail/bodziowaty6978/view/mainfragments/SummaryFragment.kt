@@ -1,23 +1,17 @@
 package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.round
-import com.gmail.bodziowaty6978.functions.toCalendar
-import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.model.LogEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
-import java.util.*
 
 
 class SummaryFragment : Fragment() {
@@ -32,9 +26,9 @@ class SummaryFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        viewModel.getWeightEntries()
 
-        viewModel.getLastTimeLogged(1)
+
+//        viewModel.getLastTimeLogged(1)
 
         observeLastTimeLogged()
         setLogStrike()
@@ -61,34 +55,34 @@ class SummaryFragment : Fragment() {
 
     private fun observeLastTimeLogged() {
         viewModel.mLastLogEntry.observe(viewLifecycleOwner, {
-            calculateStrike(it)
+//            calculateStrike(it)
         })
     }
 
-    private fun calculateStrike(entry: LogEntry) {
-        val currentDate = Calendar.getInstance()
-        val lastDateCalendar = toCalendar(Date(entry.time))
-
-        if (lastDateCalendar != null) {
-
-            val lastTimeLogged = lastDateCalendar.toShortString()
-
-            if (lastTimeLogged != currentDate.toShortString()) {
-                lastDateCalendar.add(Calendar.DAY_OF_MONTH, 1)
-
-                if (lastDateCalendar.toShortString() == currentDate.toShortString()) {
-                    Log.e(TAG,"User logged for another day in a row")
-                    viewModel.addLogEntry(currentDate, entry.strike + 1)
-                }else{
-                    Log.e(TAG,"User logged again but not for another day in a row")
-                    viewModel.addLogEntry()
-                }
-            } else {
-                Log.e(TAG,"entry for this day has been already entered")
-                viewModel.mCurrentLogStrike.value = entry.strike
-            }
-        }
-    }
+//    private fun calculateStrike(entry: LogEntry) {
+//        val currentDate = Calendar.getInstance()
+//        val lastDateCalendar = toCalendar(Date(entry.time))
+//
+//        if (lastDateCalendar != null) {
+//
+//            val lastTimeLogged = lastDateCalendar.toShortString()
+//
+//            if (lastTimeLogged != currentDate.toShortString()) {
+//                lastDateCalendar.add(Calendar.DAY_OF_MONTH, 1)
+//
+//                if (lastDateCalendar.toShortString() == currentDate.toShortString()) {
+//                    Log.e(TAG,"User logged for another day in a row")
+//                    viewModel.addLogEntry(currentDate, entry.strike + 1)
+//                }else{
+//                    Log.e(TAG,"User logged again but not for another day in a row")
+//                    viewModel.addLogEntry()
+//                }
+//            } else {
+//                Log.e(TAG,"entry for this day has been already entered")
+//                viewModel.mCurrentLogStrike.value = entry.strike
+//            }
+//        }
+//    }
 
     private fun observeLastWeight() {
         viewModel.mLastWeights.observe(viewLifecycleOwner, {
@@ -98,7 +92,7 @@ class SummaryFragment : Fragment() {
 
     private fun setWeight(weights: MutableList<WeightEntry>) {
         if (weights.isEmpty()) {
-            val userInformation = UserInformation.mUserInformation.value!!
+            val userInformation = UserInformation.user().value!!.userInformation!!
             binding.tvCurrentWeightSummary.text = ("${userInformation["currentWeight"]} kg")
         } else {
             weights.sortByDescending { it.time }
@@ -125,8 +119,9 @@ class SummaryFragment : Fragment() {
     }
 
     private fun observeWantedCalories() {
-        UserInformation.mNutritionValues.observe(viewLifecycleOwner, {
-            setWantedCalories(it["wantedCalories"]!!)
+        UserInformation.user().observe(viewLifecycleOwner, {
+            val nutritionValues = it.nutritionValues!!
+            setWantedCalories(nutritionValues["wantedCalories"]!!)
         })
     }
 

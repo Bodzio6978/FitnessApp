@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 object CurrentDate {
-    val date = MutableLiveData<Calendar>()
+    private val date = MutableLiveData<Calendar>()
+
+    fun date() = date
 
     fun addDay(){
         val calendar: Calendar = date.value!!

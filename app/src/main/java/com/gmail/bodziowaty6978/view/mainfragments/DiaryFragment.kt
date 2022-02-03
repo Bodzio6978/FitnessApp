@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
-import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
@@ -27,8 +27,6 @@ class DiaryFragment() : Fragment() {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-
-        viewModel.downloadJournalEntries(CurrentDate.date.value!!.time.toString("yyyy-MM-dd"))
 
         setUpRefreshLayout()
 
@@ -63,7 +61,7 @@ class DiaryFragment() : Fragment() {
 
     private fun setUpRefreshLayout(){
         binding.srlSwipeCalories.setOnRefreshListener {
-            viewModel.refresh()
+            viewModel.refreshJournalEntries(CurrentDate.date().value!!.toShortString())
             binding.srlSwipeCalories.isRefreshing = false
         }
     }
@@ -81,8 +79,8 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun observeWantedValues(){
-        UserInformation.mNutritionValues.observe(viewLifecycleOwner,{
-            setUpUI(it)
+        UserInformation.user().observe(viewLifecycleOwner,{
+            setUpUI(it.nutritionValues!!)
         })
     }
 

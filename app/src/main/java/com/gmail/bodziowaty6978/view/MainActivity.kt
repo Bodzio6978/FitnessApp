@@ -16,18 +16,15 @@ import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
 import com.gmail.bodziowaty6978.functions.*
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
-import com.gmail.bodziowaty6978.state.UserInformationState
+import com.gmail.bodziowaty6978.state.UiState
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
-import com.gmail.bodziowaty6978.view.auth.UsernameActivity
-import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.view.mainfragments.DiaryFragment
+import com.gmail.bodziowaty6978.view.mainfragments.SplashFragment
 import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import java.util.*
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
@@ -38,6 +35,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private val summary = SummaryFragment()
     private val diary = DiaryFragment()
     private val training = TrainingFragment()
+    private val splashFragment = SplashFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,52 +44,49 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        observeUserInformationState()
+        setFragment(splashFragment)
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        checkIfUserIsLogged(currentUser)
-    }
-
-    private fun checkIfUserIsLogged(currentUser: FirebaseUser?) {
-        if (currentUser == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
+        if(viewModel.isUserLogged()){
+            viewModel.requireData()
+        }else{
+            startActivity(Intent(this,LoginActivity::class.java))
             finish()
-        } else {
-            UserInformation.getValues(currentUser.uid)
         }
+
+        observeUiState()
     }
 
-    private fun observeUserInformationState(){
-        UserInformation.mUserInformationState.observe(this, {
-            when (it.value) {
-                UserInformationState.USER_INFORMATION_REQUIRED -> UserInformation.checkInformation()
-                UserInformationState.USER_HAS_INFORMATION -> UserInformation.checkUsername()
-
-                UserInformationState.USER_NO_INFORMATION -> {
-                    startActivity(Intent(this, IntroductionActivity::class.java))
-                    finish()
-                }
-
-                UserInformationState.USER_NO_USERNAME -> {
-                    startActivity(Intent(this, UsernameActivity::class.java))
-                    finish()
-                }
-
-                UserInformationState.USER_HAS_USERNAME -> {
-                    setUpBottomNav()
-                    setUpCalendar()
-                    observeDate()
-                    checkIfWeightDialogEnabled()
-                }
+    private fun observeUiState(){
+        viewModel.uiState().observe(this,{
+            when(it){
+                is UiState.Error -> onError(it)
+                is UiState.Success -> onSuccess()
             }
         })
     }
 
-    private fun setUpCalendar() {
-        CurrentDate.date.value = getCurrentDateTime()
+    private fun onError(state:UiState.Error){
+        Snackbar.make(binding.clMain,state.errorMessage,Snackbar.LENGTH_SHORT).show()
+    }
 
+    private fun onLoading(state:UiState.Loading){
+
+    }
+
+    private fun onSuccess(){
+        setFragment(summary)
+        binding.rlCalendar.visibility = View.VISIBLE
+        binding.bnvMain.visibility = View.VISIBLE
+        setUpBottomNav()
+        setUpCalendar()
+        observeDate()
+        checkIfWeightDialogEnabled()
+    }
+
+
+    private fun setUpCalendar() {
         binding.ibNextCalendar.setOnClickListener {
             CurrentDate.addDay()
         }
@@ -100,7 +95,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             CurrentDate.deductDay()
         }
 
-        CurrentDate.date.observe(this, {
+        CurrentDate.date().observe(this, {
             binding.tvDateCalendar.text = getDateInAppFormat(it)
         })
     }
@@ -135,23 +130,27 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun observeDate(){
-        CurrentDate.date.observe(this,{
-            val dateString = it.time.toString("dd-MM-yyyy")
+        if (CurrentDate.date().value==null){
+            startActivity(Intent(this,ErrorActivity::class.java))
+            finish()
+        }
+        CurrentDate.date().observe(this,{
+            val dateString = it.toShortString()
 
-            viewModel.downloadJournalEntries(dateString)
+            viewModel.refreshJournalEntries(dateString)
         })
     }
 
 
     private fun checkIfWeightDialogEnabled() {
-        val areEnabled = UserInformation.mAreWeightDialogsEnabled.value
-
-        if (areEnabled == null) {
-            askForWeightDialogs()
-        } else if (areEnabled) {
-            viewModel.checkIfWeightHasBeenEnteredToday()
-            observeWeightToday()
-        }
+//        val areEnabled = UserInformation.mAreWeightDialogsEnabled.value
+//
+//        if (areEnabled == null) {
+//            askForWeightDialogs()
+//        } else if (areEnabled) {
+//            viewModel.checkIfWeightHasBeenEnteredToday()
+//            observeWeightToday()
+//        }
 
     }
 
@@ -183,7 +182,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 val lastWeightEntries = viewModel.mLastWeights.value
 
                 val value: Double = if (lastWeightEntries==null||lastWeightEntries.isEmpty()){
-                    UserInformation.mUserInformation.value!!["currentWeight"]!!.toDouble()
+                    UserInformation.user().value!!.userInformation!!["currentWeight"]!!.toDouble()
                 }else{
                     lastWeightEntries.sortByDescending { it.time }
                     lastWeightEntries[0].value
@@ -226,14 +225,16 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     .get(this) as EditText).filters = emptyArray()
         }
 
+        val dialog = builder.show()
+
         layout.findViewById<Button>(R.id.btSaveWeightPicker).apply {
             setOnClickListener {
                 val currentValue = picker.value.toDouble()*0.1
-                viewModel.setTodayWeight(currentValue.round(1))
+                viewModel.setWeightEntry(currentValue.round(1))
             }
         }
 
-        val dialog = builder.show()
+
 
         viewModel.mHasWeightBeenSet.observe(this@MainActivity,{
             Log.e(TAG,it.toString())

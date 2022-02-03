@@ -6,7 +6,15 @@
     android:id="@+id/clRegister"
     tools:context=".view.auth.RegisterActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:id="@+id/pbRegister"/>
+
     <RelativeLayout
+        android:id="@+id/rlRegister"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,10 +22,24 @@
         style="@style/PageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etEmailRegister"
+        android:layout_above="@+id/etUsernameRegister"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:text="@string/sign_up" />
+
+        <EditText
+            android:id="@+id/etUsernameRegister"
+            style="@style/InputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/etEmailRegister"
+            android:layout_marginBottom="20dp"
+            android:autofillHints="username"
+            android:drawableStart="@drawable/ic_baseline_account_circle_24"
+            android:drawablePadding="10dp"
+            android:elevation="6dp"
+            android:hint="@string/username"
+            android:inputType="text" />
 
     <EditText
         android:id="@+id/etEmailRegister"
@@ -76,6 +98,7 @@
 
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvHelpRegister"
         style="@style/Paragraph_Secondary_Caption"
         android:layout_width="wrap_content"

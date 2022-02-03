@@ -2,11 +2,14 @@ package com.gmail.bodziowaty6978.view.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityRegisterBinding
+import com.gmail.bodziowaty6978.state.UiState
+import com.gmail.bodziowaty6978.view.MainActivity
 import com.gmail.bodziowaty6978.viewmodel.auth.RegisterViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -24,16 +27,13 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        viewModel.getState().observe(this, {
-            if(it){
-                val intent = Intent(this, UsernameActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        })
 
-        viewModel.getSnackbarText().observe(this,{
-            Snackbar.make(binding.clRegister,it, Snackbar.LENGTH_LONG).show()
+        viewModel.uiState().observe(this,{
+            when(it){
+                is UiState.Success -> onSuccess()
+                is UiState.Loading -> onLoading()
+                is UiState.Error -> onError(it)
+            }
         })
 
         binding.btRegister.setOnClickListener {
@@ -46,31 +46,29 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
+    private fun onLoading(){
+        binding.rlRegister.visibility = View.GONE
+        binding.pbRegister.visibility = View.VISIBLE
+
+    }
+
+    private fun onError(state:UiState.Error){
+        binding.rlRegister.visibility = View.VISIBLE
+        binding.pbRegister.visibility = View.GONE
+        Snackbar.make(binding.clRegister,state.errorMessage,Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun onSuccess(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
     private fun registerUser(){
+        val username = binding.etUsernameRegister.text.toString().trim()
         val email = binding.etEmailRegister.text.toString().trim()
         val password = binding.etPasswordRegister.text.toString().trim()
         val confirm = binding.etConfirmRegister.text.toString().trim()
 
-        val snackbar = Snackbar.make(binding.clRegister,"",Snackbar.LENGTH_LONG)
-
-        if (email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-            snackbar.apply {
-                setText(R.string.please_make_sure_all_fields_are_filled_in_correctly)
-                show()
-            }
-        }else if(password != confirm){
-            snackbar.apply {
-                setText(R.string.please_make_sure_both_passwords_are_the_same)
-                show()
-            }
-        }else if(password.length<6||password.length>24){
-            snackbar.apply {
-                setText(R.string.please_make_sure_your_password_is_at_least_6_characters_and_is_not_longer_than_24_characters)
-                show()
-            }
-        }else{
-            viewModel.registerUser(email,password)
-        }
-
+        viewModel.registerUser(username,email,password,confirm)
     }
 }

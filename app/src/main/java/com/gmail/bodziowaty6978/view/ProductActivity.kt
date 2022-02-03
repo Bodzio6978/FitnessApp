@@ -87,6 +87,6 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun initializeDate(){
-            binding.tvDateMeal.text = CurrentDate.date.value?.let { getDateInAppFormat(it) }
+            binding.tvDateMeal.text = CurrentDate.date().value?.let { getDateInAppFormat(it) }
     }
 }
