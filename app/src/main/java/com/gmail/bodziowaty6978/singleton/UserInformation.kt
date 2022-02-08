@@ -1,30 +1,30 @@
 package com.gmail.bodziowaty6978.singleton
 
 import androidx.lifecycle.MutableLiveData
+import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.model.User
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
+import com.gmail.bodziowaty6978.repository.UserData
+import com.gmail.bodziowaty6978.state.Resource
 
 object UserInformation {
     private var hasBeenCalled = false
-    private var user = MutableLiveData<User>()
-
-    fun user() = user
+    private var userData = UserData()
+    val user = MutableLiveData<User>()
 
     @Suppress("UNCHECKED_CAST")
-    suspend fun getUser(userId: String):Boolean {
+    suspend fun fetchUser(): Resource<User> {
         if (!hasBeenCalled) {
-            val db = Firebase.firestore
-
             return try {
-                user.postValue(db.collection("users").document(userId).get().await().toObject(User::class.java))
-                true
+                val user = userData.getUserInformation().data
+                if (user != null) {
+                    this.user.postValue(user)
+                }
+                Resource.Success(user)
             } catch (e: Exception) {
-                false
+                Resource.Error(Strings.get(R.string.error))
             }
         }
-        return false
+        return Resource.Error(Strings.get(R.string.error))
     }
 }
 

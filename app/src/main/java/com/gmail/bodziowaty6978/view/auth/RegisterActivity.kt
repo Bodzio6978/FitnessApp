@@ -6,9 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityRegisterBinding
-import com.gmail.bodziowaty6978.state.UiState
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.view.MainActivity
 import com.gmail.bodziowaty6978.viewmodel.auth.RegisterViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -28,13 +29,18 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
-        viewModel.uiState().observe(this,{
-            when(it){
-                is UiState.Success -> onSuccess()
-                is UiState.Loading -> onLoading()
-                is UiState.Error -> onError(it)
+        lifecycleScope.launchWhenStarted {
+            viewModel.dataState.collect{
+                when(it){
+                    is DataState.Success -> onSuccess()
+                    is DataState.Loading -> onLoading()
+                    is DataState.Error -> onError(it)
+                    else -> {
+
+                    }
+                }
             }
-        })
+        }
 
         binding.btRegister.setOnClickListener {
             registerUser()
@@ -52,7 +58,7 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
 
     }
 
-    private fun onError(state:UiState.Error){
+    private fun onError(state:DataState.Error){
         binding.rlRegister.visibility = View.VISIBLE
         binding.pbRegister.visibility = View.GONE
         Snackbar.make(binding.clRegister,state.errorMessage,Snackbar.LENGTH_LONG).show()

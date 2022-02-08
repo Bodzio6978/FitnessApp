@@ -2,7 +2,7 @@ package com.gmail.bodziowaty6978.repository
 
 import com.gmail.bodziowaty6978.model.LogEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
-import com.gmail.bodziowaty6978.state.UiState
+import com.gmail.bodziowaty6978.state.DataState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -13,16 +13,13 @@ import kotlinx.coroutines.tasks.await
 
 class MainRepository {
     private val db = Firebase.firestore
-    private var userId = "420"
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val userDocument = db.collection("users").document(userId)
     private val journalCollection = userDocument.collection("journal")
     private val weightCollection = userDocument.collection("weight")
     private val logCollection = userDocument.collection("logEntries")
 
-    fun setUserId():String{
-        userId = FirebaseAuth.getInstance().currentUser!!.uid
-        return userId
-    }
+    fun userId() = userId
 
     suspend fun getJournalEntries(date: String): List<DocumentSnapshot> {
         return try {
@@ -52,48 +49,48 @@ class MainRepository {
         }
     }
 
-    suspend fun addLogEntry(entry : LogEntry):UiState{
+    suspend fun addLogEntry(entry : LogEntry):DataState{
         return try {
             logCollection.add(entry).await()
-            UiState.Success
+            DataState.Success
         }catch (e:Exception){
-            UiState.Error("An error has occurred when adding new log entry")
+            DataState.Error("An error has occurred when adding new log entry")
         }
     }
 
-    suspend fun addWeightEntry(entry: WeightEntry): UiState {
+    suspend fun addWeightEntry(entry: WeightEntry): DataState {
         return try {
             db.collection("users").document(userId).collection("weight").add(
                 entry
             ).await()
-            UiState.Success
+            DataState.Success
         } catch (e: Exception) {
-            UiState.Error("An error has occurred when adding new weight entry")
+            DataState.Error("An error has occurred when adding new weight entry")
         }
     }
 
-    suspend fun setWeightDialogPermission(isAllowed: Boolean): UiState {
+    suspend fun setWeightDialogPermission(isAllowed: Boolean): DataState {
         return try {
             db.collection("users").document(userId).set(
                 mapOf("areWeightDialogsEnabled" to isAllowed),
                 SetOptions.merge()
             ).await()
-            UiState.Success
+            DataState.Success
         } catch (e: Exception) {
-            UiState.Error("An error has occurred when setting permission for weight dialogs")
+            DataState.Error("An error has occurred when setting permission for weight dialogs")
         }
     }
 
-    suspend fun removeJournalEntry(key: String): UiState {
+    suspend fun removeJournalEntry(key: String): DataState {
         return try {
             db.collection("users").document(userId)
                 .collection("journal")
                 .document(key).delete()
                 .await()
-            UiState.Success
+            DataState.Success
 
         } catch (e: Exception) {
-            UiState.Error("An error has occurred when removing a journal entry")
+            DataState.Error("An error has occurred when removing a journal entry")
         }
     }
 }

@@ -7,15 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
 import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.view.ProductActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class DiaryFragment() : Fragment() {
 
@@ -23,35 +26,44 @@ class DiaryFragment() : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        setUpRefreshLayout()
+        lifecycleScope.launchWhenStarted {
+            viewModel.dataState.collect {
+                if (it is DataState.Success) {
+                    setUpRefreshLayout()
 
-        observeWantedValues()
+                    observeWantedValues()
 
-        observeProducts()
+                    observeProducts()
 
-        observeLongClickedEntry()
-
+                    observeLongClickedEntry()
+                }
+            }
+        }
         return binding.root
     }
 
 
     private fun showEntryDialog(position: Int, mealName: String) {
 
-        val entry = getEntry(position,mealName)
+        val entry = getEntry(position, mealName)
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle("${entry.name} (${entry.weight}${entry.unit})")
 
-            setNegativeButton(resources.getString(R.string.delete)){ _, _ ->
-                viewModel.removeItem(entry,mealName)
+            setNegativeButton(resources.getString(R.string.delete)) { _, _ ->
+                viewModel.removeItem(entry, mealName)
             }
 
-            setNeutralButton(resources.getString(R.string.edit)){ _, _ ->
+            setNeutralButton(resources.getString(R.string.edit)) { _, _ ->
 
             }
             show()
@@ -59,27 +71,27 @@ class DiaryFragment() : Fragment() {
     }
 
 
-    private fun setUpRefreshLayout(){
+    private fun setUpRefreshLayout() {
         binding.srlSwipeCalories.setOnRefreshListener {
             viewModel.refreshJournalEntries(CurrentDate.date().value!!.toShortString())
             binding.srlSwipeCalories.isRefreshing = false
         }
     }
 
-    private fun editEntry(position: Int,mealName: String){
-        val entry = when(mealName){
+    private fun editEntry(position: Int, mealName: String) {
+        val entry = when (mealName) {
             "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
             "Lunch" -> binding.mvLunchCalories.getEntry(position)
             "Dinner" -> binding.mvDinnerCalories.getEntry(position)
             else -> binding.mvSupperCalories.getEntry(position)
         }
 
-        val intent = Intent(requireContext(), ProductActivity::class.java).putExtra("mealName",mealName)
-
+        val intent =
+            Intent(requireContext(), ProductActivity::class.java).putExtra("mealName", mealName)
     }
 
-    private fun observeWantedValues(){
-        UserInformation.user().observe(viewLifecycleOwner,{
+    private fun observeWantedValues() {
+        UserInformation.user.observe(viewLifecycleOwner, {
             setUpUI(it.nutritionValues!!)
         })
     }
@@ -91,7 +103,7 @@ class DiaryFragment() : Fragment() {
         binding.nvFat.setWanted((map["wantedFat"])?.toInt())
     }
 
-    private fun getEntry(position: Int,mealName: String): JournalEntry {
+    private fun getEntry(position: Int, mealName: String): JournalEntry {
         return when (mealName) {
             "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
             "Lunch" -> binding.mvLunchCalories.getEntry(position)
@@ -116,50 +128,31 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun observeProducts() {
-        viewModel.mJournalEntries.observe(viewLifecycleOwner,{
-            if (!it.isNullOrEmpty()){
-                for (key in it.keys){
-                    when(key){
-                        "Breakfast" -> it[key]?.let { it1 -> binding.mvBreakfastCalories.addProducts(it1) }
-                        "Lunch" -> it[key]?.let { it1 -> binding.mvLunchCalories.addProducts(it1) }
-                        "Dinner" -> it[key]?.let { it1 -> binding.mvDinnerCalories.addProducts(it1) }
-                        else -> it[key]?.let { it1 -> binding.mvSupperCalories.addProducts(it1) }
-                    }
-                }
+        lifecycleScope.launch {
+            viewModel.journalEntries.observe(viewLifecycleOwner, {
+                val breakfast = it["Breakfast"]
+                val lunch = it["Lunch"]
+                val dinner = it["Dinner"]
+                val supper = it["Supper"]
 
-            }
-            calculateValues(it.values.toList())
-        })
+                binding.mvBreakfastCalories.setProducts(breakfast)
+                binding.mvLunchCalories.setProducts(lunch)
+                binding.mvDinnerCalories.setProducts(dinner)
+                binding.mvSupperCalories.setProducts(supper)
+
+                calculateValues(viewModel.getEntries(it.values.toList()))
+            })
+        }
     }
 
-    private fun calculateValues(list: List<MutableMap<String,JournalEntry>>) {
-        val values:MutableMap<String,Int> = mutableMapOf(
-                "calories" to 0,
-                "carbohydrates" to 0,
-                "protein" to 0,
-                "fat" to 0
-        )
-
-        for(meal in list){
-            values["calories"] = values["calories"]!!.plus(meal.values.toList().sumOf(JournalEntry::calories))
-            values["carbohydrates"] = values["carbohydrates"]!!.plus(meal.values.toList().sumOf(JournalEntry::carbs).toInt())
-            values["protein"] = values["protein"]!!.plus(meal.values.toList().sumOf(JournalEntry::protein).toInt())
-            values["fat"] = values["fat"]!!.plus(meal.values.toList().sumOf(JournalEntry::fat).toInt())
-        }
-
-        setValues(values)
-
-    }
-
-    private fun setValues(map:Map<String,Int>){
-        for (key in map.keys){
-            when(key){
-                "calories" -> map[key]?.let { binding.nvCalories.updateValue(it)}
-                "carbohydrates" -> map[key]?.let { binding.nvCarbohydrates.updateValue(it) }
-                "protein" -> map[key]?.let { binding.nvProtein.updateValue(it) }
-                "fat" -> map[key]?.let { binding.nvFat.updateValue(it) }
-            }
-        }
+    private fun calculateValues(list: List<JournalEntry>) {
+        binding.nvCalories.updateValue(list.sumOf { journalEntry: JournalEntry -> journalEntry.calories })
+        binding.nvCarbohydrates.updateValue(list.sumOf { journalEntry: JournalEntry -> journalEntry.carbs }
+            .toInt())
+        binding.nvProtein.updateValue(list.sumOf { journalEntry: JournalEntry -> journalEntry.protein }
+            .toInt())
+        binding.nvFat.updateValue(list.sumOf { journalEntry: JournalEntry -> journalEntry.fat }
+            .toInt())
     }
 
     override fun onDestroyView() {

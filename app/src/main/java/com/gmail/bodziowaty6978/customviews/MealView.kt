@@ -1,5 +1,6 @@
 package com.gmail.bodziowaty6978.customviews
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
@@ -46,11 +47,14 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     }
 
-    fun addProducts(map: MutableMap<String, JournalEntry>) {
-        entriesList.clear()
-        entriesList.addAll(map.values)
-        binding.rvMeal.adapter?.notifyDataSetChanged()
-        updateValues(map.values.toList())
+    @SuppressLint("NotifyDataSetChanged")
+    fun setProducts(map: Map<String, JournalEntry>?) {
+        if(map!=null){
+            entriesList.clear()
+            entriesList.addAll(map.values)
+            binding.rvMeal.adapter?.notifyDataSetChanged()
+            updateValues(map.values.toList())
+        }
     }
 
     private fun updateValues(entries: List<JournalEntry>) {

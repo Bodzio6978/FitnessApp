@@ -1,17 +1,23 @@
 package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
-import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.UserInformation
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SummaryFragment : Fragment() {
@@ -20,24 +26,30 @@ class SummaryFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.dataState.collect {
+                if (it is DataState.Success) {
+                    setLogStrike()
 
+                    observeLastWeight()
 
-//        viewModel.getLastTimeLogged(1)
+                    observeCurrentUser()
 
-        observeLastTimeLogged()
-        setLogStrike()
+                    observeLogEntry()
 
-        observeLastWeight()
+                    observeCurrentCalories()
+                }
+            }
+        }
 
-        observeWantedCalories()
-
-        observeCurrentCalories()
 
         return binding.root
     }
@@ -47,100 +59,86 @@ class SummaryFragment : Fragment() {
         _binding = null
     }
 
+    private fun observeLogEntry(){
+        lifecycleScope.launchWhenStarted {
+            viewModel.logEntries.observe(viewLifecycleOwner,{
+                if (it.isNotEmpty()){
+                    viewModel.calculateStrike(it[0])
+                }
+            })
+        }
+    }
+
     private fun setLogStrike() {
-        viewModel.mCurrentLogStrike.observe(viewLifecycleOwner, {
-            "$it days".also { binding.tvDaysLoggedSummary.text = it }
-        })
+        lifecycleScope.launchWhenStarted {
+            viewModel.currentLogStrike.collect { logStrike ->
+                "$logStrike days".also { binding.tvDaysLoggedSummary.text = it }
+            }
+        }
     }
-
-    private fun observeLastTimeLogged() {
-        viewModel.mLastLogEntry.observe(viewLifecycleOwner, {
-//            calculateStrike(it)
-        })
-    }
-
-//    private fun calculateStrike(entry: LogEntry) {
-//        val currentDate = Calendar.getInstance()
-//        val lastDateCalendar = toCalendar(Date(entry.time))
-//
-//        if (lastDateCalendar != null) {
-//
-//            val lastTimeLogged = lastDateCalendar.toShortString()
-//
-//            if (lastTimeLogged != currentDate.toShortString()) {
-//                lastDateCalendar.add(Calendar.DAY_OF_MONTH, 1)
-//
-//                if (lastDateCalendar.toShortString() == currentDate.toShortString()) {
-//                    Log.e(TAG,"User logged for another day in a row")
-//                    viewModel.addLogEntry(currentDate, entry.strike + 1)
-//                }else{
-//                    Log.e(TAG,"User logged again but not for another day in a row")
-//                    viewModel.addLogEntry()
-//                }
-//            } else {
-//                Log.e(TAG,"entry for this day has been already entered")
-//                viewModel.mCurrentLogStrike.value = entry.strike
-//            }
-//        }
-//    }
 
     private fun observeLastWeight() {
-        viewModel.mLastWeights.observe(viewLifecycleOwner, {
-            setWeight(it)
-        })
+        lifecycleScope.launchWhenStarted {
+            viewModel.weightEntries.observe(viewLifecycleOwner, {
+                Log.e(TAG, "Collected")
+                setWeight(it.toMutableList())
+            })
+        }
     }
 
     private fun setWeight(weights: MutableList<WeightEntry>) {
         if (weights.isEmpty()) {
-            val userInformation = UserInformation.user().value!!.userInformation!!
+            val userInformation = UserInformation.user.value!!.userInformation!!
             binding.tvCurrentWeightSummary.text = ("${userInformation["currentWeight"]} kg")
         } else {
-            weights.sortByDescending { it.time }
-            binding.tvCurrentWeightSummary.text = ("${weights[0].value} kg")
-            updateWeightProgress(weights)
+            lifecycleScope.launch {
+                withContext(Dispatchers.Default) {
+                    weights.sortByDescending { it.time }
+                    Log.e(TAG, weights.toString())
+                    val progress = viewModel.calculateWeightProgress(weights)
+
+                    withContext(Dispatchers.Main) {
+                        if (weights.size > 0) {
+                            "${weights[0].value}kg".also {
+                                binding.tvCurrentWeightSummary.text = it
+                            }
+                        }
+                        binding.tvWeightChangeSummary.text = progress
+                    }
+                }
+            }
         }
     }
 
-    private fun updateWeightProgress(weights: MutableList<WeightEntry>) {
-        if (weights.size > 1) {
-            val size = weights.size
 
-            val firstHalf = weights.toTypedArray().copyOfRange(0, (size + 1) / 2)
-            val secondHalf = weights.toTypedArray().copyOfRange((size + 1) / 2, size)
-
-            val firstAverage = firstHalf.toMutableList().sumOf { it.value } / firstHalf.size.toDouble()
-            val secondAverage = secondHalf.toMutableList().sumOf { it.value } / secondHalf.size.toDouble()
-
-            val difference = (firstAverage - secondAverage).round(2)
-            val sign = if (firstAverage > secondAverage) "+" else ""
-
-            if (difference != 0.0) ("$sign${difference}kg").also { binding.tvWeightChangeSummary.text = it }
+    private fun observeCurrentUser() {
+        lifecycleScope.launchWhenStarted {
+            UserInformation.user.observe(viewLifecycleOwner, {
+                val nutritionValues = it.nutritionValues
+                if (nutritionValues != null) {
+                    setWantedCalories(nutritionValues["wantedCalories"]!!)
+                }
+            })
         }
     }
 
-    private fun observeWantedCalories() {
-        UserInformation.user().observe(viewLifecycleOwner, {
-            val nutritionValues = it.nutritionValues!!
-            setWantedCalories(nutritionValues["wantedCalories"]!!)
-        })
-    }
-
-    private fun observeCurrentCalories(){
-        viewModel.mJournalEntries.observe(viewLifecycleOwner,{
-            getEntries(it.values.toList())
-        })
-    }
-
-    private fun getEntries(entries:List<MutableMap<String,JournalEntry>>){
-        
-    }
-
-    private fun setCurrentCalories(entries: MutableList<JournalEntry>) {
-        if (entries.isNotEmpty()) {
-            val caloriesSum = entries.sumOf { journalEntry: JournalEntry -> journalEntry.calories }
-            binding.tvCurrentCaloriesSummary.text = "$caloriesSum"
+    private fun observeCurrentCalories() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.journalEntries.observe(viewLifecycleOwner, {
+                setCurrentCalories(viewModel.getEntries(it.values.toList()))
+            })
         }
+    }
 
+    private fun setCurrentCalories(entries: List<JournalEntry>) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Default) {
+                val caloriesSum = entries.sumOf { journalEntry: JournalEntry -> journalEntry.calories }
+                withContext(Dispatchers.Main) {
+                    binding.tvCurrentCaloriesSummary.text = "$caloriesSum"
+                }
+            }
+        }
     }
 
     private fun setWantedCalories(value: Double) {

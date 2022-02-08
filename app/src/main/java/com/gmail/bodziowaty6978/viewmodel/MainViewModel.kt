@@ -3,118 +3,186 @@ package com.gmail.bodziowaty6978.viewmodel
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.toCalendar
 import com.gmail.bodziowaty6978.functions.toShortString
+import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.LogEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
-import com.gmail.bodziowaty6978.other.BaseViewModel
 import com.gmail.bodziowaty6978.repository.MainRepository
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
-import com.gmail.bodziowaty6978.state.UiState
+import com.gmail.bodziowaty6978.state.DataState
+import com.gmail.bodziowaty6978.state.UserInformationState
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
+import javax.inject.Inject
 
-class MainViewModel(
-) : BaseViewModel<UiState>() {
-    val mHasPermissionBeenSet = MutableLiveData<Boolean>()
-    val mHasWeightBeenSet = MutableLiveData<Boolean>()
-    val mHasTodayWeightBeenEntered = MutableLiveData<Boolean>()
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val dispatchers: DispatcherProvider
+) : ViewModel() {
+    private lateinit var repository: MainRepository
 
-    private val repository = MainRepository()
+    val userInformationState =
+        MutableStateFlow<UserInformationState>(UserInformationState.GettingInformation)
+    val dataState = MutableStateFlow<DataState>(DataState.Loading)
 
-    val mJournalEntries = MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>>()
+    val journalEntries = MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>>()
+    val weightEntries = MutableLiveData<MutableList<WeightEntry>>()
+    val logEntries = MutableLiveData<MutableList<LogEntry>>()
 
-    val mLastWeights = MutableLiveData<MutableList<WeightEntry>>()
 
-    val mLastLogEntry = MutableLiveData<LogEntry>()
-
-    val mCurrentLogStrike = MutableLiveData<Int>()
+    val currentLogStrike = MutableStateFlow<Int>(1)
 
     //WEIGHT************************************************************************************************
 
     fun isUserLogged(): Boolean {
-        return FirebaseAuth.getInstance().currentUser != null
-    }
-
-    private suspend fun checkUser(id:String) {
-        withContext(Dispatchers.IO) {
-            val userTask = async{UserInformation.getUser(id)}
-            userTask.await()
-            val user = UserInformation.user().value!!
-            if (user.nutritionValues==null||user.userInformation==null) uiState.postValue(UiState.NoInformation)
+        return if (FirebaseAuth.getInstance().currentUser != null) {
+            repository = MainRepository()
+            true
+        } else {
+            false
         }
     }
 
-    fun requireData() {
+    fun requireData(date: String) {
         viewModelScope.launch {
-            val userId = setUserId()
-            
-            val user = async{checkUser(userId)}
-            user.await()
-
+            val journal = async { fetchJournalEntries(date) }
             val weight = async { fetchWeightEntries() }
-            val journal = async { fetchJournalEntries(CurrentDate.date().value!!.toShortString()) }
             val log = async { fetchLogEntries() }
 
-            awaitAll(weight, journal, log)
-            uiState.postValue(UiState.Success)
-        }
-    }
+            awaitAll(journal, weight, log)
 
-    private fun setUserId():String {
-        return repository.setUserId()
-    }
-
-    private suspend fun fetchLogEntries() {
-//        val lastLogEntryList = repository.getLastLogEntry()
-//
-//        if (lastLogEntryList.isEmpty()){
-//
-//        }else{
-//            val lastLogEntry = lastLogEntryList[0]
-//            mLastLogEntry.postValue(lastLogEntry)
-//        }
-//
-
-    }
-
-    private suspend fun fetchWeightEntries() {
-        withContext(Dispatchers.IO) {
-            mLastWeights.postValue(repository.getWeightEntries())
+            dataState.emit(DataState.Success)
         }
     }
 
     private suspend fun fetchJournalEntries(date: String) {
-        withContext(Dispatchers.IO) {
-            mapEntries(repository.getJournalEntries(date))
+        viewModelScope.launch {
+            withContext(dispatchers.io) {
+                val journalEntries =
+                    repository.getJournalEntries(date).map {
+                        it.id to it.toObject(JournalEntry::class.java)!!
+                    }.toMap().toMutableMap()
+                withContext(dispatchers.default) {
+                    val sortedEntries = sortProducts(journalEntries)
+                    this@MainViewModel.journalEntries.postValue(sortedEntries)
+                }
+            }
+
+        }
+    }
+
+    private suspend fun fetchWeightEntries() {
+        viewModelScope.launch {
+            withContext(dispatchers.io) {
+                weightEntries.postValue(repository.getWeightEntries())
+            }
+        }
+    }
+
+    private suspend fun fetchLogEntries() {
+        viewModelScope.launch {
+            withContext(dispatchers.io) {
+                logEntries.postValue(repository.getLastLogEntry())
+            }
+        }
+    }
+
+    fun getEntries(journalEntries: List<Map<String, JournalEntry>>): List<JournalEntry> {
+        val allEntries = mutableListOf<JournalEntry>()
+        for (map in journalEntries) {
+            allEntries.addAll(map.values)
+        }
+        return allEntries
+    }
+
+    fun checkUser() {
+        viewModelScope.launch {
+            val user = UserInformation.fetchUser().data
+            if (user?.nutritionValues == null || user.userInformation == null) {
+                userInformationState.value = UserInformationState.NoInformation
+            } else {
+                userInformationState.value = UserInformationState.HasInformation
+            }
+        }
+    }
+
+    fun calculateStrike(entry: LogEntry) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                val currentDate = Calendar.getInstance()
+                val lastDateCalendar = toCalendar(Date(entry.time))
+
+                if (lastDateCalendar != null) {
+
+                    val lastTimeLogged = lastDateCalendar.toShortString()
+
+                    if (lastTimeLogged != currentDate.toShortString()) {
+                        lastDateCalendar.add(Calendar.DAY_OF_MONTH, 1)
+
+                        if (lastDateCalendar.toShortString() == currentDate.toShortString()) {
+                            Log.e(TAG, "User logged for another day in a row")
+                            createLogEntry(entry.strike + 1)
+                        } else {
+                            Log.e(TAG, "User logged again but not for another day in a row")
+                            createLogEntry()
+                        }
+                    }
+                }
+            }
         }
     }
 
     fun setDialogPermission(areEnabled: Boolean) {
-        Log.e(TAG, "Dialog permission")
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.setWeightDialogPermission(areEnabled)
+        viewModelScope.launch {
+            Log.e(TAG, "Dialog permission")
+            withContext(dispatchers.io) {
+                val result = repository.setWeightDialogPermission(areEnabled)
 
-            if (result is UiState.Error) uiState.postValue(result)
+                if (result is DataState.Error) dataState.value = result
+            }
         }
     }
 
-    fun checkIfWeightHasBeenEnteredToday() {
+
+    fun calculateWeightProgress(weightLogs: MutableList<WeightEntry>): String {
+        if (weightLogs.size > 1) {
+            weightLogs.sortByDescending { it.time }
+            val size = weightLogs.size
+
+            val firstHalf = weightLogs.toTypedArray().copyOfRange(0, (size + 1) / 2)
+            val secondHalf = weightLogs.toTypedArray().copyOfRange((size + 1) / 2, size)
+
+            val firstAverage =
+                firstHalf.toMutableList().sumOf { it.value } / firstHalf.size.toDouble()
+            val secondAverage =
+                secondHalf.toMutableList().sumOf { it.value } / secondHalf.size.toDouble()
+
+            val difference = (firstAverage - secondAverage).round(2)
+            val sign = if (firstAverage > secondAverage) "+" else ""
+
+            return if (difference != 0.0) ("$sign${difference}kg") else ""
+        }
+        return ""
+    }
+
+    fun checkIfWeightHasBeenEnteredToday(weights: MutableList<WeightEntry>): Boolean {
         Log.d(TAG, "Check if weight has been entered today")
-//        viewModelScope.launch {
-//            db.collection("users").document(userId).collection("weight")
-//                .whereEqualTo("date", Calendar.getInstance().time.toString("dd-MM-yyyy")).get()
-//                .addOnSuccessListener {
-//                    mHasTodayWeightBeenEntered.value = !it.isEmpty
-//                }.addOnFailureListener {
-//                    Log.e(TAG, it.message.toString())
-//                }
-//        }
+
+        for (entry in weights.toMutableList()) {
+            if (entry.date == Calendar.getInstance().toShortString()) return true
+        }
+
+        return false
     }
 
 
@@ -130,24 +198,27 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val isSuccessful = repository.addWeightEntry(weightEntry)
 
-            if (isSuccessful is UiState.Success) addNewWeightEntry(weightEntry)
-            else if (isSuccessful is UiState.Error) uiState.postValue(isSuccessful)
+            if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
+            else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
 
         }
     }
 
-    @SuppressLint("NullSafeMutableLiveData")
-    private suspend fun addNewWeightEntry(entry: WeightEntry) {
-        withContext(Dispatchers.Main) {
-            val weightEntries = mLastWeights.value
-            weightEntries?.add(entry)
 
-            if (weightEntries != null) {
-                mLastWeights.postValue(weightEntries)
-                mHasWeightBeenSet.postValue(true)
+    private suspend fun addNewWeightEntry(entry: WeightEntry) {
+        viewModelScope.launch {
+            withContext(dispatchers.default) {
+                val entries = weightEntries.value
+
+                if (entries != null) {
+                    entries.add(entry)
+                    weightEntries.postValue(entries!!)
+                }
+
             }
         }
     }
+
 
     //WEIGHT************************************************************************************************
 
@@ -155,43 +226,26 @@ class MainViewModel(
     //JOURNAL************************************************************************************************
 
 
-    private suspend fun mapEntries(snapshots: List<DocumentSnapshot>) {
-        withContext(Dispatchers.Default) {
-            val entriesList = mutableMapOf<String, JournalEntry>()
+    private fun sortProducts(list: MutableMap<String, JournalEntry>): MutableMap<String, MutableMap<String, JournalEntry>> {
+        val breakfast = mutableMapOf<String, JournalEntry>()
+        val lunch = mutableMapOf<String, JournalEntry>()
+        val dinner = mutableMapOf<String, JournalEntry>()
+        val supper = mutableMapOf<String, JournalEntry>()
 
-            for (document in snapshots) {
-                entriesList[document.id] = document.toObject(JournalEntry::class.java)!!
+        for (key in list.keys) {
+            when (list[key]?.mealName) {
+                "Breakfast" -> breakfast[key] = list[key]!!
+                "Lunch" -> lunch[key] = list[key]!!
+                "Dinner" -> dinner[key] = list[key]!!
+                "Supper" -> supper[key] = list[key]!!
             }
-
-            sortProducts(entriesList)
         }
-
-    }
-
-    private suspend fun sortProducts(list: MutableMap<String, JournalEntry>) {
-        withContext(Dispatchers.Default) {
-            val breakfast = mutableMapOf<String, JournalEntry>()
-            val lunch = mutableMapOf<String, JournalEntry>()
-            val dinner = mutableMapOf<String, JournalEntry>()
-            val supper = mutableMapOf<String, JournalEntry>()
-
-            for (key in list.keys) {
-                when (list[key]?.mealName) {
-                    "Breakfast" -> breakfast[key] = list[key]!!
-                    "Lunch" -> lunch[key] = list[key]!!
-                    "Dinner" -> dinner[key] = list[key]!!
-                    "Supper" -> supper[key] = list[key]!!
-                }
-            }
-            mJournalEntries.postValue(
-                mutableMapOf<String, MutableMap<String, JournalEntry>>(
-                    "Breakfast" to breakfast,
-                    "Lunch" to lunch,
-                    "Dinner" to dinner,
-                    "Supper" to supper
-                )
-            )
-        }
+        return mutableMapOf<String, MutableMap<String, JournalEntry>>(
+            "Breakfast" to breakfast,
+            "Lunch" to lunch,
+            "Dinner" to dinner,
+            "Supper" to supper
+        )
     }
 
     fun refreshJournalEntries(date: String) {
@@ -205,7 +259,7 @@ class MainViewModel(
     @SuppressLint("NullSafeMutableLiveData")
     fun removeItem(entry: JournalEntry, mealName: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            val entryList = mJournalEntries.value
+            val entryList = journalEntries.value
 
             if (entryList != null) {
 
@@ -235,19 +289,19 @@ class MainViewModel(
 
     //SUMMARY************************************************************************************************
 
-    fun createLogEntry(strike: Int = 1) {
-        val currentTime = Calendar.getInstance().timeInMillis
-        val logEntry = LogEntry(currentTime, strike)
+    private suspend fun createLogEntry(strike: Int = 1) {
+        viewModelScope.launch(dispatchers.io) {
+            val currentTime = Calendar.getInstance().timeInMillis
+            val logEntry = LogEntry(currentTime, strike)
 
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val result = repository.addLogEntry(logEntry)
-                if (result == UiState.Success) mCurrentLogStrike.postValue(strike)
-            }
+            val result = repository.addLogEntry(logEntry)
+            if (result is DataState.Success) currentLogStrike.emit(strike)
+            else if (result is DataState.Error) dataState.emit(result)
+
         }
     }
 
 
     //SUMMARY************************************************************************************************
-
 }
+

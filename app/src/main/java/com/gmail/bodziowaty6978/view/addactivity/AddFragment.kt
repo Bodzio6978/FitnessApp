@@ -55,7 +55,7 @@ class AddFragment : Fragment(), OnAdapterItemClickListener {
         }
 
         binding.btSearchAdd.setOnClickListener {
-            viewModel.search(binding.etSearchAdd.text.toString().trim().toLowerCase())
+            viewModel.search(binding.etSearchAdd.text.toString().trim().lowercase())
         }
 
         return binding.root

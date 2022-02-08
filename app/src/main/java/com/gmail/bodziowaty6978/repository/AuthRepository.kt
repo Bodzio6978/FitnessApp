@@ -1,7 +1,6 @@
 package com.gmail.bodziowaty6978.repository
 
-import com.gmail.bodziowaty6978.state.UiState
-import com.google.firebase.auth.AuthResult
+import com.gmail.bodziowaty6978.state.DataState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,20 +12,32 @@ class AuthRepository {
     private val userCollection = db.collection("users")
     private val instance = FirebaseAuth.getInstance()
 
-    suspend fun registerUser(email:String,password:String):AuthResult?{
+    fun getUserId():String{
+        return instance.currentUser!!.uid
+    }
+
+    suspend fun logInUser(email:String,password: String){
+        instance.signInWithEmailAndPassword(email,password).await()
+    }
+
+    suspend fun registerUser(email:String,password:String):DataState{
         return try {
-            instance.createUserWithEmailAndPassword(email,password).await()
+            var result :DataState = DataState.Success
+            instance.createUserWithEmailAndPassword(email,password).addOnFailureListener {
+                result = DataState.Error(it.message.toString())
+            }.await()
+            return result
         }catch (e:Exception){
-            null
+            DataState.Error(e.message.toString())
         }
     }
 
-    suspend fun setUsername(username:String,userId:String):UiState{
+    suspend fun setUsername(username:String,userId:String):DataState{
         return try {
             userCollection.document(userId).set(mapOf("username" to username)).await()
-            UiState.Success
+            DataState.Success
         }catch (e:Exception){
-            UiState.Error("An error has occurred when setting your username")
+            DataState.Error("An error has occurred when setting your username")
         }
     }
 

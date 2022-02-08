@@ -126,7 +126,7 @@
     <string name="decline">decline</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="filters">filters</string>
-    <string name="error">Error has occurred</string>
+    <string name="error">An Error has occurred</string>
     <string name="username">Username</string>
 
     <string-array name="works">
