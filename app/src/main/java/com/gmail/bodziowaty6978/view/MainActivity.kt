@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         setFragment(splashFragment)
 
+
+
         if (viewModel.isUserLogged()) {
             viewModel.checkUser()
         } else {
@@ -121,7 +123,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun setUpBottomNav() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             binding.bnvMain.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.menu_summary -> {
@@ -139,9 +141,12 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 }
                 true
             }
-            binding.bnvMain.selectedItemId = R.id.menu_summary
-        }
 
+            when (intent.getIntExtra("position", 0)) {
+                0 -> binding.bnvMain.selectedItemId = R.id.menu_summary
+                1 -> binding.bnvMain.selectedItemId = R.id.menu_diary
+            }
+        }
     }
 
     private fun observeUser() {

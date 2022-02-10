@@ -53,6 +53,12 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
         setUpMealName()
 
         setFragment(addFragment,"ADD_FRAGMENT")
+
+        lifecycleScope.launch {
+            viewModel.scannedBarcode.observe(this@AddActivity,{
+                viewModel.checkIfBarcodeExists(it)
+            })
+        }
     }
 
     private fun observeClickedProduct(){

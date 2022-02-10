@@ -2,21 +2,28 @@ package com.gmail.bodziowaty6978.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityProductBinding
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
+import com.gmail.bodziowaty6978.functions.onError
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
+import com.gmail.bodziowaty6978.state.DataState
+import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.viewmodel.ProductViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityProductBinding
-    lateinit var viewModel: ProductViewModel
+    val viewModel: ProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +32,8 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-
         observeIfAddedProduct()
+        observeProductState()
 
         initializeDate()
 
@@ -42,41 +48,76 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
         val product = intent.getParcelableExtra<Product>("product")
 
-        if (product==null){
+        if (product == null) {
             viewModel.getProduct(id)
-
-            viewModel.getCurrentProduct().observe(this,{
-                if (it!=null){
-                    initializeUi(it)
-                }
-            })
-
-        }else{
+        } else {
             initializeUi(product)
         }
 
-        binding.btAddNew.setOnClickListener{
+        binding.btAddNew.setOnClickListener {
             if (product != null) {
-                viewModel.addProduct(product,id,binding.etWeightMeal.text.toString(),mealName.toString())
-            }else{
-                if (viewModel.getAddingState().value!=null){
-                    viewModel.addProduct(viewModel.getCurrentProduct().value!!,id,binding.etWeightMeal.text.toString().replace(",",".").trim(),mealName.toString())
+                viewModel.addProduct(
+                    product,
+                    id,
+                    binding.etWeightMeal.text.toString(),
+                    mealName.toString()
+                )
+            } else {
+                val currentProduct = viewModel.productsState.value?.data
+                if (currentProduct != null) {
+                    viewModel.addProduct(
+                        currentProduct,
+                        id,
+                        binding.etWeightMeal.text.toString().replace(",", ".").trim(),
+                        mealName.toString()
+                    )
                 }
+
             }
         }
 
     }
 
-    private fun observeIfAddedProduct(){
-        viewModel.getAddingState().observe(this,{
-            if (it){
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
-            }
-        })
+    private fun observeProductState() {
+        lifecycleScope.launch {
+            viewModel.productsState.observe(this@ProductActivity, {
+                when (it) {
+                    is Resource.Success -> initializeUi(it.data!!)
+                    else -> onError(binding.clProduct, it.uiText.toString())
+                }
+            })
+        }
     }
 
-    private fun initializeUi(product: Product){
+
+    private fun observeIfAddedProduct() {
+        lifecycleScope.launch {
+            viewModel.addingState.observe(this@ProductActivity, {
+                when (it) {
+                    is DataState.Success -> {
+                        startActivity(Intent(this@ProductActivity,MainActivity::class.java).putExtra("position",1))
+                        finish()
+                    }
+
+                    is DataState.Error -> {
+                        binding.rlProduct.visibility = View.VISIBLE
+                        binding.pbProduct.visibility = View.GONE
+                        onError(binding.clProduct, it.errorMessage)
+                    }
+                    is DataState.Loading -> onLoading()
+
+                }
+
+            })
+        }
+    }
+
+    private fun onLoading(){
+        binding.rlProduct.visibility = View.GONE
+        binding.pbProduct.visibility = View.VISIBLE
+    }
+
+    private fun initializeUi(product: Product) {
         binding.tvProductNameMeal.text = product.name
         binding.tvFatValueMeal.text = product.fat.toString()
         binding.tvCarbsValueMeal.text = product.carbs.toString()
@@ -86,7 +127,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
         binding.tvUnitMeal.text = product.unit
     }
 
-    private fun initializeDate(){
-            binding.tvDateMeal.text = CurrentDate.date().value?.let { getDateInAppFormat(it) }
+    private fun initializeDate() {
+        binding.tvDateMeal.text = getDateInAppFormat(CurrentDate.date().value!!)
     }
 }

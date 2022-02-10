@@ -29,7 +29,7 @@ class AddViewModel @Inject constructor(
 
     val mButtonPressed = MutableLiveData<Int>()
     val mMealName = MutableLiveData<String>()
-    val mScannedBarcode = MutableLiveData<String>()
+    val scannedBarcode = MutableLiveData<String>()
 
     fun initializeHistory() {
         viewModelScope.launch {

@@ -34,7 +34,7 @@ class AddScannerFragment : Fragment() {
 
         codeScanner.decodeCallback = DecodeCallback {
             activity?.runOnUiThread{
-                viewModel.mScannedBarcode.value = it.text
+                viewModel.scannedBarcode.value = it.text
             }
         }
 
