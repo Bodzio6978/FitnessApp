@@ -22,7 +22,6 @@ class AddViewModel @Inject constructor(
 
     val barcodeState = MutableLiveData<Resource<Pair<String,Product>>>()
     val searchResultState = MutableLiveData<Resource<Map<String,Product>>>()
-    val mSnackbarMessage = MutableLiveData<String>()
 
     val clickedProduct = MutableLiveData<Resource<Pair<String,Product>>>()
 
@@ -67,7 +66,7 @@ class AddViewModel @Inject constructor(
                     }.toMap())
                     searchResultState.postValue(finalResult)
                 }else{
-                    mSnackbarMessage.postValue(result.uiText!!)
+                    searchResultState.postValue(Resource.Error("Error occurred when searching product"))
                 }
             }
         }

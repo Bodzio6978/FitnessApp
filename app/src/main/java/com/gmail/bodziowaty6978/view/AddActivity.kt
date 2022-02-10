@@ -49,7 +49,6 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
         observeButtonPressed()
         observeClickedProduct()
         observeScannedBarcode()
-        observeSnackbarMessage()
 
         setUpMealName()
 
@@ -102,19 +101,15 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
     }
 
     private fun observeButtonPressed(){
-        viewModel.mButtonPressed.observe(this,{
-            when(it){
-                1 -> startActivity(Intent(this, NewActivity::class.java).putExtra("mealName",viewModel.mMealName.value))
-                2 -> super.onBackPressed()
-                3 -> setFragment(scannerFragment,"SCANNER_FRAGMENT")
-            }
-        })
-    }
-
-    private fun observeSnackbarMessage(){
-        viewModel.mSnackbarMessage.observe(this,{
-            Snackbar.make(binding.clAdd,it,Snackbar.LENGTH_LONG).show()
-        })
+        lifecycleScope.launch {
+            viewModel.mButtonPressed.observe(this@AddActivity,{
+                when(it){
+                    1 -> startActivity(Intent(this@AddActivity, NewActivity::class.java).putExtra("mealName",viewModel.mMealName.value))
+                    2 -> super.onBackPressed()
+                    3 -> setFragment(scannerFragment,"SCANNER_FRAGMENT")
+                }
+            })
+        }
     }
 
     override fun onBackPressed() {

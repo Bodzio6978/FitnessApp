@@ -104,7 +104,7 @@ class AddFragment : Fragment(), OnAdapterItemClickListener {
             viewModel.searchResultState.observe(viewLifecycleOwner,{
                 when(it){
                     is Resource.Success -> onSearchSuccess(it)
-                    else  -> onError(it.uiText!!)
+                    else  -> onError(it.uiText.toString())
                 }
             })
         }
