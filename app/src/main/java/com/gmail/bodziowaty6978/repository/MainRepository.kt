@@ -11,7 +11,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
+
 class MainRepository {
+
     private val db = Firebase.firestore
     private var userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val userDocument = db.collection("users").document(userId)

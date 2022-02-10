@@ -17,13 +17,14 @@ import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.interfaces.OnProductPassed
 import com.gmail.bodziowaty6978.interfaces.OnStringPassed
 import com.gmail.bodziowaty6978.model.Product
+import com.gmail.bodziowaty6978.other.Constants.CAMERA_REQUEST_CODE
 import com.gmail.bodziowaty6978.view.ProductActivity
 import com.gmail.bodziowaty6978.viewmodel.NewProductState
 import com.gmail.bodziowaty6978.viewmodel.NewViewModel
 
 import com.google.android.material.snackbar.Snackbar
 
-const val CAMERA_REQUEST_CODE = 101
+
 
 class NewActivity : AppCompatActivity(), LifecycleOwner,OnFragmentChangeRequest,OnProductPassed,OnStringPassed {
 
