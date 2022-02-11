@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.adapters.CaloriesRecyclerAdapter
 import com.gmail.bodziowaty6978.databinding.MealViewBinding
+import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.interfaces.OnAdapterItemClickListener
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.Strings
@@ -78,9 +79,9 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         }
 
         (values["calories"]?.toInt().toString() + " " + Strings.get(R.string.kcal)).also { binding.tvKcalValueMeal.text = it }
-        (values["carbohydrates"].toString() + Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
-        (values["protein"].toString() + Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
-        (values["fat"].toString() + Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
+        (values["carbohydrates"]?.round(2).toString() + Strings.get(R.string.g)).also { binding.tvCarbsValueMeal.text = it }
+        (values["protein"]?.round(2).toString() + Strings.get(R.string.g)).also { binding.tvProteinValueMeal.text = it }
+        (values["fat"]?.round(2).toString() + Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
     }
 
 
