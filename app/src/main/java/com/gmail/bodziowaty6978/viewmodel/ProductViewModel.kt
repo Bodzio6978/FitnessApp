@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.bodziowaty6978.functions.round
-import com.gmail.bodziowaty6978.functions.toString
+import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.Product
@@ -41,7 +41,7 @@ class ProductViewModel @Inject constructor(
                     product.name!!,
                     id,
                     mealName,
-                    CurrentDate.date().value!!.time.toString("yyyy-MM-dd"),
+                    CurrentDate.date().value!!.toShortString(),
                     CurrentDate.date().value!!.timeInMillis,
                     product.brand!!,
                     weightValue,

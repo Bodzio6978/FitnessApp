@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.functions.onError
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
+import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -123,11 +125,18 @@ class SummaryFragment : Fragment() {
     }
 
     private fun observeCurrentCalories() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.journalEntries.observe(viewLifecycleOwner, {
-                setCurrentCalories(viewModel.getEntries(it.values.toList()))
+                when(it){
+                    is Resource.Success -> onJournalSuccess(it.data!!)
+                    else -> onError(binding.clSummary,it.uiText.toString())
+                }
             })
         }
+    }
+
+    private fun onJournalSuccess(data:MutableMap<String,MutableMap<String,JournalEntry>>){
+        setCurrentCalories(viewModel.getEntries(data.values.toList()))
     }
 
     private fun setCurrentCalories(entries: List<JournalEntry>) {

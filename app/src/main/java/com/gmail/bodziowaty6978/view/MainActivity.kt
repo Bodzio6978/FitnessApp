@@ -53,8 +53,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         setFragment(splashFragment)
 
-
-
         if (viewModel.isUserLogged()) {
             viewModel.checkUser()
         } else {
@@ -62,8 +60,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             finish()
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.userInformationState.collect {
+        lifecycleScope.launch {
+            viewModel.userInformationState.observe(this@MainActivity, {
                 when (it) {
                     is UserInformationState.HasInformation -> {
                         viewModel.requireData(CurrentDate.date().value!!.toShortString())
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     is UserInformationState.NoInformation -> onNoInformation()
                     else -> Log.e(TAG, "Getting user information")
                 }
-            }
+            })
         }
 
         observeUiState()

@@ -17,8 +17,10 @@ import com.gmail.bodziowaty6978.repository.MainRepository
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
+import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.state.UserInformationState
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,11 +33,10 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private lateinit var repository: MainRepository
 
-    val userInformationState =
-        MutableStateFlow<UserInformationState>(UserInformationState.GettingInformation)
+    val userInformationState = MutableLiveData<UserInformationState>()
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
 
-    val journalEntries = MutableLiveData<MutableMap<String, MutableMap<String, JournalEntry>>>()
+    val journalEntries = MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
     val weightEntries = MutableLiveData<MutableList<WeightEntry>>()
     val logEntries = MutableLiveData<MutableList<LogEntry>>()
 
@@ -68,16 +69,25 @@ class MainViewModel @Inject constructor(
     private suspend fun fetchJournalEntries(date: String) {
         viewModelScope.launch {
             withContext(dispatchers.io) {
-                val journalEntries =
-                    repository.getJournalEntries(date).map {
-                        it.id to it.toObject(JournalEntry::class.java)!!
-                    }.toMap().toMutableMap()
-                withContext(dispatchers.default) {
-                    val sortedEntries = sortProducts(journalEntries)
-                    this@MainViewModel.journalEntries.postValue(sortedEntries)
+                when(val result = repository.getJournalEntries(date)){
+                    is Resource.Success -> {
+                        mapEntries(result)
+                    }
+                    else -> {
+                        journalEntries.postValue(Resource.Error("Error occurred when trying to download journal entries"))
+                    }
                 }
             }
+        }
+    }
 
+    private suspend fun mapEntries(resource:Resource.Success<List<DocumentSnapshot>>){
+        withContext(dispatchers.default){
+            val mappedEntries = resource.data!!.map {
+                it.id to it.toObject(JournalEntry::class.java)!!
+            }.toMap().toMutableMap()
+
+            journalEntries.postValue(Resource.Success(sortProducts(mappedEntries)))
         }
     }
 
@@ -259,7 +269,7 @@ class MainViewModel @Inject constructor(
     @SuppressLint("NullSafeMutableLiveData")
     fun removeItem(entry: JournalEntry, mealName: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            val entryList = journalEntries.value
+            val entryList = journalEntries.value?.data
 
             if (entryList != null) {
 
