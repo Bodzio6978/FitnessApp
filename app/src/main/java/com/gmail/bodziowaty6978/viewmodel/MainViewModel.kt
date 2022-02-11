@@ -268,7 +268,7 @@ class MainViewModel @Inject constructor(
 
     @SuppressLint("NullSafeMutableLiveData")
     fun removeItem(entry: JournalEntry, mealName: String) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(dispatchers.default) {
             val entryList = journalEntries.value?.data
 
             if (entryList != null) {
@@ -280,11 +280,17 @@ class MainViewModel @Inject constructor(
 
                         if (mealList[key] == entry) {
 
-                            withContext(Dispatchers.IO) {
-                                repository.removeJournalEntry(key)
+                            withContext(dispatchers.io) {
+                                val result = repository.removeJournalEntry(key)
+
+                                withContext(dispatchers.default){
+                                    if (result is DataState.Success){
+                                        mealList.remove(key)
+                                        entryList[mealName] = mealList
+                                        journalEntries.postValue(Resource.Success(entryList))
+                                    }
+                                }
                             }
-
-
                         }
                     }
                 }
