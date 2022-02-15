@@ -22,6 +22,7 @@
     </style>
     <style name="Paragraph_Secondary_Caption" parent="Theme.FitnessApp">>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/grey5</item>
     </style>
     <style name="ListTitle" parent="Theme.FitnessApp">>
         <item name="android:textSize">14sp</item>

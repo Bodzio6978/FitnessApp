@@ -69,6 +69,8 @@ dependencies {
 
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
 
     kapt "com.android.databinding:compiler:4.1.3"

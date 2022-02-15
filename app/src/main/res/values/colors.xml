@@ -13,6 +13,11 @@
     <color name="grey3">#4d4d4d</color>
     <color name="grey35">#676767</color>
     <color name="grey4">#8c8c8c</color>
+    <color name="grey5">#dddeee</color>
+
+    <color name="chartCarbohydrates">#4db6ac</color>
+    <color name="chartProtein">#f06292</color>
+    <color name="chartFat">#ff8a65</color>
 
     <color name="editText">@color/grey2</color>
     <color name="toolbar">@color/darkGrey</color>
