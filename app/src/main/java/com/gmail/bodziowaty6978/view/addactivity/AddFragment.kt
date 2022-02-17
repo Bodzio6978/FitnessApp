@@ -89,7 +89,7 @@ class AddFragment : Fragment(), OnAdapterItemClickListener {
         }
     }
 
-    override fun onAdapterItemClickListener(position: Int) {
+    override fun onAdapterItemClickListener(position: Int, isLongClicked:Boolean) {
         val clickedProduct = productList[position]
         viewModel.searchProduct(clickedProduct)
     }

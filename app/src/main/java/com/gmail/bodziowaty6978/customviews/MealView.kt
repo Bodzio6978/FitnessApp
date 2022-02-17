@@ -24,7 +24,7 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
 
     private var entriesList: MutableList<JournalEntry> = mutableListOf()
 
-    private val mClickedEntry = MutableLiveData<Pair<Int, String>>()
+    val clickedEntry = MutableLiveData<Pair<Boolean, JournalEntry>>()
 
     init {
         addView(binding.root)
@@ -84,12 +84,7 @@ class MealView(context: Context, attrs: AttributeSet) : LinearLayout(context, at
         (values["fat"]?.round(2).toString() + Strings.get(R.string.g)).also { binding.tvFatValueMeal.text = it }
     }
 
-
-    fun getEntry(position: Int): JournalEntry = entriesList[position]
-
-    fun getClickedEntry(): MutableLiveData<Pair<Int, String>> = mClickedEntry
-
-    override fun onAdapterItemClickListener(position: Int) {
-        mClickedEntry.value = Pair(position, binding.tvNameMealView.text.toString())
+    override fun onAdapterItemClickListener(position: Int,isLongClicked:Boolean) {
+        clickedEntry.value = Pair(isLongClicked,entriesList[position])
     }
 }

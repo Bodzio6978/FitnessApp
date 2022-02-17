@@ -27,7 +27,7 @@ class CaloriesRecyclerAdapter(private var journalEntries: MutableList<JournalEnt
         }
 
         override fun onLongClick(v: View?): Boolean {
-            adapterItemClickListener.onAdapterItemClickListener(adapterPosition)
+            adapterItemClickListener.onAdapterItemClickListener(adapterPosition,true)
             return true
         }
     }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +17,10 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityProductBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
 import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.functions.showSnackbar
+import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.Price
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
@@ -36,7 +35,9 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityProductBinding
     val viewModel: ProductViewModel by viewModels()
+
     lateinit var productId:String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,37 +62,49 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
         productId = intent.getStringExtra("id")!!
 
-        val product = intent.getParcelableExtra<Product>("product")
+        val entryId = intent.getStringExtra("entryId")
 
-        if (product == null) {
-            viewModel.getProduct(productId)
-        } else {
-            viewModel.productsState.value = Resource.Success(product)
-        }
+        if (entryId!=null){
+            val entry = intent.getParcelableExtra<JournalEntry>("entry")!!
 
-        binding.btAddNew.setOnClickListener {
-            val weight = binding.etWeightMeal.text.toString().replace(",", ".").trim()
-            if (product != null) {
-                viewModel.addProduct(
-                    product,
-                    productId,
-                    weight,
-                    mealName.toString()
-                )
+            binding.etWeightMeal.setText(entry.weight.toString())
+            binding.btAddNew.text = "Edit"
+
+            viewModel.getProduct(entry.id)
+
+        }else{
+            binding.etWeightMeal.setText("100")
+            val product = intent.getParcelableExtra<Product>("product")
+
+            if (product == null) {
+                viewModel.getProduct(productId)
             } else {
-                val currentProduct = viewModel.productsState.value?.data
-                if (currentProduct != null) {
+                viewModel.productsState.value = Resource.Success(product)
+            }
+
+            binding.btAddNew.setOnClickListener {
+                val weight = binding.etWeightMeal.text.toString().replace(",", ".").trim()
+                if (product != null) {
                     viewModel.addProduct(
-                        currentProduct,
+                        product,
                         productId,
                         weight,
                         mealName.toString()
                     )
-                }
+                } else {
+                    val currentProduct = viewModel.productsState.value?.data
+                    if (currentProduct != null) {
+                        viewModel.addProduct(
+                            currentProduct,
+                            productId,
+                            weight,
+                            mealName.toString()
+                        )
+                    }
 
+                }
             }
         }
-
     }
 
     private fun observeProductState() {
@@ -164,17 +177,20 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
     private fun initializeUi(product: Product) {
         lifecycleScope.launch {
             binding.etWeightMeal.addTextChangedListener {
-                val weight =
-                    binding.etWeightMeal.text.toString().replace(",", ".").trim().toDouble()
+                if (!it.isNullOrBlank()){
+                    val weight =
+                        binding.etWeightMeal.text.toString().replace(",", ".").trim().toDouble()
 
-                val data = viewModel.getData(weight)
-                Log.e(TAG,data.toString())
+                    val data = viewModel.getData(weight)
 
-                refreshChartData(data)
-                refreshNutritionValues(product,weight)
+                    refreshChartData(data)
+                    refreshNutritionValues(product,weight)
+                }
             }
-            binding.etWeightMeal.setText("100")
+
+            binding.etWeightMeal.setText(binding.etWeightMeal.text)
         }
+
         binding.tvProductNameMeal.text = product.name
         if (!product.brand.isNullOrBlank()) {
             binding.tvBrandMeal.text = product.brand

@@ -80,7 +80,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
             val intent = Intent(this@AddActivity, ProductActivity::class.java).putExtra("mealName",viewModel.mMealName.value)
 
             if(product.barcode=="fakeProduct"){
-                intent .putExtra("id",product.author)
+                intent.putExtra("id",product.author)
                 startActivity(intent)
             }else{
                 intent.putExtra("id",id).putExtra("product",product)

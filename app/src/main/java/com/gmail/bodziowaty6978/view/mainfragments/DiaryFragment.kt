@@ -48,7 +48,7 @@ class DiaryFragment() : Fragment() {
 
                     observeProducts()
 
-                    observeLongClickedEntry()
+                    observeClickedEntry()
                 }
             }
         }
@@ -56,19 +56,16 @@ class DiaryFragment() : Fragment() {
     }
 
 
-    private fun showEntryDialog(position: Int, mealName: String) {
-
-        val entry = getEntry(position, mealName)
-
+    private fun showEntryDialog(entry: JournalEntry) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle("${entry.name} (${entry.weight}${entry.unit})")
 
             setNegativeButton(resources.getString(R.string.delete)) { _, _ ->
-                viewModel.removeItem(entry, mealName)
+                viewModel.removeItem(entry)
             }
 
             setNeutralButton(resources.getString(R.string.edit)) { _, _ ->
-
+                editEntry(entry)
             }
             show()
         }
@@ -82,16 +79,17 @@ class DiaryFragment() : Fragment() {
         }
     }
 
-    private fun editEntry(position: Int, mealName: String) {
-        val entry = when (mealName) {
-            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
-            "Lunch" -> binding.mvLunchCalories.getEntry(position)
-            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
-            else -> binding.mvSupperCalories.getEntry(position)
-        }
+    private fun editEntry(journalEntry: JournalEntry) {
+        lifecycleScope.launch {
+            val entryId = viewModel.getEntryId(journalEntry)
+            val intent = Intent(requireContext(), ProductActivity::class.java)
+                .putExtra("mealName", journalEntry.mealName)
+                .putExtra("entryId",entryId)
+                .putExtra("entry",journalEntry)
+                .putExtra("id",journalEntry.id)
 
-        val intent =
-            Intent(requireContext(), ProductActivity::class.java).putExtra("mealName", mealName)
+            startActivity(intent)
+        }
     }
 
     private fun observeWantedValues() {
@@ -107,28 +105,27 @@ class DiaryFragment() : Fragment() {
         binding.nvFat.setWanted((map["wantedFat"])?.toInt())
     }
 
-    private fun getEntry(position: Int, mealName: String): JournalEntry {
-        return when (mealName) {
-            "Breakfast" -> binding.mvBreakfastCalories.getEntry(position)
-            "Lunch" -> binding.mvLunchCalories.getEntry(position)
-            "Dinner" -> binding.mvDinnerCalories.getEntry(position)
-            else -> binding.mvSupperCalories.getEntry(position)
-        }
+    private fun checkDialog(isLongClicked:Boolean,journalEntry:JournalEntry){
+        Log.e(TAG,isLongClicked.toString())
+        if (isLongClicked) showEntryDialog(journalEntry)
+        else editEntry(journalEntry)
     }
 
-    private fun observeLongClickedEntry() {
-        binding.mvBreakfastCalories.getClickedEntry().observe(viewLifecycleOwner, {
-            showEntryDialog(it.first, it.second)
-        })
-        binding.mvLunchCalories.getClickedEntry().observe(viewLifecycleOwner, {
-            showEntryDialog(it.first, it.second)
-        })
-        binding.mvDinnerCalories.getClickedEntry().observe(viewLifecycleOwner, {
-            showEntryDialog(it.first, it.second)
-        })
-        binding.mvSupperCalories.getClickedEntry().observe(viewLifecycleOwner, {
-            showEntryDialog(it.first, it.second)
-        })
+    private fun observeClickedEntry() {
+        lifecycleScope.launch {
+            binding.mvBreakfastCalories.clickedEntry.observe(viewLifecycleOwner, {
+                checkDialog(it.first, it.second)
+            })
+            binding.mvLunchCalories.clickedEntry.observe(viewLifecycleOwner, {
+                checkDialog(it.first, it.second)
+            })
+            binding.mvDinnerCalories.clickedEntry.observe(viewLifecycleOwner, {
+                checkDialog(it.first, it.second)
+            })
+            binding.mvSupperCalories.clickedEntry.observe(viewLifecycleOwner, {
+                checkDialog(it.first, it.second)
+            })
+        }
     }
 
     private fun observeProducts() {

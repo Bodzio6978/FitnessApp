@@ -27,7 +27,6 @@ import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
 import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -86,10 +85,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private fun onNoInformation() {
         startActivity(Intent(this, IntroductionActivity::class.java))
         finish()
-    }
-
-    private fun onError(state: DataState.Error) {
-        Snackbar.make(binding.clMain, state.errorMessage, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onSuccess() {

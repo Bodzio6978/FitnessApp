@@ -10,7 +10,7 @@ import com.gmail.bodziowaty6978.model.Product
 
 class QueryMealRecyclerAdapter(private var meals: MutableList<Product>,private val adapterItemClickListener:OnAdapterItemClickListener): RecyclerView.Adapter<QueryMealRecyclerAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: MealQueryLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ViewHolder(private val binding: MealQueryLayoutBinding) : RecyclerView.ViewHolder(binding.root), View.OnLongClickListener, View.OnClickListener {
 
         fun bind(item: Product){
             binding.product = item
@@ -18,11 +18,17 @@ class QueryMealRecyclerAdapter(private var meals: MutableList<Product>,private v
         }
 
         init {
+            binding.cvItem.setOnLongClickListener(this)
             binding.cvItem.setOnClickListener(this)
         }
 
-        override fun onClick(v: View?) {
-            adapterItemClickListener.onAdapterItemClickListener(adapterPosition)
+        override fun onClick(p0: View?) {
+            adapterItemClickListener.onAdapterItemClickListener(adapterPosition,false)
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            adapterItemClickListener.onAdapterItemClickListener(adapterPosition,true)
+            return true
         }
     }
 
@@ -35,7 +41,5 @@ class QueryMealRecyclerAdapter(private var meals: MutableList<Product>,private v
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(meals[position])
 
     override fun getItemCount(): Int = meals.size
-
-
 
 }
