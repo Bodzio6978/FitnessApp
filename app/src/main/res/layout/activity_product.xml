@@ -52,6 +52,7 @@
 
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btAddNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,8 +137,7 @@
         <LinearLayout
             android:id="@+id/llValuesProduct"
             style="@style/SettingsRl"
-            android:layout_below="@+id/llInformationProduct"
-            android:paddingStart="0dp">
+            android:layout_below="@+id/llInformationProduct">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/tvAveragePrice"
                     android:layout_alignParentEnd="true"
-                    android:text="25zł"
+                    android:text="@string/zl"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -252,7 +252,7 @@
                     android:layout_below="@+id/tvAveragePrice"
                     android:layout_marginTop="5dp"
                     android:layout_toStartOf="@+id/tvAveragePriceValue"
-                    android:text="100g of protein:" />
+                    android:text="10g of protein:" />
 
                 <TextView
                     android:id="@+id/tvPriceProteinValue"
@@ -261,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/tvPriceProtein"
                     android:layout_alignParentEnd="true"
-                    android:text="28zł"
+                    android:text="@string/zl"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -281,13 +281,39 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/tvPriceCalories"
                     android:layout_alignParentEnd="true"
-                    android:text="35zł"
+                    android:text="@string/zl"
                     android:textColor="@color/white" />
 
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlProgressPrice"
+                android:layout_width="0dp"
+                android:layout_weight="0.55"
+                android:layout_marginStart="15dp"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_above="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="Calculating new prices"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAddPrice"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
@@ -310,6 +336,7 @@
                     android:layout_marginBottom="7dp">
 
                     <EditText
+                        android:id="@+id/etPriceValue"
                         style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -330,6 +357,7 @@
                         android:text="zł for:" />
 
                     <EditText
+                        android:id="@+id/etPriceFor"
                         style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -354,12 +382,13 @@
 
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btSubmitPriceProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/llAddPrice"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="Submit"
+                    android:text="@string/submit"
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     app:backgroundTint="@color/grey1"

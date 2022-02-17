@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
-import com.gmail.bodziowaty6978.functions.onError
+import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntry
 import com.gmail.bodziowaty6978.singleton.UserInformation
@@ -129,7 +129,7 @@ class SummaryFragment : Fragment() {
             viewModel.journalEntries.observe(viewLifecycleOwner, {
                 when(it){
                     is Resource.Success -> onJournalSuccess(it.data!!)
-                    else -> onError(binding.clSummary,it.uiText.toString())
+                    else -> showSnackbar(binding.clSummary,it.uiText.toString())
                 }
             })
         }

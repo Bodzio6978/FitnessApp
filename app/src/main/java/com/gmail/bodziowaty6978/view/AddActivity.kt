@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityAddBinding
 import com.gmail.bodziowaty6978.functions.TAG
-import com.gmail.bodziowaty6978.functions.onError
+import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.other.Constants
 import com.gmail.bodziowaty6978.state.Resource
@@ -66,7 +66,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
             viewModel.clickedProduct.observe(this@AddActivity,{
                 when(it){
                     is Resource.Success -> onClickedSuccess(it)
-                    else -> onError(binding.clAdd,it.uiText.toString())
+                    else -> showSnackbar(binding.clAdd,it.uiText.toString())
                 }
             })
         }
@@ -100,7 +100,7 @@ class AddActivity : AppCompatActivity(),LifecycleOwner {
             viewModel.barcodeState.observe(this@AddActivity,{
                 when(it){
                     is Resource.Success -> onClickedSuccess(it)
-                    else -> onError(binding.clAdd,it.uiText.toString())
+                    else -> showSnackbar(binding.clAdd,it.uiText.toString())
                 }
             })
         }

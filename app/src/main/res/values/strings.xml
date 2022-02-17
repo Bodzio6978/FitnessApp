@@ -128,6 +128,8 @@
     <string name="filters">filters</string>
     <string name="error">An Error has occurred</string>
     <string name="username">Username</string>
+    <string name="submit">Submit</string>
+    <string name="zl" format="false">\?zł</string>
 
     <string-array name="works">
         <item>Sedentary</item>

@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
 import com.gmail.bodziowaty6978.functions.TAG
-import com.gmail.bodziowaty6978.functions.onError
+import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
@@ -136,7 +136,7 @@ class DiaryFragment() : Fragment() {
             viewModel.journalEntries.observe(viewLifecycleOwner, {
                 when(it){
                     is Resource.Success -> onJournalSuccess(it.data!!)
-                    else -> onError(binding.clJournal,it.uiText.toString())
+                    else -> showSnackbar(binding.clJournal,it.uiText.toString())
                 }
             })
         }

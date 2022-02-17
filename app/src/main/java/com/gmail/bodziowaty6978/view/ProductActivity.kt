@@ -20,8 +20,9 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityProductBinding
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.getDateInAppFormat
-import com.gmail.bodziowaty6978.functions.onError
 import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.showSnackbar
+import com.gmail.bodziowaty6978.model.Price
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.state.DataState
@@ -35,6 +36,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
     lateinit var binding: ActivityProductBinding
     val viewModel: ProductViewModel by viewModels()
+    lateinit var productId:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,8 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
         initializeDate()
 
+        observePriceState()
+
         binding.ibBackMeal.setOnClickListener {
             super.onBackPressed()
         }
@@ -55,12 +59,12 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
         val mealName = intent.getStringExtra("mealName")
         binding.tvMealNameMeal.text = mealName
 
-        val id = intent.getStringExtra("id")!!
+        productId = intent.getStringExtra("id")!!
 
         val product = intent.getParcelableExtra<Product>("product")
 
         if (product == null) {
-            viewModel.getProduct(id)
+            viewModel.getProduct(productId)
         } else {
             viewModel.productsState.value = Resource.Success(product)
         }
@@ -70,7 +74,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
             if (product != null) {
                 viewModel.addProduct(
                     product,
-                    id,
+                    productId,
                     weight,
                     mealName.toString()
                 )
@@ -79,7 +83,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
                 if (currentProduct != null) {
                     viewModel.addProduct(
                         currentProduct,
-                        id,
+                        productId,
                         weight,
                         mealName.toString()
                     )
@@ -95,7 +99,30 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
             viewModel.productsState.observe(this@ProductActivity, {
                 when (it) {
                     is Resource.Success -> initializeUi(it.data!!)
-                    else -> onError(binding.clProduct, it.uiText.toString())
+                    else -> showSnackbar(binding.clProduct, it.uiText.toString())
+                }
+            })
+        }
+    }
+
+    private fun observePriceState(){
+        lifecycleScope.launch {
+            viewModel.priceState.observe(this@ProductActivity,{
+                when(it){
+                    is DataState.Loading -> {
+                        binding.rlProgressPrice.visibility = View.VISIBLE
+                        binding.rlAddPrice.visibility = View.GONE
+                    }
+                    is DataState.Error -> {
+                        showSnackbar(binding.clProduct, it.errorMessage)
+                        binding.rlProgressPrice.visibility = View.GONE
+                        binding.rlAddPrice.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        binding.rlProgressPrice.visibility = View.GONE
+                        binding.rlAddPrice.visibility = View.VISIBLE
+                        showSnackbar(binding.clProduct, "Prices have been successfully updated")
+                    }
                 }
             })
         }
@@ -119,7 +146,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
                     is DataState.Error -> {
                         binding.rlProduct.visibility = View.VISIBLE
                         binding.pbProduct.visibility = View.GONE
-                        onError(binding.clProduct, it.errorMessage)
+                        showSnackbar(binding.clProduct, it.errorMessage)
                     }
                     is DataState.Loading -> onLoading()
                 }
@@ -154,7 +181,41 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
             binding.tvBrandMeal.visibility = View.VISIBLE
         }
 
+        initializePrices(product.prices)
+
+        binding.btSubmitPriceProduct.setOnClickListener {
+            viewModel.calculateNewPrices(
+                binding.etPriceValue.text.trim().toString(),
+                binding.etPriceFor.text.trim().toString(),
+                productId
+            )
+        }
+
+        binding.btAddNew.visibility = View.VISIBLE
+
         binding.tvUnitMeal.text = product.unit
+    }
+
+    private fun initializePrices(prices:List<Price>){
+        if (prices.isNotEmpty()){
+            for (price in prices){
+                when(price.forWhat){
+                    "100g of product" -> {
+                        "${price.price}zł".also { binding.tvAveragePriceValue.text = it }
+                    }
+                    "10g of protein" -> {
+                        if (price.price!=0.0){
+                            "${price.price}zł".also { binding.tvPriceProteinValue.text = it }
+                        }
+                    }
+                    "100 kcal" -> {
+                        if (price.price!=0.0){
+                            "${price.price}zł".also { binding.tvPriceCaloriesValue.text = it }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun refreshNutritionValues(product: Product,weight:Double){
