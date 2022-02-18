@@ -44,4 +44,13 @@ class ProductRepository {
         }
     }
 
+    suspend fun updateEntry(entryId:String,entry:JournalEntry):DataState{
+        return try {
+            db.collection("users").document(userId).collection("journal").document(entryId).set(entry)
+            DataState.Success
+        }catch (e:Exception){
+            DataState.Error("Error occurred when trying edit entry")
+        }
+    }
+
 }

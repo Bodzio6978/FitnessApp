@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.PieEntry
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.functions.recalculateValues
 import com.gmail.bodziowaty6978.functions.round
-import com.gmail.bodziowaty6978.functions.toShortString
+import com.gmail.bodziowaty6978.functions.toJournalEntry
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.Price
 import com.gmail.bodziowaty6978.model.Product
 import com.gmail.bodziowaty6978.repository.ProductRepository
-import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,8 +28,11 @@ class ProductViewModel @Inject constructor(
 ) : ViewModel() {
 
     val productsState = MutableLiveData<Resource<Product>>()
+
     private val repository = ProductRepository()
+
     val addingState = MutableLiveData<DataState>()
+    val editingState = MutableLiveData<DataState>()
 
     val priceState = MutableLiveData<DataState>()
 
@@ -37,32 +40,31 @@ class ProductViewModel @Inject constructor(
         addingState.value = DataState.Loading
         viewModelScope.launch {
             withContext(dispatchers.default) {
-                val weightValue = weight.replace(",", ".").toDouble()
+                if (weight.isBlank()) addingState.postValue(DataState.Error("Please enter entry weight"))
+                else{
+                    val weightValue = weight.replace(",", ".").trim().toDouble()
+                    val journalEntry = product.toJournalEntry(weightValue,id,mealName)
 
-                val calories = (product.calories.toDouble() * weightValue / 100.0).toInt()
-                val carbohydrates = (product.carbs * weightValue / 100.0).round(2)
-                val protein = (product.protein * weightValue / 100.0).round(2)
-                val fat = (product.fat * weightValue / 100.0).round(2)
-
-                val entry = JournalEntry(
-                    product.name!!,
-                    id,
-                    mealName,
-                    CurrentDate.date().value!!.toShortString(),
-                    CurrentDate.date().value!!.timeInMillis,
-                    product.brand!!,
-                    weightValue,
-                    product.unit!!,
-                    calories,
-                    carbohydrates,
-                    protein,
-                    fat
-                )
-                withContext(dispatchers.io) {
-                    addingState.postValue(repository.addEntry(entry))
+                    withContext(dispatchers.io) {
+                        addingState.postValue(repository.addEntry(journalEntry))
+                    }
                 }
             }
+        }
+    }
 
+    fun editJournalEntry(entryId:String,entry:JournalEntry,weight: String){
+        editingState.value = DataState.Loading
+        viewModelScope.launch(dispatchers.default) {
+            if (weight.isBlank()) editingState.value = DataState.Error("Please enter entry weight")
+            else{
+                val weightValue = weight.replace(",", ".").trim().toDouble()
+                val newEntry = entry.recalculateValues(weightValue)
+                withContext(dispatchers.io){
+                    val result = repository.updateEntry(entryId,newEntry)
+                    editingState.postValue(result)
+                }
+            }
         }
     }
 

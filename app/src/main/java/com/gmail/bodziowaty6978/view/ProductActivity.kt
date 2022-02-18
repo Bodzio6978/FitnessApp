@@ -72,6 +72,13 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
 
             viewModel.getProduct(entry.id)
 
+            observeEditState()
+
+            binding.btAddNew.setOnClickListener {
+                viewModel.editJournalEntry(entryId,
+                    entry,
+                binding.etWeightMeal.text.toString())
+            }
         }else{
             binding.etWeightMeal.setText("100")
             val product = intent.getParcelableExtra<Product>("product")
@@ -83,7 +90,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
             }
 
             binding.btAddNew.setOnClickListener {
-                val weight = binding.etWeightMeal.text.toString().replace(",", ".").trim()
+                val weight = binding.etWeightMeal.text.toString()
                 if (product != null) {
                     viewModel.addProduct(
                         product,
@@ -113,6 +120,24 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
                 when (it) {
                     is Resource.Success -> initializeUi(it.data!!)
                     else -> showSnackbar(binding.clProduct, it.uiText.toString())
+                }
+            })
+        }
+    }
+
+    private fun observeEditState(){
+        lifecycleScope.launch {
+            viewModel.editingState.observe(this@ProductActivity,{
+                when(it){
+                    is DataState.Success -> startActivity(Intent(this@ProductActivity,MainActivity::class.java).putExtra("position",1))
+                    is DataState.Error -> {
+                        binding.rlProduct.visibility = View.VISIBLE
+                        binding.pbProduct.visibility = View.GONE
+                        showSnackbar(binding.clProduct,it.errorMessage)
+                    }
+                    else -> {
+                        onLoading()
+                    }
                 }
             })
         }
