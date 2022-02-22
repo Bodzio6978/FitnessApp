@@ -21,10 +21,7 @@ import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.UserInformationState
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
-import com.gmail.bodziowaty6978.view.mainfragments.DiaryFragment
-import com.gmail.bodziowaty6978.view.mainfragments.SplashFragment
-import com.gmail.bodziowaty6978.view.mainfragments.SummaryFragment
-import com.gmail.bodziowaty6978.view.mainfragments.TrainingFragment
+import com.gmail.bodziowaty6978.view.mainfragments.*
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +37,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private val summary = SummaryFragment()
     private val diary = DiaryFragment()
-    private val training = TrainingFragment()
+    private val settings = SettingsFragment()
     private val splashFragment = SplashFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,9 +124,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                         setFragment(diary)
                         binding.rlCalendar.visibility = View.VISIBLE
                     }
-                    R.id.menu_training -> {
-                        setFragment(training)
-                        binding.rlCalendar.visibility = View.VISIBLE
+                    R.id.menu_settings -> {
+                        setFragment(settings)
+                        binding.rlCalendar.visibility = View.GONE
                     }
                 }
                 true
