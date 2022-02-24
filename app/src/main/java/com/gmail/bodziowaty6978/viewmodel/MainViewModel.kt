@@ -11,9 +11,10 @@ import com.gmail.bodziowaty6978.functions.toCalendar
 import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.model.LogEntry
-import com.gmail.bodziowaty6978.model.WeightEntry
+import com.gmail.bodziowaty6978.model.LogEntity
+import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.repository.MainRepository
+import com.gmail.bodziowaty6978.room.AppDatabase
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
@@ -29,7 +30,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    private val roomDatabase: AppDatabase
 ) : ViewModel() {
     private lateinit var repository: MainRepository
 
@@ -37,8 +39,8 @@ class MainViewModel @Inject constructor(
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
 
     val journalEntries = MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
-    val weightEntries = MutableLiveData<MutableList<WeightEntry>>()
-    val logEntries = MutableLiveData<MutableList<LogEntry>>()
+    val weightEntries = MutableLiveData<MutableList<WeightEntity>>()
+    val logEntries = MutableLiveData<MutableList<LogEntity>>()
 
 
     val currentLogStrike = MutableStateFlow<Int>(1)
@@ -47,7 +49,7 @@ class MainViewModel @Inject constructor(
 
     fun isUserLogged(): Boolean {
         return if (FirebaseAuth.getInstance().currentUser != null) {
-            repository = MainRepository()
+            repository = MainRepository(roomDatabase)
             true
         } else {
             false
@@ -94,7 +96,9 @@ class MainViewModel @Inject constructor(
     private suspend fun fetchWeightEntries() {
         viewModelScope.launch {
             withContext(dispatchers.io) {
-                weightEntries.postValue(repository.getWeightEntries())
+                val result = repository.getWeightEntries()
+                Log.e(TAG,result.toString())
+                weightEntries.postValue(result)
             }
         }
     }
@@ -103,6 +107,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(dispatchers.io) {
                 logEntries.postValue(repository.getLastLogEntry())
+                Log.e(TAG,logEntries.value.toString())
             }
         }
     }
@@ -126,11 +131,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun calculateStrike(entry: LogEntry) {
+    fun calculateStrike(entry: LogEntity) {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 val currentDate = Calendar.getInstance()
                 val lastDateCalendar = toCalendar(Date(entry.time))
+
+                Log.e(TAG+"huj",logEntries.value.toString())
 
                 if (lastDateCalendar != null) {
 
@@ -164,7 +171,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun calculateWeightProgress(weightLogs: MutableList<WeightEntry>): String {
+    fun calculateWeightProgress(weightLogs: MutableList<WeightEntity>): String {
         if (weightLogs.size > 1) {
             weightLogs.sortByDescending { it.time }
             val size = weightLogs.size
@@ -185,7 +192,7 @@ class MainViewModel @Inject constructor(
         return ""
     }
 
-    fun checkIfWeightHasBeenEnteredToday(weights: MutableList<WeightEntry>): Boolean {
+    fun checkIfWeightHasBeenEnteredToday(weights: MutableList<WeightEntity>): Boolean {
         Log.d(TAG, "Check if weight has been entered today")
 
         for (entry in weights.toMutableList()) {
@@ -199,7 +206,8 @@ class MainViewModel @Inject constructor(
     fun setWeightEntry(value: Double) {
         Log.d(TAG, "Set today weight")
 
-        val weightEntry = WeightEntry(
+        val weightEntry = WeightEntity(
+            id = 0,
             time = Calendar.getInstance().timeInMillis,
             value = value,
             date = Calendar.getInstance().toShortString()
@@ -207,6 +215,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val isSuccessful = repository.addWeightEntry(weightEntry)
+            Log.e(TAG,isSuccessful.toString())
 
             if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
             else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
@@ -215,7 +224,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    private suspend fun addNewWeightEntry(entry: WeightEntry) {
+    private suspend fun addNewWeightEntry(entry: WeightEntity) {
         viewModelScope.launch {
             withContext(dispatchers.default) {
                 val entries = weightEntries.value
@@ -325,10 +334,10 @@ class MainViewModel @Inject constructor(
 
     //SUMMARY************************************************************************************************
 
-    private suspend fun createLogEntry(strike: Int = 1) {
+    suspend fun createLogEntry(strike: Int = 1) {
         viewModelScope.launch(dispatchers.io) {
             val currentTime = Calendar.getInstance().timeInMillis
-            val logEntry = LogEntry(currentTime, strike)
+            val logEntry = LogEntity(id = 0, time = currentTime, strike = strike)
 
             val result = repository.addLogEntry(logEntry)
             if (result is DataState.Success) currentLogStrike.emit(strike)

@@ -1,7 +1,8 @@
 package com.gmail.bodziowaty6978.repository
 
-import com.gmail.bodziowaty6978.model.LogEntry
-import com.gmail.bodziowaty6978.model.WeightEntry
+import com.gmail.bodziowaty6978.model.LogEntity
+import com.gmail.bodziowaty6978.model.WeightEntity
+import com.gmail.bodziowaty6978.room.AppDatabase
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.google.firebase.auth.FirebaseAuth
@@ -13,9 +14,13 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 
-class MainRepository {
+class MainRepository(roomDatabase: AppDatabase) {
 
     private val db = Firebase.firestore
+
+    private val logDao = roomDatabase.logDao()
+    private val weightDao = roomDatabase.weightDao()
+
     private var userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val userDocument = db.collection("users").document(userId)
     private val journalCollection = userDocument.collection("journal")
@@ -34,41 +39,37 @@ class MainRepository {
         }
     }
 
-    suspend fun getWeightEntries(): MutableList<WeightEntry> {
+    suspend fun getWeightEntries(): MutableList<WeightEntity> {
         return try {
-            weightCollection.limit(14).orderBy("time", Query.Direction.DESCENDING)
-                .get().await().toObjects(WeightEntry::class.java)
+            weightDao.readLastWeightEntries().toMutableList()
         } catch (e: Exception) {
-            emptyList<WeightEntry>().toMutableList()
+            emptyList<WeightEntity>().toMutableList()
         }
     }
 
-    suspend fun getLastLogEntry():MutableList<LogEntry>{
+    suspend fun getLastLogEntry():MutableList<LogEntity>{
         return try {
-            logCollection.limit(1)
-                .orderBy("time", Query.Direction.DESCENDING).get().await().toObjects(LogEntry::class.java)
+            logDao.readLastLog().toMutableList()
         }catch (e:Exception){
-            emptyList<LogEntry>().toMutableList()
+            emptyList<LogEntity>().toMutableList()
         }
     }
 
-    suspend fun addLogEntry(entry : LogEntry):DataState{
+    suspend fun addLogEntry(entry : LogEntity):DataState{
         return try {
-            logCollection.add(entry).await()
+            logDao.addLogEntry(entry)
             DataState.Success
         }catch (e:Exception){
             DataState.Error("An error has occurred when adding new log entry")
         }
     }
 
-    suspend fun addWeightEntry(entry: WeightEntry): DataState {
+    suspend fun addWeightEntry(entry: WeightEntity): DataState {
         return try {
-            db.collection("users").document(userId).collection("weight").add(
-                entry
-            ).await()
+            weightDao.addWeightEntry(entry)
             DataState.Success
         } catch (e: Exception) {
-            DataState.Error("An error has occurred when adding new weight entry")
+            DataState.Error("An error has occurred when adding new weight entry: ${e.message}")
         }
     }
 

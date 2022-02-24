@@ -12,7 +12,7 @@ import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
-import com.gmail.bodziowaty6978.model.WeightEntry
+import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
@@ -66,6 +66,10 @@ class SummaryFragment : Fragment() {
             viewModel.logEntries.observe(viewLifecycleOwner,{
                 if (it.isNotEmpty()){
                     viewModel.calculateStrike(it[0])
+                }else{
+                    lifecycleScope.launch {
+                        viewModel.createLogEntry()
+                    }
                 }
             })
         }
@@ -88,7 +92,7 @@ class SummaryFragment : Fragment() {
         }
     }
 
-    private fun setWeight(weights: MutableList<WeightEntry>) {
+    private fun setWeight(weights: MutableList<WeightEntity>) {
         if (weights.isEmpty()) {
             val userInformation = UserInformation.user.value!!.userInformation!!
             binding.tvCurrentWeightSummary.text = ("${userInformation["currentWeight"]} kg")
