@@ -3,6 +3,7 @@ package com.gmail.bodziowaty6978.di
 import android.content.Context
 import androidx.room.Room
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
+import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.other.StandardDispatchers
 import com.gmail.bodziowaty6978.room.AppDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,20 +22,25 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDispatcherProvider():DispatcherProvider{
+    fun provideDispatcherProvider(): DispatcherProvider {
         return StandardDispatchers()
     }
 
     @Singleton
     @Provides
-    fun provideFirebaseFirestore():FirebaseFirestore{
+    fun provideFirebaseFirestore(): FirebaseFirestore {
         return Firebase.firestore
     }
 
     @Singleton
     @Provides
-    fun provideApplicationDatabase(@ApplicationContext context: Context):AppDatabase{
+    fun provideApplicationDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(context, AppDatabase::class.java, "app_database").build()
     }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(@ApplicationContext appContext: Context): DataStoreManager =
+        DataStoreManager(appContext)
 
 }

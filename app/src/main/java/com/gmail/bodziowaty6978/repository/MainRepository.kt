@@ -7,6 +7,7 @@ import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -14,18 +15,17 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 
-class MainRepository(roomDatabase: AppDatabase) {
+class MainRepository(roomDatabase: AppDatabase,
+firestore:FirebaseFirestore) {
 
-    private val db = Firebase.firestore
+    private val firestore = Firebase.firestore
 
     private val logDao = roomDatabase.logDao()
     private val weightDao = roomDatabase.weightDao()
 
     private var userId = FirebaseAuth.getInstance().currentUser!!.uid
-    private val userDocument = db.collection("users").document(userId)
+    private val userDocument = firestore.collection("users").document(userId)
     private val journalCollection = userDocument.collection("journal")
-    private val weightCollection = userDocument.collection("weight")
-    private val logCollection = userDocument.collection("logEntries")
 
     fun userId() = userId
 
@@ -75,7 +75,7 @@ class MainRepository(roomDatabase: AppDatabase) {
 
     suspend fun setWeightDialogPermission(isAllowed: Boolean): DataState {
         return try {
-            db.collection("users").document(userId).set(
+            firestore.collection("users").document(userId).set(
                 mapOf("areWeightDialogsEnabled" to isAllowed),
                 SetOptions.merge()
             ).await()
@@ -87,7 +87,7 @@ class MainRepository(roomDatabase: AppDatabase) {
 
     suspend fun removeJournalEntry(key: String): DataState {
         return try {
-            db.collection("users").document(userId)
+            firestore.collection("users").document(userId)
                 .collection("journal")
                 .document(key).delete()
                 .await()

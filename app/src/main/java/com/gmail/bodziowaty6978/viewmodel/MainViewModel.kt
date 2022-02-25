@@ -14,7 +14,6 @@ import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.LogEntity
 import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.repository.MainRepository
-import com.gmail.bodziowaty6978.room.AppDatabase
 import com.gmail.bodziowaty6978.singleton.CurrentDate
 import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
@@ -31,9 +30,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val dispatchers: DispatcherProvider,
-    private val roomDatabase: AppDatabase
+    private val repository: MainRepository
 ) : ViewModel() {
-    private lateinit var repository: MainRepository
 
     val userInformationState = MutableLiveData<UserInformationState>()
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
@@ -48,12 +46,7 @@ class MainViewModel @Inject constructor(
     //WEIGHT************************************************************************************************
 
     fun isUserLogged(): Boolean {
-        return if (FirebaseAuth.getInstance().currentUser != null) {
-            repository = MainRepository(roomDatabase)
-            true
-        } else {
-            false
-        }
+        return FirebaseAuth.getInstance().currentUser != null
     }
 
     fun requireData(date: String) {
