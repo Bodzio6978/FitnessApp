@@ -16,7 +16,6 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMainBinding
 import com.gmail.bodziowaty6978.functions.*
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.UserInformationState
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
@@ -50,7 +49,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         setFragment(splashFragment)
 
         if (viewModel.isUserLogged()) {
-            viewModel.checkUser()
+            lifecycleScope.launchWhenStarted {
+                viewModel.userInformation.observe(this@MainActivity,{
+                    viewModel.checkUser()
+                })
+            }
         } else {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -141,7 +144,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private fun observeUser() {
         lifecycleScope.launch {
-            UserInformation.user.observe(this@MainActivity, {
+            viewModel.userInformation.observe(this@MainActivity, {
                 checkIfWeightDialogEnabled(it.areWeightDialogsEnabled)
             })
         }
@@ -191,7 +194,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
                     val value: Double =
                         if (weightEntries.isEmpty()) {
-                            UserInformation.user.value!!.userInformation!!["currentWeight"]!!.toDouble()
+                            viewModel.userInformation.value!!.userInformation!!["currentWeight"]!!.toDouble()
                         } else {
                             weightEntries.sortByDescending { it.time }
                             weightEntries[0].value

@@ -13,7 +13,6 @@ import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntity
-import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
@@ -94,7 +93,7 @@ class SummaryFragment : Fragment() {
 
     private fun setWeight(weights: MutableList<WeightEntity>) {
         if (weights.isEmpty()) {
-            val userInformation = UserInformation.user.value!!.userInformation!!
+            val userInformation = viewModel.userInformation.value!!.userInformation!!
             binding.tvCurrentWeightSummary.text = ("${userInformation["currentWeight"]} kg")
         } else {
             lifecycleScope.launch {
@@ -119,7 +118,7 @@ class SummaryFragment : Fragment() {
 
     private fun observeCurrentUser() {
         lifecycleScope.launchWhenStarted {
-            UserInformation.user.observe(viewLifecycleOwner, {
+            viewModel.userInformation.observe(viewLifecycleOwner, {
                 val nutritionValues = it.nutritionValues
                 if (nutritionValues != null) {
                     setWantedCalories(nutritionValues["wantedCalories"]!!)

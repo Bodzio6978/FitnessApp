@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.round
@@ -13,9 +14,9 @@ import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.LogEntity
 import com.gmail.bodziowaty6978.model.WeightEntity
+import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.repository.MainRepository
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.state.UserInformationState
@@ -30,8 +31,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val dispatchers: DispatcherProvider,
-    private val repository: MainRepository
+    private val repository: MainRepository,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
+    val userInformation = dataStoreManager.getUserInformation.asLiveData()
 
     val userInformationState = MutableLiveData<UserInformationState>()
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
@@ -39,7 +42,6 @@ class MainViewModel @Inject constructor(
     val journalEntries = MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
     val weightEntries = MutableLiveData<MutableList<WeightEntity>>()
     val logEntries = MutableLiveData<MutableList<LogEntity>>()
-
 
     val currentLogStrike = MutableStateFlow<Int>(1)
 
@@ -115,8 +117,7 @@ class MainViewModel @Inject constructor(
 
     fun checkUser() {
         viewModelScope.launch {
-            val user = UserInformation.fetchUser().data
-            if (user?.nutritionValues == null || user.userInformation == null) {
+            if (userInformation.value?.nutritionValues == null || userInformation.value?.userInformation == null) {
                 userInformationState.value = UserInformationState.NoInformation
             } else {
                 userInformationState.value = UserInformationState.HasInformation
@@ -156,9 +157,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             Log.e(TAG, "Dialog permission")
             withContext(dispatchers.io) {
-                val result = repository.setWeightDialogPermission(areEnabled)
-
-                if (result is DataState.Error) dataState.value = result
+                dataStoreManager.saveWeightDialogsPermission(areEnabled)
             }
         }
     }
@@ -206,13 +205,14 @@ class MainViewModel @Inject constructor(
             date = Calendar.getInstance().toShortString()
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val isSuccessful = repository.addWeightEntry(weightEntry)
-            Log.e(TAG,isSuccessful.toString())
+        viewModelScope.launch(dispatchers.io) {
+            if (!checkIfWeightHasBeenEnteredToday(weightEntries.value!!)){
+                val isSuccessful = repository.addWeightEntry(weightEntry)
+                Log.e(TAG,isSuccessful.toString())
 
-            if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
-            else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
-
+                if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
+                else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
+            }
         }
     }
 

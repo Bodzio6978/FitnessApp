@@ -4,26 +4,28 @@ import androidx.collection.ArrayMap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
+import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.view.introduction.FirstIntroductionFragment
 import com.gmail.bodziowaty6978.view.introduction.SecondIntroductionFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class IntroductionViewModel : ViewModel() {
+@HiltViewModel
+class IntroductionViewModel @Inject constructor(
+    private val dispatchers: DispatcherProvider,
+    private val dataStoreManager: DataStoreManager
+) : ViewModel() {
 
     private val fragment1 = FirstIntroductionFragment()
     private val fragment2 = SecondIntroductionFragment()
 
-    private val db = Firebase.firestore
-
-    private val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
     private val userInformationMap = ArrayMap<String, String>()
 
-    private val addingInformation = MutableLiveData<InformationState>()
+    val addingInformation = MutableLiveData<InformationState>()
 
     fun getFragments(): ArrayList<Fragment> {
         val list = ArrayList<Fragment>()
@@ -41,43 +43,61 @@ class IntroductionViewModel : ViewModel() {
 
         if (isFinished && userInformationMap.size == 8) {
 
-            addingInformation.value = InformationState(InformationState.ADDING_INFORMATION)
+            viewModelScope.launch(dispatchers.default) {
+                addingInformation.postValue(InformationState(InformationState.ADDING_INFORMATION))
 
-            val gender = userInformationMap["gender"]!!
-            val age = userInformationMap["age"]?.toInt()!!
-            val currentWeight = userInformationMap["current"]!!.replace(",",".").toDouble().round()
-            val wantedWeight = userInformationMap["desired"]!!.replace(",",".").toDouble().round()
+                val gender = userInformationMap["gender"]!!
+                val age = userInformationMap["age"]?.toInt()!!
+                val currentWeight =
+                    userInformationMap["current"]!!.replace(",", ".").toDouble().round()
+                val wantedWeight =
+                    userInformationMap["desired"]!!.replace(",", ".").toDouble().round()
 
-            val workType = userInformationMap["type"]!!
-            val workoutInWeek = userInformationMap["workouts"]!!
-            val activityInDay = userInformationMap["activity"]!!
+                val workType = userInformationMap["type"]!!
+                val workoutInWeek = userInformationMap["workouts"]!!
+                val activityInDay = userInformationMap["activity"]!!
 
-            val height = userInformationMap["height"]!!.replace(",",".").toDouble().round()
+                val height = userInformationMap["height"]!!.replace(",", ".").toDouble().round()
 
-            val userInformation = mapOf<String,String>("gender" to gender,
+                val userInformation = mapOf<String, String>(
+                    "gender" to gender,
                     "currentWeight" to currentWeight.toString(),
                     "wantedWeight" to wantedWeight.toString(),
                     "workType" to workType,
                     "workoutInWeek" to workoutInWeek,
                     "activityInDay" to activityInDay,
-                    "height" to height.toString(),)
+                    "height" to height.toString(),
+                )
 
-            val nutritionValues = calculateNutritionNeeds(gender,age,currentWeight,wantedWeight,workType,activityInDay,workoutInWeek,height)
+                val nutritionValues = calculateNutritionNeeds(
+                    gender,
+                    age,
+                    currentWeight,
+                    wantedWeight,
+                    workType,
+                    activityInDay,
+                    workoutInWeek,
+                    height
+                )
 
-            val batch = db.batch()
+                dataStoreManager.saveNutritionValues(nutritionValues)
+                dataStoreManager.saveUserInformation(userInformation)
 
-            val userRef = db.collection("users").document(userId)
-
-            batch.set(userRef, mapOf("userInformation" to userInformation),SetOptions.merge())
-            batch.set(userRef,mapOf("nutritionValues" to nutritionValues),SetOptions.merge())
-
-            batch.commit().addOnSuccessListener {
-                addingInformation.value = InformationState(InformationState.INFORMATION_ADDED)
+                addingInformation.postValue(InformationState(InformationState.INFORMATION_ADDED))
             }
         }
     }
 
-    private fun calculateNutritionNeeds(gender: String,age:Int, currentWeight: Double, wantedWeight: Double,workType:String,activityInDay:String,workoutsInWeek:String, height: Double): Map<String,Double> {
+    private fun calculateNutritionNeeds(
+        gender: String,
+        age: Int,
+        currentWeight: Double,
+        wantedWeight: Double,
+        workType: String,
+        activityInDay: String,
+        workoutsInWeek: String,
+        height: Double
+    ): Map<String, Double> {
 
         val ppm = when (gender) {
             "Male" -> {
@@ -128,13 +148,13 @@ class IntroductionViewModel : ViewModel() {
         val wantedFat = currentWeight * 0.93
         val wantedCarbs = ((wantedCalories - ((9.0 * wantedFat) + (4.0 * wantedProtein))) / 4.0)
 
-        return mapOf<String,Double>("wantedCalories" to wantedCalories.round(),
-                "wantedCarbohydrates" to wantedCarbs.round(),
-                "wantedProtein" to wantedProtein.round(),
-                "wantedFat" to wantedFat.round())
+        return mapOf<String, Double>(
+            "wantedCalories" to wantedCalories.round(),
+            "wantedCarbohydrates" to wantedCarbs.round(),
+            "wantedProtein" to wantedProtein.round(),
+            "wantedFat" to wantedFat.round()
+        )
     }
-
-    fun getInformationStatus(): MutableLiveData<InformationState> = addingInformation
 }
 
 class InformationState(val value: Int) {

@@ -9,11 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSettingsBinding
 import com.gmail.bodziowaty6978.model.User
-import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
 
 
 class SettingsFragment : Fragment() {
@@ -40,8 +38,8 @@ class SettingsFragment : Fragment() {
     }
 
     private fun observeUser(){
-        lifecycleScope.launch {
-            UserInformation.user.observe(this@SettingsFragment,{
+        lifecycleScope.launchWhenStarted {
+            viewModel.userInformation.observe(this@SettingsFragment,{
                 initializeCaloriesGoals(it)
             })
         }

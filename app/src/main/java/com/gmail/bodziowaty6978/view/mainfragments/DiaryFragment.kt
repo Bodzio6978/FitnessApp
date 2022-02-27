@@ -16,7 +16,6 @@ import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.singleton.UserInformation
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.view.ProductActivity
@@ -93,9 +92,11 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun observeWantedValues() {
-        UserInformation.user.observe(viewLifecycleOwner, {
-            setUpUI(it.nutritionValues!!)
-        })
+        lifecycleScope.launchWhenStarted {
+            viewModel.userInformation.observe(viewLifecycleOwner, {
+                setUpUI(it.nutritionValues!!)
+            })
+        }
     }
 
     private fun setUpUI(map: Map<String, Double>) {
