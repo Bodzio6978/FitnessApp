@@ -13,8 +13,9 @@ import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.view.MainActivity
 import com.gmail.bodziowaty6978.viewmodel.auth.RegisterViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var binding: ActivityRegisterBinding

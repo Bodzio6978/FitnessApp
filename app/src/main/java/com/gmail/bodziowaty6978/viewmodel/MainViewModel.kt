@@ -45,8 +45,6 @@ class MainViewModel @Inject constructor(
 
     val currentLogStrike = MutableStateFlow<Int>(1)
 
-    //WEIGHT************************************************************************************************
-
     fun isUserLogged(): Boolean {
         return FirebaseAuth.getInstance().currentUser != null
     }
@@ -231,13 +229,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
-    //WEIGHT************************************************************************************************
-
-
-    //JOURNAL************************************************************************************************
-
-
     private fun sortProducts(list: MutableMap<String, JournalEntry>): MutableMap<String, MutableMap<String, JournalEntry>> {
         val breakfast = mutableMapOf<String, JournalEntry>()
         val lunch = mutableMapOf<String, JournalEntry>()
@@ -302,7 +293,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun getEntryId(entry:JournalEntry):String?{
+    fun getEntryId(entry:JournalEntry):String?{
         val entryList = journalEntries.value?.data
 
         if (entryList != null) {
@@ -322,11 +313,6 @@ class MainViewModel @Inject constructor(
         return null
     }
 
-
-    //JOURNAL************************************************************************************************
-
-    //SUMMARY************************************************************************************************
-
     suspend fun createLogEntry(strike: Int = 1) {
         viewModelScope.launch(dispatchers.io) {
             val currentTime = Calendar.getInstance().timeInMillis
@@ -338,8 +324,5 @@ class MainViewModel @Inject constructor(
 
         }
     }
-
-
-    //SUMMARY************************************************************************************************
 }
 

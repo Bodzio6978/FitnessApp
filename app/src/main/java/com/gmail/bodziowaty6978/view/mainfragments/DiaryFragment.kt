@@ -36,7 +36,7 @@ class DiaryFragment() : Fragment() {
     ): View? {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         lifecycleScope.launchWhenStarted {
             viewModel.dataState.collect {

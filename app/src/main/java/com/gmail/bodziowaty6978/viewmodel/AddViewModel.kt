@@ -16,10 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    private val repository: AddRepository
 )  : ViewModel() {
-    private val repository = AddRepository()
-
     val barcodeState = MutableLiveData<Resource<Pair<String,Product>>>()
     val searchResultState = MutableLiveData<Resource<Map<String,Product>>>()
 

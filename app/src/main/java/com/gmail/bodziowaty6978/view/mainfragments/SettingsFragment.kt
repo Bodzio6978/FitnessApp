@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSettingsBinding
 import com.gmail.bodziowaty6978.model.User
@@ -25,6 +26,7 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater,container,false)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         binding.rlLogOutSettings.setOnClickListener {
             logOutUser()

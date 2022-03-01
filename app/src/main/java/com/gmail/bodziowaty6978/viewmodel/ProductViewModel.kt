@@ -24,16 +24,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    private val repository: ProductRepository
 ) : ViewModel() {
 
     val productsState = MutableLiveData<Resource<Product>>()
-
-    private val repository = ProductRepository()
-
     val addingState = MutableLiveData<DataState>()
     val editingState = MutableLiveData<DataState>()
-
     val priceState = MutableLiveData<DataState>()
 
     fun addProduct(product: Product, id: String, weight: String, mealName: String) {
