@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.settings.NutritionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlTopNutrition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/ibBackNutrition"
+                style="@style/backArrow"
+                android:layout_centerVertical="true" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:text="@string/save"
+                android:textColor="@color/primary"
+                android:textSize="16sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlCaloriesNutrition"
+            android:layout_below="@+id/rlTopNutrition"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/etCaloriesNutrition"
+                android:text="Calories:" />
+
+            <EditText
+                android:id="@+id/etCaloriesNutrition"
+                style="@style/InputEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/tvKcalNutrition"
+                android:minWidth="100dp" />
+
+            <TextView
+                android:id="@+id/tvKcalNutrition"
+                style="@style/Paragraph_Secondary_Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="Kcal" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlValuesNutrition"
+            style="@style/SettingsRl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlCaloriesNutrition"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/tvTitleNutrition"
+                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Macro elements" />
+
+            <LinearLayout
+                android:id="@+id/llValuesNutrition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTitleNutrition"
+                android:layout_marginTop="20dp">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_weight="0.3">
+
+                    <TextView
+                        android:id="@+id/tvCarbsTitle"
+                        style="@style/Paragraph_Secondary_Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Carbs"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentCarbsNutrition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvCarbsTitle"
+                        android:text="189g"
+                        android:textAlignment="center" />
+
+                    <NumberPicker
+                        android:id="@+id/npCarbohydratesNutrition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvCurrentCarbsNutrition"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_weight="0.3">
+
+                    <TextView
+                        android:id="@+id/tvProteinTitle"
+                        style="@style/Paragraph_Secondary_Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Protein"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentProteinNutrition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvProteinTitle"
+                        android:text="189g"
+                        android:textAlignment="center" />
+
+                    <NumberPicker
+                        android:id="@+id/npProteinNutrition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvCurrentProteinNutrition"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_weight="0.2" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_weight="0.3">
+
+                    <TextView
+                        android:id="@+id/tvFatTitle"
+                        style="@style/Paragraph_Secondary_Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Fat"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentFatNutrition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvFatTitle"
+                        android:text="189g"
+                        android:textAlignment="center" />
+
+                    <NumberPicker
+                        android:id="@+id/npFatNutrition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvCurrentFatNutrition"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_weight="0.2" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llValuesNutrition">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total %"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_toStartOf="@id/tvPercentageNutrition"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/tvPercentageNutrition"
+                    android:text="100%"
+                    android:textSize="20sp"
+                    android:textColor="@color/green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your total have to be at 100%"
+                    android:layout_below="@+id/tvPercentageNutrition"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+<!--        <TextView-->
+<!--            style="@style/Paragraph_Secondary_Caption"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginBottom="40dp"-->
+<!--            android:text="I don't want to enter it by myself"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textColor="@color/primary" />-->
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

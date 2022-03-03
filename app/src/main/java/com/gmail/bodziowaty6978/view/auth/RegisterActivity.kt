@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity(), LifecycleOwner {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
         lifecycleScope.launchWhenStarted {
             viewModel.dataState.collect{

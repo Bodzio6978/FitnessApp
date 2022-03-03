@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSettingsBinding
 import com.gmail.bodziowaty6978.model.User
 import com.gmail.bodziowaty6978.view.auth.LoginActivity
+import com.gmail.bodziowaty6978.view.settings.NutritionActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 
 class SettingsFragment : Fragment() {
@@ -32,8 +34,14 @@ class SettingsFragment : Fragment() {
             logOutUser()
         }
 
-        observeUser()
+        binding.rlGoalSettings.setOnClickListener {
+            lifecycleScope.launch {
+                val intent = Intent(requireContext(),NutritionActivity::class.java)
+                startActivity(intent)
+            }
+        }
 
+        observeUser()
         binding.rlGoalSettings
 
         return binding.root

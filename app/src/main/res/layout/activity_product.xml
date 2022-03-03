@@ -30,9 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-                app:tint="@color/primary" />
+                />
 
             <TextView
                 android:id="@+id/tvMealNameMeal"
