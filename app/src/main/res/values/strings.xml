@@ -130,6 +130,9 @@
     <string name="username">Username</string>
     <string name="submit">Submit</string>
     <string name="zl" format="false">\?zł</string>
+    <string name="macro_elements">Macro elements</string>
+    <string name="total">Total %</string>
+    <string name="your_total_have_to_be_at_100">Your total have to be at 100%</string>
 
     <string-array name="works">
         <item>Sedentary</item>

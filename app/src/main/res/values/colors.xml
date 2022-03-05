@@ -16,6 +16,7 @@
     <color name="grey5">#dddeee</color>
 
     <color name="green">#81c784</color>
+    <color name="red">#e57373</color>
 
     <color name="chartCarbohydrates">#4db6ac</color>
     <color name="chartProtein">#f06292</color>

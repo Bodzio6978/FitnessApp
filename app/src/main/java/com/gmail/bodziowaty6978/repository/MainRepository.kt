@@ -23,15 +23,14 @@ firestore:FirebaseFirestore) {
     private val logDao = roomDatabase.logDao()
     private val weightDao = roomDatabase.weightDao()
 
-    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
-    private val userDocument = firestore.collection("users").document(userId)
-    private val journalCollection = userDocument.collection("journal")
+    private var userId = FirebaseAuth.getInstance().currentUser?.uid
+    private val userCollection = firestore.collection("users")
 
     fun userId() = userId
 
     suspend fun getJournalEntries(date: String): Resource<List<DocumentSnapshot>> {
         return try {
-            Resource.Success(journalCollection.whereEqualTo("date", date)
+            Resource.Success(userCollection.document(userId!!).collection("journal").whereEqualTo("date", date)
                 .orderBy("time", Query.Direction.DESCENDING)
                 .get().await().documents)
         } catch (e: Exception) {
@@ -75,7 +74,7 @@ firestore:FirebaseFirestore) {
 
     suspend fun setWeightDialogPermission(isAllowed: Boolean): DataState {
         return try {
-            firestore.collection("users").document(userId).set(
+            firestore.collection("users").document(userId!!).set(
                 mapOf("areWeightDialogsEnabled" to isAllowed),
                 SetOptions.merge()
             ).await()
@@ -87,7 +86,7 @@ firestore:FirebaseFirestore) {
 
     suspend fun removeJournalEntry(key: String): DataState {
         return try {
-            firestore.collection("users").document(userId)
+            firestore.collection("users").document(userId!!)
                 .collection("journal")
                 .document(key).delete()
                 .await()

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clNutrition"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.settings.NutritionActivity">
 
+    <ProgressBar
+        android:id="@+id/pbNutrition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <RelativeLayout
+        android:id="@+id/rlNutrition"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,44 +23,51 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+                android:contentDescription="@string/back_button"
                 android:id="@+id/ibBackNutrition"
                 style="@style/backArrow"
                 android:layout_centerVertical="true" />
 
             <Button
+                android:id="@+id/btSaveNutrition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@android:color/transparent"
                 android:text="@string/save"
                 android:textColor="@color/primary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
 
 
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rlCaloriesNutrition"
-            android:layout_below="@+id/rlTopNutrition"
             style="@style/SettingsRl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlTopNutrition">
 
             <TextView
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:labelFor="@+id/etCaloriesNutrition"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/etCaloriesNutrition"
-                android:text="Calories:" />
+                android:text="@string/calories" />
 
             <EditText
+                android:autofillHints="calories"
                 android:id="@+id/etCaloriesNutrition"
                 style="@style/InputEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/tvKcalNutrition"
-                android:minWidth="100dp" />
+                android:inputType="number"
+                android:minWidth="100dp"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tvKcalNutrition"
@@ -61,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="Kcal" />
+                android:text="@string/kcal" />
 
         </RelativeLayout>
 
@@ -82,14 +97,15 @@
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Macro elements" />
+                android:text="@string/macro_elements" />
 
             <LinearLayout
                 android:id="@+id/llValuesNutrition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvTitleNutrition"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:baselineAligned="false">
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -103,7 +119,7 @@
                         style="@style/Paragraph_Secondary_Caption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Carbs"
+                        android:text="@string/carbs"
                         android:textAlignment="center" />
 
                     <TextView
@@ -111,7 +127,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tvCarbsTitle"
-                        android:text="189g"
                         android:textAlignment="center" />
 
                     <NumberPicker
@@ -138,7 +153,7 @@
                         style="@style/Paragraph_Secondary_Caption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Protein"
+                        android:text="@string/protein"
                         android:textAlignment="center" />
 
                     <TextView
@@ -146,7 +161,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tvProteinTitle"
-                        android:text="189g"
                         android:textAlignment="center" />
 
                     <NumberPicker
@@ -157,8 +171,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_weight="0.2" />
+                        android:layout_marginEnd="15dp"/>
 
                 </RelativeLayout>
 
@@ -174,7 +187,7 @@
                         style="@style/Paragraph_Secondary_Caption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fat"
+                        android:text="@string/fat"
                         android:textAlignment="center" />
 
                     <TextView
@@ -182,7 +195,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tvFatTitle"
-                        android:text="189g"
                         android:textAlignment="center" />
 
                     <NumberPicker
@@ -192,8 +204,7 @@
                         android:layout_below="@+id/tvCurrentFatNutrition"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_weight="0.2" />
+                        android:layout_marginEnd="15dp"/>
 
 
                 </RelativeLayout>
@@ -201,33 +212,32 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llValuesNutrition">
+                android:layout_below="@+id/llValuesNutrition"
+                android:layout_marginTop="20dp">
 
                 <TextView
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total %"
-                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_toStartOf="@id/tvPercentageNutrition"
-                    android:textSize="20sp"/>
+                    android:text="@string/total"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvPercentageNutrition"
-                    android:text="100%"
-                    android:textSize="20sp"
-                    android:textColor="@color/green"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/green"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Your total have to be at 100%"
-                    android:layout_below="@+id/tvPercentageNutrition"/>
+                    android:layout_below="@+id/tvPercentageNutrition"
+                    android:text="@string/your_total_have_to_be_at_100" />
 
 
             </RelativeLayout>
@@ -235,15 +245,15 @@
         </RelativeLayout>
 
 
-<!--        <TextView-->
-<!--            style="@style/Paragraph_Secondary_Caption"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_marginBottom="40dp"-->
-<!--            android:text="I don't want to enter it by myself"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/primary" />-->
+        <!--        <TextView-->
+        <!--            style="@style/Paragraph_Secondary_Caption"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_marginBottom="40dp"-->
+        <!--            android:text="I don't want to enter it by myself"-->
+        <!--            android:textAlignment="center"-->
+        <!--            android:textColor="@color/primary" />-->
 
     </RelativeLayout>
 
