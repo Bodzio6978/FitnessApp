@@ -123,43 +123,43 @@ class IntroductionViewModel @Inject constructor(
         }
 
         val firstFactor = when (workType) {
-            "Sedentary" -> 1.0 / 7.0
-            "Mixed" -> 2.0 / 7.0
-            else -> 3.0 / 7.0
+            "Sedentary" -> 0.0
+            "Mixed" -> 1.0/15.0
+            else -> 1.0/15.0*2.0
         }
 
         val secondFactor = when (workoutsInWeek) {
             "none" -> 0.0
-            "1–2" -> 1.0 / 14.0
-            "3–4" -> 2.0 / 14.0
-            "5-6" -> 3.0 / 14.0
-            else -> 4.0 / 14.0
+            "1–2" -> 1.0 / 30.0
+            "3–4" -> 1.0 / 30.0 * 2.0
+            "5-6" -> 1.0 / 30.0 * 3.0
+            else -> 1.0 / 30.0 * 4.0
         }
         val thirdFactor = when (activityInDay) {
-            "Low" -> 1.0 / 14.0
-            "Moderate" -> 2.0 / 14.0
-            "High" -> 3.0 / 14.0
-            else -> 4.0 / 14.0
+            "Low" -> 0.0
+            "Moderate" -> 1.0 / 15.0
+            "High" -> 1.0 / 15.0 * 2.0
+            else -> 1.0 / 15.0 * 3.0
         }
 
-        val pal = 1.1 + firstFactor + secondFactor + thirdFactor
+        val pal = 1.4 + firstFactor + secondFactor + thirdFactor
 
         val cpm = ppm * pal
 
         val wantedCalories = when {
             wantedWeight > currentWeight -> {
-                cpm + 500.0
+                cpm + 400.0
             }
             wantedWeight < currentWeight -> {
-                cpm - 500.0
+                cpm - 400.0
             }
             else -> {
                 cpm + 0.0
             }
         }
 
-        val wantedProtein = currentWeight * 2.0 * 0.87
-        val wantedFat = currentWeight * 0.93
+        val wantedProtein = wantedCalories * 30.0 / 100.0 / 4.0
+        val wantedFat = wantedCalories * 25.0 / 100.0 / 9.0
         val wantedCarbs = ((wantedCalories - ((9.0 * wantedFat) + (4.0 * wantedProtein))) / 4.0)
 
         return mapOf<String, Double>(
