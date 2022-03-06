@@ -11,6 +11,7 @@ import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.room.AppDatabase
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.view.introduction.FirstIntroductionFragment
 import com.gmail.bodziowaty6978.view.introduction.SecondIntroductionFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +32,7 @@ class IntroductionViewModel @Inject constructor(
 
     private val userInformationMap = ArrayMap<String, String>()
 
-    val addingInformation = MutableLiveData<InformationState>()
+    val addingInformation = MutableLiveData<DataState>()
 
     fun getFragments(): ArrayList<Fragment> {
         val list = ArrayList<Fragment>()
@@ -50,7 +51,7 @@ class IntroductionViewModel @Inject constructor(
         if (isFinished && userInformationMap.size == 8) {
 
             viewModelScope.launch(dispatchers.default) {
-                addingInformation.postValue(InformationState(InformationState.ADDING_INFORMATION))
+                addingInformation.postValue(DataState.Loading)
 
                 val gender = userInformationMap["gender"]!!
                 val age = userInformationMap["age"]?.toInt()!!
@@ -91,7 +92,7 @@ class IntroductionViewModel @Inject constructor(
 
                 addInitialWeightDialog(currentWeight)
 
-                addingInformation.postValue(InformationState(InformationState.INFORMATION_ADDED))
+                addingInformation.postValue(DataState.Success)
             }
         }
     }
@@ -168,13 +169,5 @@ class IntroductionViewModel @Inject constructor(
             "wantedProtein" to wantedProtein.round(),
             "wantedFat" to wantedFat.round()
         )
-    }
-}
-
-class InformationState(val value: Int) {
-
-    companion object {
-        const val ADDING_INFORMATION = 0
-        const val INFORMATION_ADDED = 1
     }
 }

@@ -12,8 +12,8 @@ import com.gmail.bodziowaty6978.databinding.ActivityIntroductionBinding
 import com.gmail.bodziowaty6978.interfaces.OnClearDataRequest
 import com.gmail.bodziowaty6978.interfaces.OnFragmentChangeRequest
 import com.gmail.bodziowaty6978.interfaces.OnMapPassed
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.view.MainActivity
-import com.gmail.bodziowaty6978.viewmodel.InformationState
 import com.gmail.bodziowaty6978.viewmodel.IntroductionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,12 +32,13 @@ class IntroductionActivity : AppCompatActivity(), OnMapPassed, OnFragmentChangeR
 
         lifecycleScope.launchWhenStarted {
             viewModel.addingInformation.observe(this@IntroductionActivity,{
-                when (it.value){
-                    InformationState.INFORMATION_ADDED -> {
+                when (it){
+                    is DataState.Success -> {
                         val intent = Intent(this@IntroductionActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     }
+                    else -> {}
                 }
             })
         }
