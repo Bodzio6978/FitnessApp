@@ -6,18 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.bodziowaty6978.functions.round
+import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
+import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.other.DataStoreManager
+import com.gmail.bodziowaty6978.room.AppDatabase
 import com.gmail.bodziowaty6978.view.introduction.FirstIntroductionFragment
 import com.gmail.bodziowaty6978.view.introduction.SecondIntroductionFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class IntroductionViewModel @Inject constructor(
     private val dispatchers: DispatcherProvider,
-    private val dataStoreManager: DataStoreManager
+    private val dataStoreManager: DataStoreManager,
+    private val roomDatabase: AppDatabase
 ) : ViewModel() {
 
     private val fragment1 = FirstIntroductionFragment()
@@ -83,9 +89,17 @@ class IntroductionViewModel @Inject constructor(
                 dataStoreManager.saveNutritionValues(nutritionValues)
                 dataStoreManager.saveUserInformation(userInformation)
 
+                addInitialWeightDialog(currentWeight)
+
                 addingInformation.postValue(InformationState(InformationState.INFORMATION_ADDED))
             }
         }
+    }
+
+    private suspend fun addInitialWeightDialog(weight:Double){
+        val calendar = Calendar.getInstance()
+        val weightEntry = WeightEntity(0,calendar.timeInMillis,weight,calendar.toShortString())
+        roomDatabase.weightDao().addWeightEntry(weightEntry)
     }
 
     private fun calculateNutritionNeeds(
