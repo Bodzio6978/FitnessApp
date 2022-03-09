@@ -16,6 +16,13 @@
         android:text="@string/let_us_know_something_about_you"
         android:textAlignment="center" />
 
+    <ProgressBar
+        android:id="@+id/pbIntroduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2Introduction"
         android:layout_width="match_parent"

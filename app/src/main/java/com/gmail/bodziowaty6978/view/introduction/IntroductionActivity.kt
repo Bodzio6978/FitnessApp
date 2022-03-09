@@ -2,6 +2,7 @@ package com.gmail.bodziowaty6978.view.introduction
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
@@ -38,7 +39,10 @@ class IntroductionActivity : AppCompatActivity(), OnMapPassed, OnFragmentChangeR
                         startActivity(intent)
                         finish()
                     }
-                    else -> {}
+                    else -> {
+                        binding.vp2Introduction.visibility = View.GONE
+                        binding.pbIntroduction.visibility = View.VISIBLE
+                    }
                 }
             })
         }

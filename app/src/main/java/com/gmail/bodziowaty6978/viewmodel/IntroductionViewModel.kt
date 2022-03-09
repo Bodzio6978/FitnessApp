@@ -55,10 +55,8 @@ class IntroductionViewModel @Inject constructor(
 
                 val gender = userInformationMap["gender"]!!
                 val age = userInformationMap["age"]?.toInt()!!
-                val currentWeight =
-                    userInformationMap["current"]!!.replace(",", ".").toDouble().round()
-                val wantedWeight =
-                    userInformationMap["desired"]!!.replace(",", ".").toDouble().round()
+                val currentWeight = userInformationMap["current"]!!.replace(",", ".").toDouble().round()
+                val wantedWeight = userInformationMap["desired"]!!.replace(",", ".").toDouble().round()
 
                 val workType = userInformationMap["type"]!!
                 val workoutInWeek = userInformationMap["workouts"]!!

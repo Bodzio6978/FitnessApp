@@ -56,45 +56,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlMeasurementsSettings"
-            style="@style/SettingsRl"
-            android:layout_below="@+id/rlGoalSettings"
-            android:background="@drawable/settings_layout">
-
-            <TextView
-                android:id="@+id/tvLabelMeasurements"
-                style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/body_measurements" />
-
-            <TextView
-                android:id="@+id/tvLastValueMeasurement"
-                style="@style/Paragraph_Secondary_Caption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvLabelMeasurements"
-                android:layout_marginTop="5dp"
-                android:layout_toStartOf="@+id/ibAddMeasurement"
-                android:text="2021/12/24: 106.5 kg" />
-
-            <ImageButton
-                android:id="@+id/ibAddMeasurement"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_baseline_add_24" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
             android:id="@+id/rlLogOutSettings"
             style="@style/SettingsRl"
-            android:layout_below="@+id/rlMeasurementsSettings">
+            android:layout_below="@+id/rlGoalSettings">
 
             <ImageView
                 android:id="@+id/ivLogOutSettings"

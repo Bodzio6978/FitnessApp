@@ -1,5 +1,6 @@
 package com.gmail.bodziowaty6978.view.mainfragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
+import com.gmail.bodziowaty6978.view.MeasurementActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +49,12 @@ class SummaryFragment : Fragment() {
                     observeLogEntry()
 
                     observeCurrentCalories()
+
+                    lifecycleScope.launch {
+                        binding.ibAddMeasurementSummary.setOnClickListener {
+                            startActivity(Intent(requireActivity(),MeasurementActivity::class.java))
+                        }
+                    }
                 }
             }
         }
