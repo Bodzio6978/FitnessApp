@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/clSummary"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.mainfragments.SummaryFragment">
 
@@ -194,7 +194,20 @@
                     android:layout_height="wrap_content"
                     android:text="@string/body_measurements" />
 
+                <TextView
+                    android:id="@+id/tvNotEnteredMeasurement"
+                    style="@style/Paragraph_Secondary_Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvMeasurementsSummary"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/not_entered_yet"
+                    android:visibility="gone" />
+
+
                 <LinearLayout
+                    android:id="@+id/llMeasurements"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvMeasurementsSummary"
@@ -208,18 +221,21 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text="Hips: +3.6cm" />
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text="Thigh: -1.9cm" />
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
@@ -234,22 +250,25 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Waist: -9.6cm"/>
+                            android:text="Waist: -9.6cm" />
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Bust: -4.32cm"/>
+                            android:text="Bust: -4.32cm" />
 
                         <TextView
+                            style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Neck: -1.36cm"/>
+                            android:text="Neck: -1.36cm" />
 
                     </LinearLayout>
 
@@ -264,6 +283,7 @@
                 android:layout_weight="0.2">
 
                 <ImageButton
+                    android:visibility="gone"
                     android:id="@+id/ibAddMeasurementSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

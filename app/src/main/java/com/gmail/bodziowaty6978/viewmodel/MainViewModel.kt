@@ -13,6 +13,7 @@ import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.interfaces.DispatcherProvider
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.LogEntity
+import com.gmail.bodziowaty6978.model.MeasurementEntity
 import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.repository.MainRepository
@@ -42,6 +43,7 @@ class MainViewModel @Inject constructor(
     val journalEntries = MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
     val weightEntries = MutableLiveData<MutableList<WeightEntity>>()
     val logEntries = MutableLiveData<MutableList<LogEntity>>()
+    val measurementEntries = MutableLiveData<MutableList<MeasurementEntity>>()
 
     val currentLogStrike = MutableStateFlow<Int>(1)
 
@@ -54,10 +56,18 @@ class MainViewModel @Inject constructor(
             val journal = async { fetchJournalEntries(date) }
             val weight = async { fetchWeightEntries() }
             val log = async { fetchLogEntries() }
+            val measurement = async { fetchMeasurementEntries() }
 
-            awaitAll(journal, weight, log)
+            awaitAll(journal, weight, log, measurement)
 
             dataState.emit(DataState.Success)
+        }
+    }
+
+    private suspend fun fetchMeasurementEntries(){
+        viewModelScope.launch(dispatchers.io) {
+            val result = repository.getMeasurementEntries()
+            measurementEntries.postValue(result)
         }
     }
 

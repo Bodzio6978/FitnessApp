@@ -1,9 +1,12 @@
 package com.gmail.bodziowaty6978.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "measurement_table")
 data class MeasurementEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
@@ -15,4 +18,4 @@ data class MeasurementEntity(
     @ColumnInfo(name = "bust") val bust: Double = 0.0,
     @ColumnInfo(name = "biceps") val biceps: Double = 0.0,
     @ColumnInfo(name = "calf") val calf: Double = 0.0
-)
+) : Parcelable

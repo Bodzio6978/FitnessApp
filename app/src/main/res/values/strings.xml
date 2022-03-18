@@ -146,6 +146,7 @@
     <string name="largest_part_of_your_upper_arm">Largest part of your upper arm</string>
     <string name="calf">Calf</string>
     <string name="biggest_part_of_your_calf">Biggest part of your calf</string>
+    <string name="not_entered_yet">Not entered yet</string>
 
     <string-array name="works">
         <item>Sedentary</item>

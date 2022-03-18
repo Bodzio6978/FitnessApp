@@ -2,6 +2,7 @@ package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
+import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntity
@@ -36,7 +38,7 @@ class SummaryFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         lifecycleScope.launchWhenStarted {
-            viewModel.dataState.collect {
+            viewModel.dataState.collect { it ->
                 if (it is DataState.Success) {
                     setLogStrike()
 
@@ -48,9 +50,20 @@ class SummaryFragment : Fragment() {
 
                     observeCurrentCalories()
 
+                    observeMeasurementEntries()
+
                     lifecycleScope.launch {
                         binding.ibAddMeasurementSummary.setOnClickListener {
-                            startActivity(Intent(requireActivity(),MeasurementActivity::class.java))
+                            val lastEntries = viewModel.measurementEntries.value!!
+
+                            val intent = Intent(requireActivity(),MeasurementActivity::class.java)
+
+                            if (lastEntries.isNotEmpty()){
+                                lastEntries.sortBy { entry -> entry.time }
+                                intent.putExtra("lastMeasurement",lastEntries[0])
+                            }
+
+                            startActivity(intent)
                         }
                     }
                 }
@@ -64,6 +77,25 @@ class SummaryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observeMeasurementEntries(){
+        lifecycleScope.launchWhenStarted {
+            viewModel.measurementEntries.observe(viewLifecycleOwner,{
+                binding.ibAddMeasurementSummary.visibility = View.VISIBLE
+
+                if (it.isEmpty()){
+                    binding.llMeasurements.visibility = View.GONE
+                    binding.tvNotEnteredMeasurement.visibility = View.VISIBLE
+                }else{
+                    initializeMeasurementUi()
+                }
+            })
+        }
+    }
+
+    private fun initializeMeasurementUi(){
+
     }
 
     private fun observeLogEntry(){
@@ -91,6 +123,7 @@ class SummaryFragment : Fragment() {
     private fun observeLastWeight() {
         lifecycleScope.launchWhenStarted {
             viewModel.weightEntries.observe(viewLifecycleOwner, {
+                Log.e(TAG,it.toString())
                 setWeight(it.toMutableList())
             })
         }
