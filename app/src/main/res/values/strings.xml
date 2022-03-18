@@ -134,6 +134,19 @@
     <string name="total">Total %</string>
     <string name="your_total_have_to_be_at_100">Your total have to be at 100%</string>
 
+    <string name="hips">Hips</string>
+    <string name="fullest_part_of_your_hip">Fullest part of your hip</string>
+    <string name="waist">Waist</string>
+    <string name="smallest_part_of_your_belly">Smallest part of your belly</string>
+    <string name="thigh">Thigh</string>
+    <string name="biggest_part_of_your_thigh">Biggest part of your thigh</string>
+    <string name="bust">Bust</string>
+    <string name="over_nipples">Over nipples</string>
+    <string name="biceps">Biceps</string>
+    <string name="largest_part_of_your_upper_arm">Largest part of your upper arm</string>
+    <string name="calf">Calf</string>
+    <string name="biggest_part_of_your_calf">Biggest part of your calf</string>
+
     <string-array name="works">
         <item>Sedentary</item>
         <item>Mixed</item>

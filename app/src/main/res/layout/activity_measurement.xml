@@ -1,9 +1,393 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MeasurementActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlTopMeasurements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                style="@style/backArrow"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/back_button" />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:text="@string/save"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/llHips"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlTopMeasurements"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:labelFor="@+id/etHipsMeasurement"
+                    android:id="@+id/tvHipTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hips" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvHipTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/fullest_part_of_your_hip" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etHipsMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvHipsCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvHipsCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llWaist"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llHips"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:labelFor="@+id/etWaistMeasurement"
+                    android:id="@+id/tvWaistTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/waist" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvWaistTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/smallest_part_of_your_belly" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etWaistMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvWaistsCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvWaistsCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llThigh"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llWaist"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:labelFor="@+id/etThighMeasurement"
+                    android:id="@+id/tvThighTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/thigh" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvThighTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/biggest_part_of_your_thigh" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etThighMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvThighCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvThighCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBust"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llThigh"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:labelFor="@+id/etBustMeasurement"
+                    android:id="@+id/tvBustTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bust" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBustTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/over_nipples" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etBustMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvBustCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvBustCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llBiceps"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llBust"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:id="@+id/tvBicepsTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/etBicepsMeasurement"
+                    android:text="@string/biceps" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBicepsTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/largest_part_of_your_upper_arm" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etBicepsMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvBicepsCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvBicepsCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llNeck"
+            style="@style/SettingsRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llBiceps"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:labelFor="@+id/etCalfMeasurement"
+                    android:id="@+id/tvCalfTitle"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/calf" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvCalfTitle"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/biggest_part_of_your_calf" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4">
+
+                <EditText
+                    android:id="@+id/etCalfMeasurement"
+                    style="@style/InputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tvCalfCm"
+                    android:digits="0123456789,."
+                    android:inputType="numberDecimal"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/tvCalfCm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cm" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

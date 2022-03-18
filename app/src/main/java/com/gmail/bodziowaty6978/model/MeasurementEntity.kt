@@ -14,5 +14,5 @@ data class MeasurementEntity(
     @ColumnInfo(name = "thigh") val thigh: Double = 0.0,
     @ColumnInfo(name = "bust") val bust: Double = 0.0,
     @ColumnInfo(name = "biceps") val biceps: Double = 0.0,
-    @ColumnInfo(name = "neck") val neck: Double = 0.0
+    @ColumnInfo(name = "calf") val calf: Double = 0.0
 )
