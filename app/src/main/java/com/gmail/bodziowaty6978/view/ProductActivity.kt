@@ -186,7 +186,7 @@ class ProductActivity : AppCompatActivity(), LifecycleOwner {
                         binding.pbProduct.visibility = View.GONE
                         showSnackbar(binding.clProduct, it.errorMessage)
                     }
-                    is DataState.Loading -> onLoading()
+                    else -> onLoading()
                 }
 
             })

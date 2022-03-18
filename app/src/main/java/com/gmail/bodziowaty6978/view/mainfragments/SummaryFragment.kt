@@ -2,7 +2,6 @@ package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.WeightEntity
@@ -93,7 +91,6 @@ class SummaryFragment : Fragment() {
     private fun observeLastWeight() {
         lifecycleScope.launchWhenStarted {
             viewModel.weightEntries.observe(viewLifecycleOwner, {
-                Log.e(TAG, "Collected")
                 setWeight(it.toMutableList())
             })
         }
@@ -107,7 +104,6 @@ class SummaryFragment : Fragment() {
             lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     weights.sortByDescending { it.time }
-                    Log.e(TAG, weights.toString())
                     val progress = viewModel.calculateWeightProgress(weights)
 
                     withContext(Dispatchers.Main) {

@@ -1,7 +1,8 @@
 package com.gmail.bodziowaty6978.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.gmail.bodziowaty6978.R
 
 class MeasurementActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -90,7 +90,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(dispatchers.io) {
                 val result = repository.getWeightEntries()
-                Log.e(TAG,result.toString())
                 weightEntries.postValue(result)
             }
         }
@@ -100,7 +99,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(dispatchers.io) {
                 logEntries.postValue(repository.getLastLogEntry())
-                Log.e(TAG,logEntries.value.toString())
             }
         }
     }
@@ -128,8 +126,6 @@ class MainViewModel @Inject constructor(
             withContext(Dispatchers.Default) {
                 val currentDate = Calendar.getInstance()
                 val lastDateCalendar = toCalendar(Date(entry.time))
-
-                Log.e(TAG+"huj",logEntries.value.toString())
 
                 if (lastDateCalendar != null) {
 
@@ -222,7 +218,7 @@ class MainViewModel @Inject constructor(
 
                 if (entries != null) {
                     entries.add(entry)
-                    weightEntries.postValue(entries!!)
+                    weightEntries.postValue(entries)
                 }
 
             }

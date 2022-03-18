@@ -2,7 +2,6 @@ package com.gmail.bodziowaty6978.view.mainfragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentCaloriesBinding
-import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.functions.toShortString
 import com.gmail.bodziowaty6978.model.JournalEntry
@@ -33,7 +31,7 @@ class DiaryFragment() : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCaloriesBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
@@ -107,7 +105,6 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun checkDialog(isLongClicked:Boolean,journalEntry:JournalEntry){
-        Log.e(TAG,isLongClicked.toString())
         if (isLongClicked) showEntryDialog(journalEntry)
         else editEntry(journalEntry)
     }
@@ -141,19 +138,19 @@ class DiaryFragment() : Fragment() {
     }
 
     private fun onJournalSuccess(data:MutableMap<String,MutableMap<String,JournalEntry>>){
-        val breakfast = data["Breakfast"]
-        val lunch = data["Lunch"]
-        val dinner = data["Dinner"]
-        val supper = data["Supper"]
+        lifecycleScope.launch{
+            val breakfast = data["Breakfast"]
+            val lunch = data["Lunch"]
+            val dinner = data["Dinner"]
+            val supper = data["Supper"]
 
-        binding.mvBreakfastCalories.setProducts(breakfast)
-        binding.mvLunchCalories.setProducts(lunch)
-        binding.mvDinnerCalories.setProducts(dinner)
-        binding.mvSupperCalories.setProducts(supper)
+            binding.mvBreakfastCalories.setProducts(breakfast)
+            binding.mvLunchCalories.setProducts(lunch)
+            binding.mvDinnerCalories.setProducts(dinner)
+            binding.mvSupperCalories.setProducts(supper)
 
-        Log.e(TAG,viewModel.getEntries(data.values.toList()).toString())
-
-        calculateValues(viewModel.getEntries(data.values.toList()))
+            calculateValues(viewModel.getEntries(data.values.toList()))
+        }
     }
 
     private fun calculateValues(list: List<JournalEntry>) {
