@@ -221,25 +221,28 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvHipsSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Hips: +3.6cm" />
+                            android:text="" />
 
                         <TextView
+                            android:id="@+id/tvThighSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Thigh: -1.9cm" />
+                            android:text="" />
 
                         <TextView
+                            android:id="@+id/tvBicepsSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Biceps: +1.3cm" />
+                            android:text="" />
 
                     </LinearLayout>
 
@@ -250,25 +253,25 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvWaistSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Waist: -9.6cm" />
+                            android:layout_marginTop="2dp"/>
 
                         <TextView
+                            android:id="@+id/tvBustSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Bust: -4.32cm" />
+                            android:layout_marginTop="2dp"/>
 
                         <TextView
+                            android:id="@+id/tvCalfSummary"
                             style="@style/Paragraph_Secondary_Caption"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Neck: -1.36cm" />
+                            android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
 

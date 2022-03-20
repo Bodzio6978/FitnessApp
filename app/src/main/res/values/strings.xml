@@ -148,6 +148,13 @@
     <string name="biggest_part_of_your_calf">Biggest part of your calf</string>
     <string name="not_entered_yet">Not entered yet</string>
 
+    <string name="hips_value">Hips: %scm</string>
+    <string name="waist_value">Waist: %scm</string>
+    <string name="thigh_value">Thigh: %scm</string>
+    <string name="biceps_value">Biceps: %scm</string>
+    <string name="bust_value">Bust: %scm</string>
+    <string name="calf_value">Calf: %scm</string>
+
     <string-array name="works">
         <item>Sedentary</item>
         <item>Mixed</item>

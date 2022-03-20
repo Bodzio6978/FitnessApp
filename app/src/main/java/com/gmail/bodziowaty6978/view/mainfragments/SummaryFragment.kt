@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
+import com.gmail.bodziowaty6978.model.MeasurementEntity
 import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
@@ -88,14 +90,22 @@ class SummaryFragment : Fragment() {
                     binding.llMeasurements.visibility = View.GONE
                     binding.tvNotEnteredMeasurement.visibility = View.VISIBLE
                 }else{
-                    initializeMeasurementUi()
+                    initializeMeasurementUi(it)
                 }
             })
         }
     }
 
-    private fun initializeMeasurementUi(){
-
+    private fun initializeMeasurementUi(measurementEntities:MutableList<MeasurementEntity>){
+        if (measurementEntities.size==1){
+            val entity = measurementEntities[0]
+            binding.tvHipsSummary.text = String.format(resources.getString(R.string.hips_value),entity.hips.toString())
+            binding.tvWaistSummary.text = String.format(resources.getString(R.string.waist_value),entity.waist.toString())
+            binding.tvThighSummary.text = String.format(resources.getString(R.string.thigh_value),entity.thigh.toString())
+            binding.tvBustSummary.text = String.format(resources.getString(R.string.bust_value),entity.bust.toString())
+            binding.tvBicepsSummary.text = String.format(resources.getString(R.string.biceps_value),entity.biceps.toString())
+            binding.tvCalfSummary.text = String.format(resources.getString(R.string.calf_value),entity.calf.toString())
+        }
     }
 
     private fun observeLogEntry(){
