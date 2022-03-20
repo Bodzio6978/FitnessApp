@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMeasurement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MeasurementActivity">
 
+    <ProgressBar
+        android:id="@+id/pbMeasurement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
     <RelativeLayout
+        android:id="@+id/rlMeasurement"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -49,11 +58,11 @@
                 android:layout_weight="0.6">
 
                 <TextView
-                    android:labelFor="@+id/etHipsMeasurement"
                     android:id="@+id/tvHipTitle"
                     style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/etHipsMeasurement"
                     android:text="@string/hips" />
 
                 <TextView
@@ -108,11 +117,11 @@
                 android:layout_weight="0.6">
 
                 <TextView
-                    android:labelFor="@+id/etWaistMeasurement"
                     android:id="@+id/tvWaistTitle"
                     style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/etWaistMeasurement"
                     android:text="@string/waist" />
 
                 <TextView
@@ -167,11 +176,11 @@
                 android:layout_weight="0.6">
 
                 <TextView
-                    android:labelFor="@+id/etThighMeasurement"
                     android:id="@+id/tvThighTitle"
                     style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/etThighMeasurement"
                     android:text="@string/thigh" />
 
                 <TextView
@@ -226,11 +235,11 @@
                 android:layout_weight="0.6">
 
                 <TextView
-                    android:labelFor="@+id/etBustMeasurement"
                     android:id="@+id/tvBustTitle"
                     style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/etBustMeasurement"
                     android:text="@string/bust" />
 
                 <TextView
@@ -344,11 +353,11 @@
                 android:layout_weight="0.6">
 
                 <TextView
-                    android:labelFor="@+id/etCalfMeasurement"
                     android:id="@+id/tvCalfTitle"
                     style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/etCalfMeasurement"
                     android:text="@string/calf" />
 
                 <TextView

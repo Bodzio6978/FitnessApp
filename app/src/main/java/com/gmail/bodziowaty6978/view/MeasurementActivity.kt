@@ -1,12 +1,16 @@
 package com.gmail.bodziowaty6978.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.ActivityMeasurementBinding
+import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.MeasurementEntity
+import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.viewmodel.MeasurementViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,9 +34,11 @@ class MeasurementActivity : AppCompatActivity() {
             initializeLastValues(lastMeasurement)
         }
 
+        observeAddingState()
+
         lifecycleScope.launch {
             binding.btSaveMeasurement.setOnClickListener {
-                viewModel.addMeasurementEntry(
+                viewModel.checkMeasurementEntry(
                     binding.etHipsMeasurement.text.toString(),
                     binding.etWaistMeasurement.text.toString(),
                     binding.etThighMeasurement.text.toString(),
@@ -41,6 +47,25 @@ class MeasurementActivity : AppCompatActivity() {
                     binding.etCalfMeasurement.text.toString(),
                 )
             }
+        }
+    }
+
+    private fun observeAddingState(){
+        lifecycleScope.launchWhenStarted {
+            viewModel.addingState.observe(this@MeasurementActivity,{
+                when(it){
+                    is DataState.Error -> {
+                        showSnackbar(binding.clMeasurement, it.errorMessage)
+                        binding.pbMeasurement.visibility = View.GONE
+                        binding.rlMeasurement.visibility = View.VISIBLE
+                    }
+                    is DataState.Success -> startActivity(Intent(this@MeasurementActivity,MainActivity::class.java))
+                    else -> {
+                        binding.pbMeasurement.visibility = View.VISIBLE
+                        binding.rlMeasurement.visibility = View.GONE
+                    }
+                }
+            })
         }
     }
 
