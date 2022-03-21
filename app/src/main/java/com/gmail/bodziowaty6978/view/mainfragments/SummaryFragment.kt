@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
+import com.gmail.bodziowaty6978.functions.getMeasurementMap
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.MeasurementEntity
@@ -62,7 +63,7 @@ class SummaryFragment : Fragment() {
 
                             if (lastEntries.isNotEmpty()){
                                 lastEntries.sortBy { entry -> entry.time }
-                                intent.putExtra("lastMeasurement",lastEntries[0])
+                                intent.putExtra("lastMeasurement",lastEntries[lastEntries.size-1])
                             }
 
                             startActivity(intent)
@@ -90,6 +91,7 @@ class SummaryFragment : Fragment() {
                     binding.llMeasurements.visibility = View.GONE
                     binding.tvNotEnteredMeasurement.visibility = View.VISIBLE
                 }else{
+                    it.sortBy { item -> item.time }
                     initializeMeasurementUi(it)
                 }
             })
@@ -99,13 +101,20 @@ class SummaryFragment : Fragment() {
     private fun initializeMeasurementUi(measurementEntities:MutableList<MeasurementEntity>){
         if (measurementEntities.size==1){
             val entity = measurementEntities[0]
-            binding.tvHipsSummary.text = String.format(resources.getString(R.string.hips_value),entity.hips.toString())
-            binding.tvWaistSummary.text = String.format(resources.getString(R.string.waist_value),entity.waist.toString())
-            binding.tvThighSummary.text = String.format(resources.getString(R.string.thigh_value),entity.thigh.toString())
-            binding.tvBustSummary.text = String.format(resources.getString(R.string.bust_value),entity.bust.toString())
-            binding.tvBicepsSummary.text = String.format(resources.getString(R.string.biceps_value),entity.biceps.toString())
-            binding.tvCalfSummary.text = String.format(resources.getString(R.string.calf_value),entity.calf.toString())
+            setMeasurementValues(entity.getMeasurementMap())
+        }else{
+            val progress = viewModel.calculateProgress(measurementEntities)
+            setMeasurementValues(progress)
         }
+    }
+
+    private fun setMeasurementValues(values:Map<String,String>){
+        binding.tvHipsSummary.text = String.format(resources.getString(R.string.hips_value),values["hips"])
+        binding.tvWaistSummary.text = String.format(resources.getString(R.string.waist_value),values["waist"])
+        binding.tvThighSummary.text = String.format(resources.getString(R.string.thigh_value),values["thigh"])
+        binding.tvBustSummary.text = String.format(resources.getString(R.string.bust_value),values["bust"])
+        binding.tvBicepsSummary.text = String.format(resources.getString(R.string.biceps_value),values["biceps"])
+        binding.tvCalfSummary.text = String.format(resources.getString(R.string.calf_value),values["calf"])
     }
 
     private fun observeLogEntry(){

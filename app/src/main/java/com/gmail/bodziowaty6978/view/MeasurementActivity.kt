@@ -37,6 +37,12 @@ class MeasurementActivity : AppCompatActivity() {
         observeAddingState()
 
         lifecycleScope.launch {
+            binding.ibBackMeasurement.setOnClickListener {
+                onBackPressed()
+            }
+        }
+
+        lifecycleScope.launch {
             binding.btSaveMeasurement.setOnClickListener {
                 viewModel.checkMeasurementEntry(
                     binding.etHipsMeasurement.text.toString(),

@@ -40,7 +40,8 @@ class MainViewModel @Inject constructor(
     val userInformationState = MutableLiveData<UserInformationState>()
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
 
-    val journalEntries = MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
+    val journalEntries =
+        MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
     val weightEntries = MutableLiveData<MutableList<WeightEntity>>()
     val logEntries = MutableLiveData<MutableList<LogEntity>>()
     val measurementEntries = MutableLiveData<MutableList<MeasurementEntity>>()
@@ -64,7 +65,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchMeasurementEntries(){
+    private suspend fun fetchMeasurementEntries() {
         viewModelScope.launch(dispatchers.io) {
             val result = repository.getMeasurementEntries()
             measurementEntries.postValue(result)
@@ -74,7 +75,7 @@ class MainViewModel @Inject constructor(
     private suspend fun fetchJournalEntries(date: String) {
         viewModelScope.launch {
             withContext(dispatchers.io) {
-                when(val result = repository.getJournalEntries(date)){
+                when (val result = repository.getJournalEntries(date)) {
                     is Resource.Success -> {
                         mapEntries(result)
                     }
@@ -86,8 +87,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun mapEntries(resource:Resource.Success<List<DocumentSnapshot>>){
-        withContext(dispatchers.default){
+    private suspend fun mapEntries(resource: Resource.Success<List<DocumentSnapshot>>) {
+        withContext(dispatchers.default) {
             val mappedEntries = resource.data!!.map {
                 it.id to it.toObject(JournalEntry::class.java)!!
             }.toMap().toMutableMap()
@@ -210,9 +211,9 @@ class MainViewModel @Inject constructor(
         )
 
         viewModelScope.launch(dispatchers.io) {
-            if (!checkIfWeightHasBeenEnteredToday(weightEntries.value!!)){
+            if (!checkIfWeightHasBeenEnteredToday(weightEntries.value!!)) {
                 val isSuccessful = repository.addWeightEntry(weightEntry)
-                Log.e(TAG,isSuccessful.toString())
+                Log.e(TAG, isSuccessful.toString())
 
                 if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
                 else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
@@ -282,8 +283,8 @@ class MainViewModel @Inject constructor(
                             withContext(dispatchers.io) {
                                 val result = repository.removeJournalEntry(key)
 
-                                withContext(dispatchers.default){
-                                    if (result is DataState.Success){
+                                withContext(dispatchers.default) {
+                                    if (result is DataState.Success) {
                                         mealList.remove(key)
                                         entryList[entry.mealName] = mealList
                                         journalEntries.postValue(Resource.Success(entryList))
@@ -299,7 +300,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getEntryId(entry:JournalEntry):String?{
+    fun getEntryId(entry: JournalEntry): String? {
         val entryList = journalEntries.value?.data
 
         if (entryList != null) {
@@ -317,6 +318,34 @@ class MainViewModel @Inject constructor(
             }
         }
         return null
+    }
+
+    fun calculateProgress(measurementEntities: MutableList<MeasurementEntity>): MutableMap<String, String> {
+        val olderEntity = measurementEntities[0]
+        val latestEntity = measurementEntities[1]
+
+        val hipProgress = (latestEntity.hips - olderEntity.hips).toString()
+        val waistProgress = (latestEntity.waist - olderEntity.waist).toString()
+        val thighProgress = (latestEntity.thigh - olderEntity.thigh).toString()
+        val bustProgress = (latestEntity.bust - olderEntity.bust).toString()
+        val bicepsProgress = (latestEntity.biceps - olderEntity.biceps).toString()
+        val calfProgress = (latestEntity.calf - olderEntity.calf).toString()
+
+        val progressMap = mutableMapOf<String, String>(
+            "hips" to hipProgress,
+            "waist" to waistProgress,
+            "thigh" to thighProgress,
+            "bust" to bustProgress,
+            "biceps" to bicepsProgress,
+            "calf" to calfProgress
+        )
+
+        progressMap.forEach {
+            if (it.value.toDouble() > 0) progressMap[it.key] = "+${it.value}"
+        }
+
+        return progressMap
+
     }
 
     suspend fun createLogEntry(strike: Int = 1) {

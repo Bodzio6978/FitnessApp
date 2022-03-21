@@ -154,6 +154,7 @@
     <string name="biceps_value">Biceps: %scm</string>
     <string name="bust_value">Bust: %scm</string>
     <string name="calf_value">Calf: %scm</string>
+    <string name="we_recommend_measuring_the_body_not_often_than_once_a_month">We recommend measuring the body not often than once a month</string>
 
     <string-array name="works">
         <item>Sedentary</item>

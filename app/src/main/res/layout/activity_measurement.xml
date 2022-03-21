@@ -24,6 +24,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+                android:id="@+id/ibBackMeasurement"
                 style="@style/backArrow"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/back_button" />
@@ -339,7 +340,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llNeck"
+            android:id="@+id/llCalf"
             style="@style/SettingsRl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -396,6 +397,16 @@
             </RelativeLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/we_recommend_measuring_the_body_not_often_than_once_a_month"
+            android:layout_below="@+id/llCalf"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"/>
 
     </RelativeLayout>
 
