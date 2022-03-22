@@ -4,9 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.NumberPicker
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,7 +19,6 @@ import com.gmail.bodziowaty6978.view.auth.LoginActivity
 import com.gmail.bodziowaty6978.view.introduction.IntroductionActivity
 import com.gmail.bodziowaty6978.view.mainfragments.*
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -94,7 +90,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         setUpBottomNav()
         setUpCalendar()
         observeDate()
-        observeUser()
     }
 
 
@@ -142,13 +137,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         }
     }
 
-    private fun observeUser() {
-        lifecycleScope.launch {
-            viewModel.userInformation.observe(this@MainActivity, {
-                checkIfWeightDialogEnabled(it.areWeightDialogsEnabled)
-            })
-        }
-    }
+
 
     private fun observeDate() {
         lifecycleScope.launch {
@@ -161,97 +150,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
 
-    private fun checkIfWeightDialogEnabled(areEnabled: Boolean?) {
-        if (areEnabled == null) {
-            askForWeightDialogs()
-        } else if (areEnabled) {
-            observeWeightToday()
-        }
-    }
-
-    private fun askForWeightDialogs() {
-        MaterialAlertDialogBuilder(this@MainActivity).apply {
-            setTitle(R.string.do_you_want_us_to_help_you_track_your_weight)
-            setMessage(R.string.we_will_ask_you_everyday_about_your_weight_automatically)
-            setCancelable(false)
-            setPositiveButton(R.string.accept) { _, _ ->
-                viewModel.setDialogPermission(true)
-            }
-
-            setNegativeButton(R.string.decline) { _, _ ->
-                viewModel.setDialogPermission(false)
-            }
-            show()
-        }
 
 
-    }
 
-    private fun observeWeightToday() {
-        lifecycleScope.launch {
-            viewModel.weightEntries.observe(this@MainActivity, { weightEntries ->
-                if (!viewModel.checkIfWeightHasBeenEnteredToday(weightEntries)) {
 
-                    val value: Double =
-                        if (weightEntries.isEmpty()) {
-                            viewModel.userInformation.value!!.userInformation!!["currentWeight"]!!.toDouble()
-                        } else {
-                            weightEntries.sortByDescending { it.time }
-                            weightEntries[0].value
-                        }
 
-                    showNumberPickerDialog(
-                        value = value, // in kilograms
-                        formatToString = { "${it.round(1)} kg" }
-                    )
 
-                }
-            })
-        }
-    }
 
-    private fun showNumberPickerDialog(
-        value: Double,
-        formatToString: (Double) -> String
-    ) {
-        val inflater = this.layoutInflater
-
-        val layout = inflater.inflate(R.layout.weight_picker_layout, null)
-
-        val builder = MaterialAlertDialogBuilder(this).apply {
-            setView(layout)
-            setCancelable(false)
-        }
-
-        val picker = layout.findViewById(R.id.npWeightPicker) as NumberPicker
-        picker.apply {
-            setFormatter { formatToString(it.toDouble() * 0.1) }
-            wrapSelectorWheel = false
-
-            minValue = (10.0 / 0.1).toInt()
-            maxValue = (200.0 / 0.1).toInt()
-            this.value = (value / 0.1).toInt()
-
-            (NumberPicker::class.java.getDeclaredField("mInputText").apply { isAccessible = true }
-                .get(this) as EditText).filters = emptyArray()
-        }
-
-        val dialog = builder.show()
-
-        layout.findViewById<Button>(R.id.btSaveWeightPicker).apply {
-            setOnClickListener {
-                val currentValue = (picker.value.toDouble() * 0.1).round(1)
-                viewModel.setWeightEntry(currentValue)
-                dialog.dismiss()
-            }
-        }
-
-        layout.findViewById<Button>(R.id.btCancelWeightPicker).apply {
-            val currentValue = (picker.value.toDouble() * 0.1).round(1)
-            setOnClickListener {
-                viewModel.setWeightEntry(currentValue)
-                dialog.dismiss()
-            }
-        }
-    }
 }

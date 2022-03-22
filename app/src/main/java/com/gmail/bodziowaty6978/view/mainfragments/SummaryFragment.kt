@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +16,7 @@ import com.gmail.bodziowaty6978.R
 import com.gmail.bodziowaty6978.databinding.FragmentSummaryBinding
 import com.gmail.bodziowaty6978.functions.TAG
 import com.gmail.bodziowaty6978.functions.getMeasurementMap
+import com.gmail.bodziowaty6978.functions.round
 import com.gmail.bodziowaty6978.functions.showSnackbar
 import com.gmail.bodziowaty6978.model.JournalEntry
 import com.gmail.bodziowaty6978.model.MeasurementEntity
@@ -21,6 +25,7 @@ import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.view.MeasurementActivity
 import com.gmail.bodziowaty6978.viewmodel.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,6 +60,18 @@ class SummaryFragment : Fragment() {
 
                     observeMeasurementEntries()
 
+                    observeUser()
+
+                    observeWeightState()
+
+                    lifecycleScope.launch {
+                        binding.ibAddWeightSummary.setOnClickListener {
+                            val value = getLatestWeightValue()
+                            showNumberPickerDialog(value = value, // in kilograms
+                                formatToString = { "${it.round(1)} kg" })
+                        }
+                    }
+
                     lifecycleScope.launch {
                         binding.ibAddMeasurementSummary.setOnClickListener {
                             val lastEntries = viewModel.measurementEntries.value!!
@@ -80,6 +97,121 @@ class SummaryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observeWeightState(){
+        lifecycleScope.launchWhenStarted {
+            viewModel.weightState.observe(viewLifecycleOwner,{
+                if (it is DataState.Error) {
+                    showSnackbar(binding.clSummary, it.errorMessage)
+                    viewModel.weightState.postValue(DataState.Success)
+                }
+            })
+        }
+    }
+
+    private fun observeUser() {
+        lifecycleScope.launch {
+            viewModel.userInformation.observe(viewLifecycleOwner, {
+                checkIfWeightDialogEnabled(it.areWeightDialogsEnabled)
+            })
+        }
+    }
+
+    private fun checkIfWeightDialogEnabled(areEnabled: Boolean?) {
+        if (areEnabled == null) {
+            askForWeightDialogs()
+        } else if (areEnabled) {
+            observeWeightToday()
+        }
+    }
+
+    private fun askForWeightDialogs() {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(R.string.do_you_want_us_to_help_you_track_your_weight)
+            setMessage(R.string.we_will_ask_you_everyday_about_your_weight_automatically)
+            setCancelable(false)
+            setPositiveButton(R.string.accept) { _, _ ->
+                viewModel.setDialogPermission(true)
+            }
+
+            setNegativeButton(R.string.decline) { _, _ ->
+                viewModel.setDialogPermission(false)
+            }
+            show()
+        }
+    }
+
+    private fun getLatestWeightValue():Double{
+        val weightEntries = viewModel.weightEntries.value
+        return if (weightEntries==null||weightEntries.isEmpty()){
+            viewModel.userInformation.value!!.userInformation!!["currentWeight"]!!.toDouble()
+        }else{
+            weightEntries.sortByDescending { it.time }
+            weightEntries[0].value
+        }
+    }
+
+    private fun observeWeightToday() {
+        lifecycleScope.launch {
+            viewModel.weightEntries.observe(viewLifecycleOwner, { weightEntries ->
+                if (!viewModel.checkIfWeightHasBeenEnteredToday(weightEntries)) {
+
+                    val value = getLatestWeightValue()
+
+                    showNumberPickerDialog(
+                        value = value, // in kilograms
+                        formatToString = { "${it.round(1)} kg" }
+                    )
+
+                }
+            })
+        }
+    }
+
+    private fun showNumberPickerDialog(
+        value: Double,
+        formatToString: (Double) -> String
+    ) {
+        val inflater = this.layoutInflater
+
+        val layout = inflater.inflate(R.layout.weight_picker_layout, null)
+
+        val builder = MaterialAlertDialogBuilder(requireContext()).apply {
+            setView(layout)
+            setCancelable(false)
+        }
+
+        val picker = layout.findViewById(R.id.npWeightPicker) as NumberPicker
+        picker.apply {
+            setFormatter { formatToString(it.toDouble() * 0.1) }
+            wrapSelectorWheel = false
+
+            minValue = (10.0 / 0.1).toInt()
+            maxValue = (200.0 / 0.1).toInt()
+            this.value = (value / 0.1).toInt()
+
+            (NumberPicker::class.java.getDeclaredField("mInputText").apply { isAccessible = true }
+                .get(this) as EditText).filters = emptyArray()
+        }
+
+        val dialog = builder.show()
+
+        layout.findViewById<Button>(R.id.btSaveWeightPicker).apply {
+            setOnClickListener {
+                val currentValue = (picker.value.toDouble() * 0.1).round(1)
+                viewModel.setWeightEntry(currentValue)
+                dialog.dismiss()
+            }
+        }
+
+        layout.findViewById<Button>(R.id.btCancelWeightPicker).apply {
+            val currentValue = (picker.value.toDouble() * 0.1).round(1)
+            setOnClickListener {
+                viewModel.setWeightEntry(currentValue)
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun observeMeasurementEntries(){

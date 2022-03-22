@@ -13,6 +13,7 @@
         <item name="colorError">@color/error</item>
         <item name="android:statusBarColor">@color/darkGrey</item>
         <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="fontFamily">@font/robotomedium</item>
     </style>
 
     <!--    Text size preset for every app element-->

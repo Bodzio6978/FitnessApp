@@ -18,6 +18,7 @@ import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.repository.MainRepository
 import com.gmail.bodziowaty6978.singleton.CurrentDate
+import com.gmail.bodziowaty6978.singleton.Strings
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.state.UserInformationState
@@ -39,6 +40,7 @@ class MainViewModel @Inject constructor(
 
     val userInformationState = MutableLiveData<UserInformationState>()
     val dataState = MutableStateFlow<DataState>(DataState.Loading)
+    val weightState = MutableLiveData<DataState>()
 
     val journalEntries =
         MutableLiveData<Resource<MutableMap<String, MutableMap<String, JournalEntry>>>>()
@@ -212,11 +214,12 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch(dispatchers.io) {
             if (!checkIfWeightHasBeenEnteredToday(weightEntries.value!!)) {
-                val isSuccessful = repository.addWeightEntry(weightEntry)
-                Log.e(TAG, isSuccessful.toString())
+                val result = repository.addWeightEntry(weightEntry)
 
-                if (isSuccessful is DataState.Success) addNewWeightEntry(weightEntry)
-                else if (isSuccessful is DataState.Error) dataState.value = isSuccessful
+                if (result is DataState.Success) addNewWeightEntry(weightEntry)
+                else if (result is DataState.Error) weightState.postValue(result)
+            }else{
+                weightState.postValue(DataState.Error("Weight has been already entered today"))
             }
         }
     }

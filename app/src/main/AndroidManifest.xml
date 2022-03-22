@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
         <activity
+            android:name=".view.WeightChartActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.MeasurementActivity"
             android:exported="false" />
         <activity
