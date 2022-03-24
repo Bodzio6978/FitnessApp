@@ -18,20 +18,19 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
-            android:text="Settings" />
+            android:text="@string/account" />
 
         <RelativeLayout
             android:id="@+id/rlGoalSettings"
             style="@style/SettingsRl"
-            android:layout_below="@+id/tvSettingsTitle"
-            android:background="@drawable/settings_layout">
+            android:layout_below="@+id/tvSettingsTitle">
 
             <TextView
                 android:id="@+id/tvLabelGoal"
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nutrition goals" />
+                android:text="@string/nutrition_goals" />
 
             <TextView
                 android:id="@+id/tvValuesGoal"
@@ -40,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvLabelGoal"
                 android:layout_marginTop="5dp"
-                android:layout_toStartOf="@+id/ibEditGoal"
-                android:text="3694 kcal, Carbs: 528g, Prot: 179g, Fat: 95g" />
+                android:layout_toStartOf="@+id/ibEditGoal" />
 
             <ImageButton
                 android:id="@+id/ibEditGoal"
@@ -51,21 +49,63 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_baseline_edit_24" />
+                android:src="@drawable/ic_baseline_edit_24"
+                android:contentDescription="@string/edit" />
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/rlWeightProgress"
+            style="@style/SettingsRl"
+            android:orientation="vertical"
+            android:layout_below="@+id/rlGoalSettings">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:layout_centerVertical="true"
+                    android:id="@+id/ibWeightChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_show_chart_24"
+                    android:background="@android:color/transparent"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/ibWeightChart"
+                    android:layout_marginStart="10dp"
+                    android:layout_centerVertical="true"
+                    style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
+                    android:text="Weight progress"/>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Paragraph_Secondary_Caption"
+                android:text="See your weight progress at a chart"/>
+
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/rlLogOutSettings"
             style="@style/SettingsRl"
-            android:layout_below="@+id/rlGoalSettings">
+            android:layout_below="@+id/rlWeightProgress">
 
             <ImageView
                 android:id="@+id/ivLogOutSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_baseline_logout_24" />
+                android:src="@drawable/ic_baseline_logout_24"
+                android:contentDescription="@string/log_out" />
 
             <TextView
                 style="@style/TextInput_ListItemTitles_ImportantText_Snippet"
@@ -78,7 +118,10 @@
 
         </RelativeLayout>
 
+
+
     </RelativeLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

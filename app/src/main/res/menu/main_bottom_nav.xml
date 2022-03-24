@@ -3,6 +3,6 @@
 
     <item android:id="@+id/menu_summary" android:title="@string/summary" android:icon="@drawable/home_icon"/>
     <item android:id="@+id/menu_diary" android:title="@string/diary" android:icon="@drawable/diary_icon"/>
-    <item android:id="@+id/menu_settings" android:title="@string/settings" android:icon="@drawable/settings_icon"/>
+    <item android:id="@+id/menu_settings" android:title="@string/account" android:icon="@drawable/account_icon"/>
 
 </menu>
