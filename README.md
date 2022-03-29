@@ -12,9 +12,9 @@ It also uses firebase authentication to authenticate users.
 
 ## Application presentation
 
-### Login screen
+### Screenshots from the app
 
-![login screen](https://github.com/Bodzio6978/FitnessApp/blob/main/images/login.png?raw=true)
+[a link](https://github.com/Bodzio6978/FitnessApp/tree/main/images)
 
 ## Technologies used
 
