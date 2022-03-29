@@ -10,6 +10,12 @@ This project was created to help me in my fitness journey. It contains different
 
 It also uses firebase authentication to authenticate users.
 
+## Application presentation
+
+### Login screen
+
+![alt text](https://github.com/Bodzio6978/FitnessApp/tree/main/images/login.png?raw=true)
+
 ## Technologies used
 
 - Kotlin
