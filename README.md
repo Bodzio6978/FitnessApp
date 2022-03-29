@@ -10,11 +10,32 @@ This project was created to help me in my fitness journey. It contains different
 
 It also uses firebase authentication to authenticate users.
 
-## Application presentation
+## Screenshots from the app
 
-### Screenshots from the app
+### Logging in and introduction
+[Logging into the app](https://github.com/Bodzio6978/FitnessApp/blob/main/images/login.png)
 
-[a link](https://github.com/Bodzio6978/FitnessApp/tree/main/images)
+[Part 1 of entering information about yourself](https://github.com/Bodzio6978/FitnessApp/blob/main/images/enter1.png)
+
+[Part 2 of entering information about yourself](https://github.com/Bodzio6978/FitnessApp/blob/main/images/enter2.png)
+
+### Summary screen
+
+[Summary screen](https://github.com/Bodzio6978/FitnessApp/blob/main/images/summary.png)
+
+[Entering your weight](https://github.com/Bodzio6978/FitnessApp/blob/main/images/weight.png)
+
+### Nutrition journal
+
+[Nutrition journal](https://github.com/Bodzio6978/FitnessApp/blob/main/images/journal.png)
+
+[Searching for a product](https://github.com/Bodzio6978/FitnessApp/blob/main/images/search.png)
+
+[Adding a new product](https://github.com/Bodzio6978/FitnessApp/blob/main/images/add.png)
+
+#Account
+
+[Account settings](https://github.com/Bodzio6978/FitnessApp/blob/main/images/account.png)
 
 ## Technologies used
 
