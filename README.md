@@ -33,7 +33,7 @@ It also uses firebase authentication to authenticate users.
 
 [Adding a new product](https://github.com/Bodzio6978/FitnessApp/blob/main/images/add.png)
 
-###Account
+### Account
 
 [Account settings](https://github.com/Bodzio6978/FitnessApp/blob/main/images/account.png)
 
