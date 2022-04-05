@@ -49,7 +49,7 @@ It also uses firebase authentication to authenticate users.
 
 - Ads
 - Charts for weight and body measurements
-- Data caching(Making more use of ROOM that firebase)
+- Data caching(Making more use of ROOM and removing a lot of unnecessary firebase calls)
 - User customization(app colors, starting screen etc.)
 
 ## Installation
