@@ -18,7 +18,3 @@ data class Product(
     val barcode: String? = "",
     var prices: List<Price> = emptyList()
 ) : Parcelable
-
-
-
-

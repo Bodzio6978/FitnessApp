@@ -18,7 +18,6 @@ import com.gmail.bodziowaty6978.model.WeightEntity
 import com.gmail.bodziowaty6978.other.DataStoreManager
 import com.gmail.bodziowaty6978.repository.MainRepository
 import com.gmail.bodziowaty6978.singleton.CurrentDate
-import com.gmail.bodziowaty6978.singleton.Strings
 import com.gmail.bodziowaty6978.state.DataState
 import com.gmail.bodziowaty6978.state.Resource
 import com.gmail.bodziowaty6978.state.UserInformationState
@@ -98,6 +97,29 @@ class MainViewModel @Inject constructor(
             journalEntries.postValue(Resource.Success(sortProducts(mappedEntries)))
         }
     }
+
+    private fun sortProducts(list: MutableMap<String, JournalEntry>): MutableMap<String, MutableMap<String, JournalEntry>> {
+        val breakfast = mutableMapOf<String, JournalEntry>()
+        val lunch = mutableMapOf<String, JournalEntry>()
+        val dinner = mutableMapOf<String, JournalEntry>()
+        val supper = mutableMapOf<String, JournalEntry>()
+
+        for (key in list.keys) {
+            when (list[key]?.mealName) {
+                "Breakfast" -> breakfast[key] = list[key]!!
+                "Lunch" -> lunch[key] = list[key]!!
+                "Dinner" -> dinner[key] = list[key]!!
+                "Supper" -> supper[key] = list[key]!!
+            }
+        }
+        return mutableMapOf<String, MutableMap<String, JournalEntry>>(
+            "Breakfast" to breakfast,
+            "Lunch" to lunch,
+            "Dinner" to dinner,
+            "Supper" to supper
+        )
+    }
+
 
     private suspend fun fetchWeightEntries() {
         viewModelScope.launch {
@@ -239,27 +261,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun sortProducts(list: MutableMap<String, JournalEntry>): MutableMap<String, MutableMap<String, JournalEntry>> {
-        val breakfast = mutableMapOf<String, JournalEntry>()
-        val lunch = mutableMapOf<String, JournalEntry>()
-        val dinner = mutableMapOf<String, JournalEntry>()
-        val supper = mutableMapOf<String, JournalEntry>()
-
-        for (key in list.keys) {
-            when (list[key]?.mealName) {
-                "Breakfast" -> breakfast[key] = list[key]!!
-                "Lunch" -> lunch[key] = list[key]!!
-                "Dinner" -> dinner[key] = list[key]!!
-                "Supper" -> supper[key] = list[key]!!
-            }
-        }
-        return mutableMapOf<String, MutableMap<String, JournalEntry>>(
-            "Breakfast" to breakfast,
-            "Lunch" to lunch,
-            "Dinner" to dinner,
-            "Supper" to supper
-        )
-    }
 
     fun refreshJournalEntries(date: String) {
         viewModelScope.launch {

@@ -12,6 +12,9 @@ interface WeightDao {
     @Query("SELECT * FROM weight_table AS w ORDER BY w.time DESC LIMIT 20")
     suspend fun readLastWeightEntries():List<WeightEntity>
 
+    @Query("SELECT * FROM weight_table AS w ORDER BY w.time DESC")
+    suspend fun readAllWeightEntries():List<WeightEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addWeightEntry(entry:WeightEntity)
 

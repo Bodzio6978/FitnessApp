@@ -84,12 +84,12 @@
         android:id="@+id/fabMeal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="20dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="20dp"
+        android:layout_below="@+id/vDividerMeal"
         android:background="@color/card_word"
-        android:layout_below="@+id/vDividerMeal">
+        android:paddingStart="20dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="8dp">
 
         <ImageView
             android:id="@+id/ivAddMealView"
@@ -99,15 +99,14 @@
             app:tint="@color/primary" />
 
         <TextView
-            android:layout_toEndOf="@+id/ivAddMealView"
+            style="@style/Button_Tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/add_product"
             android:layout_marginStart="10dp"
-            android:textColor="@color/primary"
-            style="@style/Button_Tab"/>
-
+            android:layout_toEndOf="@+id/ivAddMealView"
+            android:text="@string/add_product"
+            android:textColor="@color/primary" />
 
 
     </RelativeLayout>

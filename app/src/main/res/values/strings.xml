@@ -27,7 +27,6 @@
     <string name="your_username">Your Username</string>
     <string name="username_length_notification">Please Make Sure Your Username Is At Least 6 Characters Long And No Longer Than 24 Characters</string>
     <string name="username_exists_notification">There Is Already User With This Username</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="account">Account</string>
@@ -133,6 +132,8 @@
     <string name="macro_elements">Macro elements</string>
     <string name="total">Total %</string>
     <string name="your_total_have_to_be_at_100">Your total have to be at 100%</string>
+
+    <string name="settings_nutrition_values">"%s kcal, Carbs: %sg, Prot: %sg, Fat:%sg "</string>
 
     <string name="hips">Hips</string>
     <string name="fullest_part_of_your_hip">Fullest part of your hip</string>

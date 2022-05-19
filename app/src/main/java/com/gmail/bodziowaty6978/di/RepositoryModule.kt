@@ -35,4 +35,9 @@ object RepositoryModule {
     fun provideProductRepository(): ProductRepository {
         return ProductRepository()
     }
+
+    @Provides
+    fun provideWeightChartRepository(roomDatabase:AppDatabase): WeightChartRepository {
+        return WeightChartRepository(roomDatabase)
+    }
 }
