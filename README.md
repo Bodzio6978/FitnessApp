@@ -12,30 +12,31 @@ It also uses firebase authentication to authenticate users.
 
 ## Screenshots from the app
 
-### Logging in and introduction
-[Logging into the app](https://github.com/Bodzio6978/FitnessApp/blob/main/images/login.png)
+### Login screen & register screen
+<img src="images/login.jpg" width=200/> <img src="images/register.jpg" width=200/>
 
-[Part 1 of entering information about yourself](https://github.com/Bodzio6978/FitnessApp/blob/main/images/enter1.png)
+### Introduction Screens
+<img src="images/introduction1.jpg" width=200/>     <img src="images/introduction2.jpg" width=200/>
 
-[Part 2 of entering information about yourself](https://github.com/Bodzio6978/FitnessApp/blob/main/images/enter2.png)
+<!--   <img src="/images/login.jpg" width="200"/>
+  <img src="/images/introduction1.jpg" width="200" /> 
+  <img src="/images/introduction2.jpg" width="200" /> -->
 
-### Summary screen
+### Summary screen & entering weight
 
-[Summary screen](https://github.com/Bodzio6978/FitnessApp/blob/main/images/summary.png)
+<img src="images/summary.jpg" width=200/>     <img src="images/weight.jpg" width=200/>
 
-[Entering your weight](https://github.com/Bodzio6978/FitnessApp/blob/main/images/weight.png)
+### Measurements screen
 
-### Nutrition journal
+<img src="images/measurements.jpg" width=200/>
 
-[Nutrition journal](https://github.com/Bodzio6978/FitnessApp/blob/main/images/journal.png)
+### Diary, searching for existing produtct, adding new product & product screen
 
-[Searching for a product](https://github.com/Bodzio6978/FitnessApp/blob/main/images/search.png)
+<img src="images/diary.jpg" width=200/>     <img src="images/search.jpg" width=200/>      <img src="images/new_product.jpg" width=200/>     <img src="images/product.jpg" width=200/>
 
-[Adding a new product](https://github.com/Bodzio6978/FitnessApp/blob/main/images/add.png)
+### Account and editing your nutrition settings
 
-### Account
-
-[Account settings](https://github.com/Bodzio6978/FitnessApp/blob/main/images/account.png)
+<img src="images/account.jpg" width=200/> <img src="images/nutrition.jpg" width=200/>
 
 ## Technologies used
 
